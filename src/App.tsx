@@ -1,5 +1,7 @@
 import * as React from "react";
 
-const App = () => <div className="app"/>;
+import TextEditor from "./TextEditor";
+
+const App = () => <div className="w-app"><TextEditor/></div>;
 
 export default App;
