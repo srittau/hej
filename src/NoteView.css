@@ -1,0 +1,11 @@
+.note-title {
+  margin-bottom: 4px;
+}
+.note-title > input {
+  width: 100%;
+}
+
+.note-text > textarea {
+  width: 100%;
+  height: calc(100vh - 50px);
+}
