@@ -5,7 +5,7 @@ interface AddNoteProps {
 function AddNote({ onClick }: AddNoteProps) {
   return (
     <button className="add-note" onClick={() => onClick?.()}>
-      Add Note
+      Add note
     </button>
   );
 }
