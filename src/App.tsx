@@ -6,6 +6,7 @@ import AddNote from "./AddNote";
 import NotesList from "./NotesList";
 import { createNote, Note } from "./Note";
 import NoteContainer from "./NoteContainer";
+import { loadAllNotes, saveNote } from "./store";
 
 function App() {
   const [notes, addNote, updateNote] = useNoteList();
@@ -36,11 +37,12 @@ function useNoteList(): [
   () => string,
   (newNote: Note) => void,
 ] {
-  const [list, setList] = useState<Note[]>([]);
+  const [list, setList] = useState<Note[]>(() => loadAllNotes());
 
   const addNote = (): string => {
     const newNote = createNote();
     setList((oldList) => [newNote, ...oldList]);
+    saveNote(newNote);
     return newNote.uuid;
   };
 
@@ -49,6 +51,7 @@ function useNoteList(): [
       changedNote,
       ...oldList.filter((n) => n.uuid !== changedNote.uuid),
     ]);
+    saveNote(changedNote);
   };
 
   return [list, addNote, updateNote];
