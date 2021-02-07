@@ -15,3 +15,7 @@ export function loadAllNotes(): Note[] {
 export function saveNote(note: Note): void {
   localStorage.setItem(note.uuid, JSON.stringify(note));
 }
+
+export function deleteNote(uuid: string): void {
+  localStorage.removeItem(uuid);
+}

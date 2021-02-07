@@ -4,15 +4,25 @@ import NoteView from "./NoteView";
 
 interface NoteContainerProps {
   note?: Note;
-  onNoteChanged?: (newNote: Note) => void;
   onAddNote?: () => void;
+  onChangeNote?: (newNote: Note) => void;
+  onDeleteNote?: (uuid: string) => void;
 }
 
-function NoteContainer({ note, onNoteChanged, onAddNote }: NoteContainerProps) {
+function NoteContainer({
+  note,
+  onAddNote,
+  onChangeNote,
+  onDeleteNote,
+}: NoteContainerProps) {
   return (
     <div className="note-container">
       {note ? (
-        <NoteView note={note} onNoteChanged={onNoteChanged} />
+        <NoteView
+          note={note}
+          onChangeNote={onChangeNote}
+          onDeleteNote={onDeleteNote}
+        />
       ) : (
         <NoNote onAddClick={onAddNote} />
       )}

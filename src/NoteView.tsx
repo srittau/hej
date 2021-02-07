@@ -5,21 +5,23 @@ import "./NoteView.css";
 
 interface NoteViewProps {
   note: Note;
-  onNoteChanged?: (newNote: Note) => void;
+  onChangeNote?: (newNote: Note) => void;
+  onDeleteNote?: (uuid: string) => void;
 }
 
-function NoteView({ note, onNoteChanged }: NoteViewProps) {
+function NoteView({ note, onChangeNote, onDeleteNote }: NoteViewProps) {
   const onTitleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    onNoteChanged?.({ ...note, title: evt.target.value });
+    onChangeNote?.({ ...note, title: evt.target.value });
   };
   const onTextChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
-    onNoteChanged?.({ ...note, text: evt.target.value });
+    onChangeNote?.({ ...note, text: evt.target.value });
   };
   return (
     <div className="note-view">
       <div className="note-title">
         <input type="text" value={note.title} onChange={onTitleChange} />
       </div>
+      <button onClick={() => onDeleteNote?.(note.uuid)}>Delete note</button>
       <div className="note-text">
         <textarea value={note.text} onChange={onTextChange} />
       </div>

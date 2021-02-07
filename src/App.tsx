@@ -6,24 +6,30 @@ import AddNote from "./AddNote";
 import NotesList from "./NotesList";
 import { createNote, Note } from "./Note";
 import NoteContainer from "./NoteContainer";
-import { loadAllNotes, saveNote } from "./store";
+import { deleteNote, loadAllNotes, saveNote } from "./store";
 
 function App() {
-  const [notes, addNote, updateNote] = useNoteList();
-  const [note, changeNote] = useActiveNote(notes);
+  const [notes, addNote, updateNote, deleteNote] = useNoteList();
+  const [note, setActiveNote] = useActiveNote(notes);
 
   const onAddNote = () => {
     const newUUID = addNote();
-    changeNote(newUUID);
+    setActiveNote(newUUID);
+  };
+
+  const onDeleteNote = (uuid: string) => {
+    setActiveNote(undefined);
+    deleteNote(uuid);
   };
 
   return (
     <div className="app">
-      <NotesList notes={notes} onClickNote={changeNote} />
+      <NotesList notes={notes} onClickNote={setActiveNote} />
       <NoteContainer
         note={note}
-        onNoteChanged={updateNote}
         onAddNote={onAddNote}
+        onChangeNote={updateNote}
+        onDeleteNote={onDeleteNote}
       />
       <AddNote onClick={onAddNote} />
     </div>
@@ -33,9 +39,10 @@ function App() {
 export default App;
 
 function useNoteList(): [
-  readonly Note[],
-  () => string,
-  (newNote: Note) => void,
+  noteList: readonly Note[],
+  addNote: () => string,
+  updateNote: (newNote: Note) => void,
+  deleteNote: (uuid: string) => void,
 ] {
   const [list, setList] = useState<Note[]>(() => loadAllNotes());
 
@@ -54,12 +61,17 @@ function useNoteList(): [
     saveNote(changedNote);
   };
 
-  return [list, addNote, updateNote];
+  const deleteNoteFromList = (uuid: string) => {
+    setList((oldList) => oldList.filter((n) => n.uuid !== uuid));
+    deleteNote(uuid);
+  };
+
+  return [list, addNote, updateNote, deleteNoteFromList];
 }
 
 function useActiveNote(
   notes: readonly Note[],
-): [Note | undefined, (uuid: string) => void] {
+): [Note | undefined, (uuid: string | undefined) => void] {
   const [activeUUID, setActiveUUID] = useState<string>();
   const note =
     activeUUID !== undefined
