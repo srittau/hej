@@ -5,6 +5,7 @@ from pathlib import Path
 from uuid import UUID
 
 import click
+from click.core import Context
 from click.exceptions import BadParameter
 
 from hej.exc import UnknownItemError
@@ -24,16 +25,24 @@ list_ = list
 
 @click.group()
 @click.option("--database", help="path to the database file")
-def cli(*, database: str | None = None) -> None:
-    pass
+@click.pass_context
+def cli(ctx: Context, *, database: str | None = None) -> None:
+    ctx.obj["db_url"] = _db_url(database)
+
+
+def _db_url(database: str | None) -> str:
+    if database is not None:
+        return f"file:{database}"
+    return str(Path.home() / ".hey.sqlite")
 
 
 @cli.command()
 @click.argument("title")
 @click.argument("text")
-def create(*, database: str | None = None, title: str, text: str) -> None:
+@click.pass_context
+def create(ctx: Context, *, title: str, text: str) -> None:
     async def create_article() -> Article:
-        async with open_transaction(_db_path(database)) as db:
+        async with open_transaction(ctx.obj["db_url"]) as db:
             return await insert_article(db, title, text)
 
     article = asyncio.run(create_article())
@@ -44,11 +53,10 @@ def create(*, database: str | None = None, title: str, text: str) -> None:
 @click.argument("uuid", type=click.UUID)
 @click.argument("title")
 @click.argument("text")
-def update(
-    *, database: str | None = None, uuid: UUID, title: str, text: str
-) -> None:
+@click.pass_context
+def update(ctx: Context, *, uuid: UUID, title: str, text: str) -> None:
     async def change_article() -> Article:
-        async with open_transaction(_db_path(database)) as db:
+        async with open_transaction(ctx.obj["db_url"]) as db:
             return await update_article(db, uuid, title, text)
 
     try:
@@ -58,9 +66,10 @@ def update(
 
 
 @cli.command()
-def list(*, database: str | None = None) -> None:
+@click.pass_context
+def list(ctx: Context) -> None:
     async def list_articles() -> list_[Article]:
-        async with open_transaction(_db_path(database)) as db:
+        async with open_transaction(ctx.obj["db_url"]) as db:
             return await select_all_articles(db)
 
     articles = asyncio.run(list_articles())
@@ -72,10 +81,11 @@ def list(*, database: str | None = None) -> None:
 
 
 @cli.command()
+@click.pass_context
 @click.argument("uuid", type=click.UUID)
-def view(*, database: str | None = None, uuid: UUID) -> None:
+def view(ctx: Context, *, uuid: UUID) -> None:
     async def read_article() -> Article:
-        async with open_transaction(_db_path(database)) as db:
+        async with open_transaction(ctx.obj["db_url"]) as db:
             return await select_article(db, uuid)
 
     try:
@@ -92,9 +102,10 @@ def view(*, database: str | None = None, uuid: UUID) -> None:
 
 @cli.command()
 @click.argument("uuid", type=click.UUID)
-def delete(*, database: str | None = None, uuid: UUID) -> None:
+@click.pass_context
+def delete(ctx: Context, *, uuid: UUID) -> None:
     async def remove_article() -> None:
-        async with open_transaction(_db_path(database)) as db:
+        async with open_transaction(ctx.obj["db_url"]) as db:
             await delete_article(db, uuid)
 
     try:
@@ -103,11 +114,5 @@ def delete(*, database: str | None = None, uuid: UUID) -> None:
         raise BadParameter(f"unknown article '{uuid}'", param_hint="uuid")
 
 
-def _db_path(database: str | None) -> str:
-    if database is not None:
-        return database
-    return str(Path.home() / ".hey.sqlite")
-
-
 def main() -> None:
-    cli()
+    cli(obj={})
