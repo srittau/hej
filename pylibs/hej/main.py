@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import sys
 from pathlib import Path
 from uuid import UUID
 
@@ -38,13 +39,14 @@ def _db_url(database: str | None) -> str:
 
 @cli.command()
 @click.argument("title")
-@click.argument("text")
+@click.argument("text", required=False)
 @click.pass_context
-def create(ctx: Context, *, title: str, text: str) -> None:
+def create(ctx: Context, *, title: str, text: str | None = None) -> None:
     async def create_article() -> Article:
         async with open_transaction(ctx.obj["db_url"]) as db:
-            return await insert_article(db, title, text)
+            return await insert_article(db, title, full_text)
 
+    full_text = _read_text(text)
     article = asyncio.run(create_article())
     click.echo(f"Article created with UUID {article.uuid}")
 
@@ -52,17 +54,25 @@ def create(ctx: Context, *, title: str, text: str) -> None:
 @cli.command()
 @click.argument("uuid", type=click.UUID)
 @click.argument("title")
-@click.argument("text")
+@click.argument("text", required=False)
 @click.pass_context
 def update(ctx: Context, *, uuid: UUID, title: str, text: str) -> None:
     async def change_article() -> Article:
         async with open_transaction(ctx.obj["db_url"]) as db:
-            return await update_article(db, uuid, title, text)
+            return await update_article(db, uuid, title, full_text)
 
+    full_text = _read_text(text)
     try:
         asyncio.run(change_article())
     except UnknownItemError:
         raise BadParameter(f"unknown article '{uuid}'", param_hint="uuid")
+
+
+def _read_text(text: str | None) -> str:
+    if text is not None:
+        return text
+    else:
+        return sys.stdin.read()
 
 
 @cli.command()
