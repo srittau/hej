@@ -9,7 +9,7 @@ flake8==4.0.1
 isort==5.10.1
 mypy==0.930
 pytest==6.2.5
-types-aiofiles==0.7.2
+types-aiofiles==0.8.0
 pytest-asyncio==0.16.0
 
 # Indirect dependencies
