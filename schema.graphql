@@ -1,0 +1,56 @@
+scalar DateTime # YYYY-MM-DDTHH:MM:SSZ
+"""
+A note or other kind of article.
+"""
+type Article {
+  """
+  Unique UUID for this article.
+  """
+  uuid: ID!
+  """
+  Article title.
+  """
+  title: String!
+  """
+  Article text in Markdown format.
+  """
+  text: String!
+  """
+  Date the article was last changed.
+  """
+  lastChanged: DateTime!
+}
+
+type Query {
+  """
+  List articles.
+
+  If `uuid` is not specified, return a list of all articles. If `uuid` is
+  specified, but the UUID is invalid or unknown, return an empty list,
+  otherwise return a list with the requested article.
+  """
+  articles(uuid: ID): [Article!]!
+}
+
+type Mutation {
+  """
+  Create a new article with a given title and (optionally) text.
+  """
+  createArticle(title: String!, text: String): Article!
+
+  """
+  Update the title and/or text of an article.
+
+  Return the changed article or `null` if the given UUID was invalid or
+  unknown.
+  """
+  updateArticle(uuid: ID!, title: String, text: String): Article
+
+  """
+  Delete an article.
+
+  Return `true` if the article was deleted and `false` if the UUID was invalid
+  or the article was unknown.
+  """
+  deleteArticle(uuid: ID!): Boolean!
+}

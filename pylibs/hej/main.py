@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import asyncio
 import sys
-from pathlib import Path
 from uuid import UUID
 
 import click
@@ -13,6 +12,7 @@ from hej.exc import UnknownItemError
 
 from .article import Article
 from .db import (
+    db_url,
     delete_article,
     insert_article,
     open_transaction,
@@ -28,13 +28,7 @@ list_ = list
 @click.option("--database", help="path to the database file")
 @click.pass_context
 def cli(ctx: Context, *, database: str | None = None) -> None:
-    ctx.obj["db_url"] = _db_url(database)
-
-
-def _db_url(database: str | None) -> str:
-    if database is not None:
-        return f"file:{database}"
-    return str(Path.home() / ".hey.sqlite")
+    ctx.obj["db_url"] = db_url(database)
 
 
 @cli.command()

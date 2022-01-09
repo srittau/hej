@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import datetime
+import os
 from collections.abc import Iterable
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -19,6 +20,15 @@ from hej.exc import UnknownItemError
 _SCHEMA_PATH = Path(__file__).parent.parent.parent / "db" / "schema.sql"
 
 
+def db_url(database: str | None = None) -> str:
+    if database is not None:
+        return f"file:{database}"
+    db_path = os.getenv("HEJ_DB")
+    if db_path is not None:
+        return db_path
+    return str(Path.home() / ".hey.sqlite")
+
+
 def db_datetime(dt: datetime.datetime) -> str:
     return dt.isoformat()[:19] + "Z"
 
@@ -35,8 +45,9 @@ class _ConnectionBase:
 
     async def execute(
         self, sql: str, parameters: Iterable[Any] | None = None
-    ) -> None:
-        await self.db.execute(sql, parameters)
+    ) -> int:
+        async with await self.db.execute(sql, parameters) as c:
+            return c.rowcount  # type: ignore
 
     async def execute_fetchall(
         self, sql: str, parameters: Iterable[Any] | None = None
@@ -171,25 +182,35 @@ async def insert_article(
 
 
 async def update_article(
-    db: _ConnectionBase, uuid: UUID, title: str, text: str
+    db: _ConnectionBase,
+    uuid: UUID,
+    title: str | None = None,
+    text: str | None = None,
 ) -> Article:
-    dt = datetime.datetime.utcnow()
-    async with db.db.execute(
+    old_article = await select_article(db, uuid)
+    if title is None and text is None:
+        return old_article
+
+    if title is None:
+        title = old_article.title
+    if text is None:
+        text = old_article.text
+    now = datetime.datetime.utcnow()
+
+    await db.execute(
         "UPDATE articles SET title = ?, text = ?, last_changed = ? "
         "WHERE uuid = ?",
-        [title, text, db_datetime(dt), str(uuid)],
-    ) as c:
-        if c.rowcount == 0:
-            raise UnknownItemError("articles", uuid)
-    return Article(uuid, title, text, dt)
+        [title, text, db_datetime(now), str(uuid)],
+    )
+    return Article(uuid, title, text, now)
 
 
 async def delete_article(db: _ConnectionBase, uuid: UUID) -> None:
-    async with db.db.execute(
+    rowcount = await db.execute(
         "DELETE FROM articles WHERE uuid = ?", [str(uuid)]
-    ) as c:
-        if c.rowcount == 0:
-            raise UnknownItemError("articles", uuid)
+    )
+    if rowcount == 0:
+        raise UnknownItemError("articles", uuid)
 
 
 def _article_from_db(row: Row) -> Article:
