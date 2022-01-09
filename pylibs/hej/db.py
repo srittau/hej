@@ -17,13 +17,18 @@ from aiosqlite import Connection
 from hej.exc import UnknownItemError
 from hej.note import Note
 
-_SCHEMA_PATH = Path(__file__).parent.parent.parent / "db" / "schema.sql"
+
+def db_schema_path() -> Path:
+    path = os.getenv("HEJ_DB_SCHEMA_PATH")
+    if path is not None:
+        return Path(path)
+    return Path(__file__).parent.parent.parent / "db" / "schema.sql"
 
 
 def db_url(database: str | None = None) -> str:
     if database is not None:
         return f"file:{database}"
-    db_path = os.getenv("HEJ_DB")
+    db_path = os.getenv("HEJ_DB_PATH")
     if db_path is not None:
         return db_path
     return str(Path.home() / ".hey.sqlite")
@@ -89,7 +94,7 @@ class Database(_ConnectionBase):
             assert count is not None
         if count[0] > 0:
             return
-        async with aiofiles.open(_SCHEMA_PATH) as f:
+        async with aiofiles.open(db_schema_path()) as f:
             sql = await f.read()
         await db.executescript(sql)
 

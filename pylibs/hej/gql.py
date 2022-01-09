@@ -32,7 +32,7 @@ from .note import Note
 
 
 def schema_file() -> Path:
-    path_s = os.getenv("HEJ_SCHEMA_PATH")
+    path_s = os.getenv("HEJ_GQL_SCHEMA_PATH")
     if path_s is None:
         path = Path(__file__).parent.parent.parent / "schema.graphql"
     else:
