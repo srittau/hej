@@ -7,9 +7,9 @@ click==8.0.3
 black==21.12b0
 flake8==4.0.1
 isort==5.10.1
-mypy==0.930
+mypy==0.931
 pytest==6.2.5
-types-aiofiles==0.8.0
+types-aiofiles==0.8.2
 pytest-asyncio==0.16.0
 
 # Indirect dependencies
