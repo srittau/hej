@@ -1,78 +1,51 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import "./App.css";
 
 import AddNote from "./AddNote";
 import NotesList from "./NotesList";
-import { createNote, Note } from "./Note";
+import { Note } from "./Note";
 import NoteContainer from "./NoteContainer";
-import { deleteNote, loadAllNotes, saveNote } from "./store";
+import { useCreateNote, useDeleteNote, useNotes, useUpdateNote } from "./gql";
 
-function App() {
-  const [notes, addNote, updateNote, deleteNote] = useNoteList();
-  const [note, setActiveNote] = useActiveNote(notes);
-
-  const onAddNote = () => {
-    const newUUID = addNote();
-    setActiveNote(newUUID);
-  };
+export default function App() {
+  const notes = useNotes();
+  const [createNote, newNoteUUID] = useCreateNote();
+  const updateNote = useUpdateNote();
+  const deleteNote = useDeleteNote();
+  const [note, setActiveUUID] = useActiveNote(notes, newNoteUUID);
 
   const onDeleteNote = (uuid: string) => {
-    setActiveNote(undefined);
+    setActiveUUID(undefined);
     deleteNote(uuid);
   };
 
   return (
     <div className="app">
-      <NotesList notes={notes} onClickNote={setActiveNote} />
+      <NotesList notes={notes} onClickNote={setActiveUUID} />
       <NoteContainer
         note={note}
-        onAddNote={onAddNote}
+        onAddNote={() => createNote()}
         onChangeNote={updateNote}
         onDeleteNote={onDeleteNote}
       />
-      <AddNote onClick={onAddNote} />
+      <AddNote onClick={() => createNote()} />
     </div>
   );
 }
 
-export default App;
-
-function useNoteList(): [
-  noteList: readonly Note[],
-  addNote: () => string,
-  updateNote: (newNote: Note) => void,
-  deleteNote: (uuid: string) => void,
-] {
-  const [list, setList] = useState<Note[]>(() => loadAllNotes());
-
-  const addNote = (): string => {
-    const newNote = createNote();
-    setList((oldList) => [newNote, ...oldList]);
-    saveNote(newNote);
-    return newNote.uuid;
-  };
-
-  const updateNote = (changedNote: Note) => {
-    setList((oldList) => [
-      changedNote,
-      ...oldList.filter((n) => n.uuid !== changedNote.uuid),
-    ]);
-    saveNote(changedNote);
-  };
-
-  const deleteNoteFromList = (uuid: string) => {
-    setList((oldList) => oldList.filter((n) => n.uuid !== uuid));
-    deleteNote(uuid);
-  };
-
-  return [list, addNote, updateNote, deleteNoteFromList];
-}
-
 function useActiveNote(
   notes: readonly Note[],
+  activeNoteUUID?: string,
 ): [Note | undefined, (uuid: string | undefined) => void] {
   const [activeUUID, setActiveUUID] = useState<string>();
+
+  useEffect(() => {
+    if (activeNoteUUID !== undefined) {
+      setActiveUUID(activeNoteUUID);
+    }
+  }, [activeNoteUUID]);
+
   const note =
     activeUUID !== undefined
       ? notes.find((n) => n.uuid === activeUUID)
