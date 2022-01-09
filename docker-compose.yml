@@ -1,0 +1,13 @@
+version: "3"
+
+volumes:
+  data:
+
+services:
+  hej:
+    image: srittau/hej:latest
+    build: .
+    ports:
+      - 127.0.0.1:8080:80
+    volumes:
+      - data:/app/data
