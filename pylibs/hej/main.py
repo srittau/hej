@@ -10,16 +10,16 @@ from click.exceptions import BadParameter
 
 from hej.exc import UnknownItemError
 
-from .article import Article
 from .db import (
     db_url,
-    delete_article,
-    insert_article,
+    delete_note,
+    insert_note,
     open_transaction,
-    select_all_articles,
-    select_article,
-    update_article,
+    select_all_notes,
+    select_note,
+    update_note,
 )
+from .note import Note
 
 list_ = list
 
@@ -36,13 +36,13 @@ def cli(ctx: Context, *, database: str | None = None) -> None:
 @click.argument("text", required=False)
 @click.pass_context
 def create(ctx: Context, *, title: str, text: str | None = None) -> None:
-    async def create_article() -> Article:
+    async def create_note() -> Note:
         async with open_transaction(ctx.obj["db_url"]) as db:
-            return await insert_article(db, title, full_text)
+            return await insert_note(db, title, full_text)
 
     full_text = _read_text(text)
-    article = asyncio.run(create_article())
-    click.echo(f"Article created with UUID {article.uuid}")
+    note = asyncio.run(create_note())
+    click.echo(f"Note created with UUID {note.uuid}")
 
 
 @cli.command()
@@ -51,15 +51,15 @@ def create(ctx: Context, *, title: str, text: str | None = None) -> None:
 @click.argument("text", required=False)
 @click.pass_context
 def update(ctx: Context, *, uuid: UUID, title: str, text: str) -> None:
-    async def change_article() -> Article:
+    async def change_note() -> Note:
         async with open_transaction(ctx.obj["db_url"]) as db:
-            return await update_article(db, uuid, title, full_text)
+            return await update_note(db, uuid, title, full_text)
 
     full_text = _read_text(text)
     try:
-        asyncio.run(change_article())
+        asyncio.run(change_note())
     except UnknownItemError:
-        raise BadParameter(f"unknown article '{uuid}'", param_hint="uuid")
+        raise BadParameter(f"unknown note '{uuid}'", param_hint="uuid")
 
 
 def _read_text(text: str | None) -> str:
@@ -72,50 +72,50 @@ def _read_text(text: str | None) -> str:
 @cli.command()
 @click.pass_context
 def list(ctx: Context) -> None:
-    async def list_articles() -> list_[Article]:
+    async def list_notes() -> list_[Note]:
         async with open_transaction(ctx.obj["db_url"]) as db:
-            return await select_all_articles(db)
+            return await select_all_notes(db)
 
-    articles = asyncio.run(list_articles())
-    for article in articles:
-        click.echo(f"{article.uuid} {article.title}")
-    if articles:
+    notes = asyncio.run(list_notes())
+    for note in notes:
+        click.echo(f"{note.uuid} {note.title}")
+    if notes:
         click.echo()
-    click.echo(f"Total {len(articles)} articles")
+    click.echo(f"Total {len(notes)} notes")
 
 
 @cli.command()
 @click.pass_context
 @click.argument("uuid", type=click.UUID)
 def view(ctx: Context, *, uuid: UUID) -> None:
-    async def read_article() -> Article:
+    async def read_note() -> Note:
         async with open_transaction(ctx.obj["db_url"]) as db:
-            return await select_article(db, uuid)
+            return await select_note(db, uuid)
 
     try:
-        article = asyncio.run(read_article())
+        note = asyncio.run(read_note())
     except UnknownItemError:
-        raise BadParameter(f"unknown article '{uuid}'", param_hint="uuid")
+        raise BadParameter(f"unknown note '{uuid}'", param_hint="uuid")
 
-    click.echo(article.title)
+    click.echo(note.title)
     click.echo()
-    click.echo(article.text)
+    click.echo(note.text)
     click.echo()
-    click.echo(f"Last changed: {article.last_changed}")
+    click.echo(f"Last changed: {note.last_changed}")
 
 
 @cli.command()
 @click.argument("uuid", type=click.UUID)
 @click.pass_context
 def delete(ctx: Context, *, uuid: UUID) -> None:
-    async def remove_article() -> None:
+    async def remove_note() -> None:
         async with open_transaction(ctx.obj["db_url"]) as db:
-            await delete_article(db, uuid)
+            await delete_note(db, uuid)
 
     try:
-        asyncio.run(remove_article())
+        asyncio.run(remove_note())
     except UnknownItemError:
-        raise BadParameter(f"unknown article '{uuid}'", param_hint="uuid")
+        raise BadParameter(f"unknown note '{uuid}'", param_hint="uuid")
 
 
 def main() -> None:

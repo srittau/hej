@@ -14,8 +14,8 @@ import aiofiles
 import aiosqlite
 from aiosqlite import Connection
 
-from hej.article import Article
 from hej.exc import UnknownItemError
+from hej.note import Note
 
 _SCHEMA_PATH = Path(__file__).parent.parent.parent / "db" / "schema.sql"
 
@@ -150,69 +150,66 @@ async def open_transaction(
             yield t
 
 
-async def select_all_articles(db: _ConnectionBase) -> list[Article]:
+async def select_all_notes(db: _ConnectionBase) -> list[Note]:
     rows = db.execute_fetchall(
-        "SELECT uuid, title, text, last_changed FROM articles"
+        "SELECT uuid, title, text, last_changed FROM notes"
     )
-    return [_article_from_db(row) async for row in rows]
+    return [_note_from_db(row) async for row in rows]
 
 
-async def select_article(db: _ConnectionBase, uuid: UUID) -> Article:
+async def select_note(db: _ConnectionBase, uuid: UUID) -> Note:
     row = await db.execute_fetchone(
-        "SELECT uuid, title, text, last_changed FROM articles "
-        "WHERE uuid = ?",
+        "SELECT uuid, title, text, last_changed FROM notes " "WHERE uuid = ?",
         [str(uuid)],
     )
     if row is None:
-        raise UnknownItemError("articles", uuid)
-    return _article_from_db(row)
+        raise UnknownItemError("notes", uuid)
+    return _note_from_db(row)
 
 
-async def insert_article(
-    db: _ConnectionBase, title: str, text: str
-) -> Article:
+async def insert_note(db: _ConnectionBase, title: str, text: str) -> Note:
     uuid = uuid4()
     dt = datetime.datetime.utcnow()
     await db.execute(
-        "INSERT INTO articles(uuid, title, text, last_changed) "
+        "INSERT INTO notes(uuid, title, text, last_changed) "
         "VALUES(?, ?, ?, ?)",
         [str(uuid), title, text, db_datetime(dt)],
     )
-    return Article(uuid, title, text, dt)
+    return Note(uuid, title, text, dt)
 
 
-async def update_article(
+async def update_note(
     db: _ConnectionBase,
     uuid: UUID,
     title: str | None = None,
     text: str | None = None,
-) -> Article:
-    old_article = await select_article(db, uuid)
+) -> Note:
+    old_note = await select_note(db, uuid)
     if title is None and text is None:
-        return old_article
+        return old_note
 
     if title is None:
-        title = old_article.title
+        title = old_note.title
     if text is None:
-        text = old_article.text
+        text = old_note.text
     now = datetime.datetime.utcnow()
 
     await db.execute(
-        "UPDATE articles SET title = ?, text = ?, last_changed = ? "
+        "UPDATE notes SET title = ?, text = ?, last_changed = ? "
         "WHERE uuid = ?",
         [title, text, db_datetime(now), str(uuid)],
     )
-    return Article(uuid, title, text, now)
+    return Note(uuid, title, text, now)
 
 
-async def delete_article(db: _ConnectionBase, uuid: UUID) -> None:
+async def delete_note(db: _ConnectionBase, uuid: UUID) -> None:
     rowcount = await db.execute(
-        "DELETE FROM articles WHERE uuid = ?", [str(uuid)]
+        "DELETE FROM notes WHERE uuid = ?", [str(uuid)]
     )
     if rowcount == 0:
-        raise UnknownItemError("articles", uuid)
+        raise UnknownItemError("notes", uuid)
 
 
-def _article_from_db(row: Row) -> Article:
+def _note_from_db(row: Row) -> Note:
     uuid_s, title, text, dt_str = row
-    return Article(UUID(uuid_s), title, text, datetime_from_db(dt_str))
+    return Note(UUID(uuid_s), title, text, datetime_from_db(dt_str))

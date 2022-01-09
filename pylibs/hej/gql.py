@@ -18,17 +18,17 @@ from graphql import GraphQLResolveInfo
 
 from hej.exc import UnknownItemError
 
-from .article import Article
 from .db import (
     db_url,
-    delete_article,
-    insert_article,
+    delete_note,
+    insert_note,
     open_transaction,
-    select_all_articles,
-    select_article,
-    update_article,
+    select_all_notes,
+    select_note,
+    update_note,
 )
 from .debug import debug
+from .note import Note
 
 
 def schema_file() -> Path:
@@ -50,18 +50,18 @@ def serialize_datetime(dt: datetime.datetime) -> str:
     return dt.isoformat()[:19] + "Z"
 
 
-article = ObjectType("Article")
+note = ObjectType("Note")
 
 query = QueryType()
 
 
-@query.field("articles")
-async def resolve_articles(
+@query.field("notes")
+async def resolve_notes(
     _: None, __: GraphQLResolveInfo, *, uuid: str | None = None
-) -> list[Article]:
+) -> list[Note]:
     if uuid is None:
         async with open_transaction(db_url()) as db:
-            return await select_all_articles(db)
+            return await select_all_notes(db)
     else:
         try:
             uuid_o = UUID(uuid)
@@ -69,33 +69,33 @@ async def resolve_articles(
             return []
         async with open_transaction(db_url()) as db:
             try:
-                article = await select_article(db, uuid_o)
+                note = await select_note(db, uuid_o)
             except UnknownItemError:
                 return []
             else:
-                return [article]
+                return [note]
 
 
 mutation = MutationType()
 
 
-@mutation.field("createArticle")
-async def resolve_create_article(
+@mutation.field("createNote")
+async def resolve_create_note(
     _: None, __: GraphQLResolveInfo, *, title: str, text: str | None = None
-) -> Article:
+) -> Note:
     async with open_transaction(db_url()) as db:
-        return await insert_article(db, title, text or "")
+        return await insert_note(db, title, text or "")
 
 
-@mutation.field("updateArticle")
-async def resolve_update_article(
+@mutation.field("updateNote")
+async def resolve_update_note(
     _: None,
     __: GraphQLResolveInfo,
     *,
     uuid: str,
     title: str | None = None,
     text: str | None = None,
-) -> Article | None:
+) -> Note | None:
     try:
         uuid_o = UUID(uuid)
     except ValueError:
@@ -103,13 +103,13 @@ async def resolve_update_article(
 
     async with open_transaction(db_url()) as db:
         try:
-            return await update_article(db, uuid_o, title, text)
+            return await update_note(db, uuid_o, title, text)
         except UnknownItemError:
             return None
 
 
-@mutation.field("deleteArticle")
-async def resolve_delete_article(
+@mutation.field("deleteNote")
+async def resolve_delete_note(
     _: None, __: GraphQLResolveInfo, *, uuid: str
 ) -> bool:
     try:
@@ -119,7 +119,7 @@ async def resolve_delete_article(
 
     async with open_transaction(db_url()) as db:
         try:
-            await delete_article(db, uuid_o)
+            await delete_note(db, uuid_o)
         except UnknownItemError:
             return False
         else:
@@ -130,7 +130,7 @@ schema = make_executable_schema(
     type_defs,
     snake_case_fallback_resolvers,
     datetime_scalar,
-    article,
+    note,
     query,
     mutation,
 )

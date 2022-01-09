@@ -4,7 +4,7 @@ from uuid import UUID
 
 
 @dataclass
-class Article:
+class Note:
     uuid: UUID
     title: str
     text: str

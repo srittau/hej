@@ -1,4 +1,4 @@
-CREATE TABLE articles(
+CREATE TABLE notes(
     uuid BLOB PRIMARY KEY,  -- valid UUID
     title TEXT NOT NULL,
     text TEXT NOT NULL,

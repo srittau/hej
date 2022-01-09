@@ -1,56 +1,56 @@
 scalar DateTime # YYYY-MM-DDTHH:MM:SSZ
 """
-A note or other kind of article.
+A note.
 """
-type Article {
+type Note {
   """
-  Unique UUID for this article.
+  Unique UUID for this note.
   """
   uuid: ID!
   """
-  Article title.
+  Note title.
   """
   title: String!
   """
-  Article text in Markdown format.
+  Note text in Markdown format.
   """
   text: String!
   """
-  Date the article was last changed.
+  Date the note was last changed.
   """
   lastChanged: DateTime!
 }
 
 type Query {
   """
-  List articles.
+  List notes.
 
-  If `uuid` is not specified, return a list of all articles. If `uuid` is
+  If `uuid` is not specified, return a list of all notes. If `uuid` is
   specified, but the UUID is invalid or unknown, return an empty list,
-  otherwise return a list with the requested article.
+  otherwise return a list with the requested note.
   """
-  articles(uuid: ID): [Article!]!
+  notes(uuid: ID): [Note!]!
 }
 
 type Mutation {
   """
-  Create a new article with a given title and (optionally) text.
+  Create a new note with a given title and (optionally) text.
   """
-  createArticle(title: String!, text: String): Article!
+  createNote(title: String!, text: String): Note!
 
   """
-  Update the title and/or text of an article.
+  Update the title and/or text of an note.
 
-  Return the changed article or `null` if the given UUID was invalid or
+  Return the changed note or `null` if the given UUID was invalid or
   unknown.
   """
-  updateArticle(uuid: ID!, title: String, text: String): Article
+  updateNote(uuid: ID!, title: String, text: String): Note
 
   """
-  Delete an article.
+  Delete an note.
 
-  Return `true` if the article was deleted and `false` if the UUID was invalid
-  or the article was unknown.
+  Return `true` if the note was deleted and `false` if the UUID was invalid
+  or the note was unknown.
   """
-  deleteArticle(uuid: ID!): Boolean!
+  deleteNote(uuid: ID!): Boolean!
 }
