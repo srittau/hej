@@ -11,3 +11,5 @@ services:
       - 127.0.0.1:8080:80
     volumes:
       - data:/app/data
+    environment:
+      - HEJ_SESSION_KEY=sikrit

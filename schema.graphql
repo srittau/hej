@@ -34,6 +34,21 @@ type Query {
 
 type Mutation {
   """
+  Login to hej.
+
+  Return a session key to be provided as HejSessionKey cookie in subsequent
+  requests on success. Return `null` if logging in failed.
+  """
+  login(password: String!): String
+
+  """
+  Logout from hej.
+
+  Return `true`.
+  """
+  logout: Boolean!
+
+  """
   Create a new note with a given title and (optionally) text.
   """
   createNote(title: String!, text: String): Note!
