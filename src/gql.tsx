@@ -6,7 +6,8 @@ import {
   useMutation,
   useQuery,
 } from "@apollo/client";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { setAuthCookie } from "./auth";
 
 import { Note } from "./Note";
 
@@ -21,6 +22,55 @@ interface GqlProviderProps {
 
 export function GqlProvider({ children }: GqlProviderProps) {
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
+}
+
+const LOGIN = gql`
+  mutation login($password: String!) {
+    sessionKey: login(password: $password)
+  }
+`;
+
+interface LoginResponse {
+  sessionKey: string;
+}
+
+export type LoginStatus = "not-logged-in" | "logged-in" | "wrong-password";
+
+export function useLogin(): [
+  status: LoginStatus,
+  login: (password: string) => void,
+] {
+  const [status, setStatus] = useState<LoginStatus>("not-logged-in");
+  const [login, { data }] = useMutation<LoginResponse>(LOGIN);
+  console.log(data);
+
+  useEffect(() => {
+    if (!data) return;
+    if (data.sessionKey === null) {
+      setStatus("wrong-password");
+    } else {
+      setAuthCookie(data.sessionKey);
+      setStatus("logged-in");
+    }
+  }, [data]);
+
+  return [
+    status,
+    (password) => {
+      login({ variables: { password } });
+    },
+  ];
+}
+
+const LOGOUT = gql`
+  mutation logout {
+    logout
+  }
+`;
+
+export function useLogout(): () => void {
+  const [logout] = useMutation(LOGOUT);
+  return () => logout();
 }
 
 const ALL_NOTES = gql`
