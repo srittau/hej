@@ -1,8 +1,8 @@
 import {
   ApolloClient,
   ApolloProvider,
-  gql,
   InMemoryCache,
+  gql,
   useMutation,
   useQuery,
 } from "@apollo/client";
@@ -13,7 +13,13 @@ import { Note } from "./Note";
 
 const client = new ApolloClient({
   uri: "/graphql/",
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Note: {
+        keyFields: ["uuid"],
+      },
+    },
+  }),
 });
 
 interface GqlProviderProps {
@@ -130,15 +136,21 @@ const UPDATE_NOTE = gql`
 `;
 
 export function useUpdateNote(): (note: Note) => void {
-  const [update] = useMutation(UPDATE_NOTE, {
-    refetchQueries: [ALL_NOTES],
-  });
+  const [update] = useMutation(UPDATE_NOTE);
   function updateNote(newNote: Note) {
     update({
       variables: {
         uuid: newNote.uuid,
         title: newNote.title,
         text: newNote.text,
+      },
+      optimisticResponse: {
+        updateNote: {
+          __typename: "Note",
+          uuid: newNote.uuid,
+          title: newNote.title,
+          text: newNote.text,
+        },
       },
     });
   }
