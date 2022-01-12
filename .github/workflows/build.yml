@@ -21,19 +21,18 @@ jobs:
         with:
           python-version: "3.10"
           cache: pip
-      - name: Install Python packages
+      - name: Install poetry
         env:
           PIP_DISABLE_PIP_VERSION_CHECK: 1
-        run: |
-          pip install --upgrade pip setuptools
-          pip install -r requirements.txt
-          pip check
+        run: pip install poetry==1.1.12
+      - name: Install Python packages
+        run: poetry install
       - name: Type check with mypy
-        run: mypy --no-incremental pylibs
+        run: poetry run mypy --no-incremental pylibs
       - name: Lint with flake8
-        run: flake8 pylibs
+        run: poetry run flake8 pylibs
       - name: Run tests with pytest
-        run: pytest
+        run: poetry run pytest
 
   test-javascript:
     runs-on: ubuntu-latest
