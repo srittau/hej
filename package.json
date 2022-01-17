@@ -47,5 +47,8 @@
     "@types/uuid": "^8.3.0",
     "prettier": "^2.2.1"
   },
+  "resolutions": {
+    "mini-css-extract-plugin": "~2.4.5"
+  },
   "proxy": "http://localhost:8000"
 }
