@@ -10,7 +10,7 @@ python = "~3.10"
 aiofiles = "^0.8"
 aiosqlite = "^0.17"
 ariadne = "^0.14.1"
-click = "^8.0.3"
+click = "^8.0.4"
 graphql-core = "^3.1.7"
 starlette = "^0.17.1"
 uvicorn = { version = ">=0.16", extras = ["standard"] }
