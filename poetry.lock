@@ -390,7 +390,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "types-aiofiles"
-version = "0.8.3"
+version = "0.8.4"
 description = "Typing stubs for aiofiles"
 category = "dev"
 optional = false
@@ -695,8 +695,8 @@ tomli = [
     {file = "tomli-2.0.1.tar.gz", hash = "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"},
 ]
 types-aiofiles = [
-    {file = "types-aiofiles-0.8.3.tar.gz", hash = "sha256:77c455ecfb08a81e39441ce35697870bcba8f2682baad4408b5eb48d9efb02c2"},
-    {file = "types_aiofiles-0.8.3-py3-none-any.whl", hash = "sha256:e261d6c0fafc3303c40cab64872609af8c702f6ec6590dc9f04a9bb8aaccc7b2"},
+    {file = "types-aiofiles-0.8.4.tar.gz", hash = "sha256:266ea4f8ea8e79cd74092adad6e0fe8d793cdd26169413434cf3fd56ac73f76f"},
+    {file = "types_aiofiles-0.8.4-py3-none-any.whl", hash = "sha256:695121ae118283b28869968f16965a5ab69a8ea94488e4935cd843144356aee7"},
 ]
 typing-extensions = [
     {file = "typing_extensions-4.1.1-py3-none-any.whl", hash = "sha256:21c85e0fe4b9a155d0799430b0ad741cdce7e359660ccbd8b530613e8df88ce2"},
