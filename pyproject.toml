@@ -19,7 +19,7 @@ uvicorn = { version = ">=0.16", extras = ["standard"] }
 black = "^22.1.0"
 flake8 = "^4.0.1"
 isort = "^5.10.1"
-mypy = "0.940"
+mypy = "0.942"
 pytest = ">=6.2.5,<8"
 pytest-asyncio = ">=0.16"
 types-aiofiles = "^0.8.2"
