@@ -6,6 +6,7 @@ from typing import AsyncGenerator
 from uuid import UUID
 
 import pytest
+import pytest_asyncio
 
 from hej.db import (
     Database,
@@ -25,8 +26,8 @@ _UUID = UUID("7bb570bf-2e21-4baf-b963-23c454e052ab")
 _UUID2 = UUID("dd877ebd-a9cf-466d-99f2-1327e2068ff2")
 
 
-@pytest.fixture
-async def db() -> AsyncGenerator[Database, None]:
+@pytest_asyncio.fixture
+async def db() -> AsyncGenerator[Database, None]:  # type: ignore[misc]
     async with open_db(":memory:") as db:
         yield db
 
