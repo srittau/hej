@@ -1,15 +1,17 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 
 import "./index.css";
 import App from "./App";
 import { GqlProvider } from "./gql";
 
-ReactDOM.render(
-  <React.StrictMode>
-    <GqlProvider>
-      <App />
-    </GqlProvider>
-  </React.StrictMode>,
-  document.getElementById("root"),
-);
+const el = document.getElementById("root");
+if (el) {
+  createRoot(el).render(
+    <React.StrictMode>
+      <GqlProvider>
+        <App />
+      </GqlProvider>
+    </React.StrictMode>,
+  );
+}
