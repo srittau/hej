@@ -56,14 +56,14 @@ class _ConnectionBase:
 
     async def execute_fetchall(
         self, sql: str, parameters: Iterable[Any] | None = None
-    ) -> AsyncIterable[Row]:
+    ) -> AsyncIterable[Row[Any]]:
         async with self.db.execute(sql, parameters) as c:
             async for row in c:
                 yield row
 
     async def execute_fetchone(
         self, sql: str, parameters: Iterable[Any] | None = None
-    ) -> Row | None:
+    ) -> Row[Any] | None:
         async with self.db.execute(sql, parameters) as c:
             return await c.fetchone()
 
@@ -215,6 +215,6 @@ async def delete_note(db: _ConnectionBase, uuid: UUID) -> None:
         raise UnknownItemError("notes", uuid)
 
 
-def _note_from_db(row: Row) -> Note:
+def _note_from_db(row: Row[Any]) -> Note:
     uuid_s, title, text, dt_str = row
     return Note(UUID(uuid_s), title, text, datetime_from_db(dt_str))
