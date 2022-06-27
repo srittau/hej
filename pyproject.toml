@@ -13,7 +13,7 @@ ariadne = "^0.15.0"
 click = "^8.0.3"
 graphql-core = "^3.1.7"
 starlette = ">=0.19.0,<0.21"
-uvicorn = { version = ">=0.16", extras = ["standard"] }
+uvicorn = { version = "~0.18.1", extras = ["standard"] }
 
 [tool.poetry.dev-dependencies]
 black = "^22.1.0"
