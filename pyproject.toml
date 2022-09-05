@@ -7,7 +7,7 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "~3.10"
-aiofiles = "^0.8"
+aiofiles = "22.1.0"
 aiosqlite = "^0.17"
 ariadne = "^0.15.0"
 click = "^8.0.3"
