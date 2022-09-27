@@ -36,7 +36,7 @@ trio = ["trio (>=0.16)"]
 
 [[package]]
 name = "ariadne"
-version = "0.15.1"
+version = "0.16.1"
 description = "Ariadne is a Python library for implementing GraphQL servers."
 category = "main"
 optional = false
@@ -44,6 +44,7 @@ python-versions = "*"
 
 [package.dependencies]
 graphql-core = ">=3.2.0,<3.3"
+starlette = ">0.17,<0.21"
 typing-extensions = ">=3.6.0"
 
 [package.extras]
@@ -441,7 +442,7 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "~3.10"
-content-hash = "c1007797ea5d13987376bee58f41ed4f2046c1c0514cb2bb10410afb834fe897"
+content-hash = "6d25334c8b030441e52100e0beb81d7d1e5512bd680bda9e5dc582658e018b2b"
 
 [metadata.files]
 aiofiles = [
@@ -457,8 +458,8 @@ anyio = [
     {file = "anyio-3.6.1.tar.gz", hash = "sha256:413adf95f93886e442aea925f3ee43baa5a765a64a0f52c6081894f9992fdd0b"},
 ]
 ariadne = [
-    {file = "ariadne-0.15.1-py3-none-any.whl", hash = "sha256:c87835e895ab0fcf9b3a0ab2b4a692ee56e9b043f449aece2d9b8da7e61a7ccc"},
-    {file = "ariadne-0.15.1.tar.gz", hash = "sha256:678851826887ecf27a791135fb9ea9a67305243ebb03f9814fbc50fb7e8251f4"},
+    {file = "ariadne-0.16.1-py3-none-any.whl", hash = "sha256:e600e27afbf04645604fdc7b25bf15f60e036acc56f6ea6febd3b6114b573b57"},
+    {file = "ariadne-0.16.1.tar.gz", hash = "sha256:77ab1f77ca8c091f8c095c9bafc9ee589243ea50b2f94ab6bea9985fced5d3d0"},
 ]
 attrs = [
     {file = "attrs-22.1.0-py2.py3-none-any.whl", hash = "sha256:86efa402f67bf2df34f51a335487cf46b1ec130d02b8d39fd248abfd30da551c"},
