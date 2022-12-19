@@ -36,7 +36,7 @@ trio = ["trio (>=0.16,<0.22)"]
 
 [[package]]
 name = "ariadne"
-version = "0.16.1"
+version = "0.17.0"
 description = "Ariadne is a Python library for implementing GraphQL servers."
 category = "main"
 optional = false
@@ -44,11 +44,12 @@ python-versions = "*"
 
 [package.dependencies]
 graphql-core = ">=3.2.0,<3.3"
-starlette = ">0.17,<0.21"
+starlette = "<1.0"
 typing-extensions = ">=3.6.0"
 
 [package.extras]
 asgi-file-uploads = ["python-multipart (>=0.0.5)"]
+file-uploads = ["python-multipart (>=0.0.5)"]
 
 [[package]]
 name = "attrs"
@@ -340,7 +341,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "starlette"
-version = "0.20.4"
+version = "0.23.1"
 description = "The little ASGI library that shines."
 category = "main"
 optional = false
@@ -350,7 +351,7 @@ python-versions = ">=3.7"
 anyio = ">=3.4.0,<5"
 
 [package.extras]
-full = ["itsdangerous", "jinja2", "python-multipart", "pyyaml", "requests"]
+full = ["httpx (>=0.22.0)", "itsdangerous", "jinja2", "python-multipart", "pyyaml"]
 
 [[package]]
 name = "tomli"
@@ -433,7 +434,7 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "~3.10"
-content-hash = "d0de9779286327f41a35638267da670704cc88869698391c7ef52e7ee92e82cc"
+content-hash = "ec3596ca201f118ec811ec24cd2e178db734249c4f4f1b41d4f4c3dcf6222337"
 
 [metadata.files]
 aiofiles = [
@@ -449,8 +450,8 @@ anyio = [
     {file = "anyio-3.6.2.tar.gz", hash = "sha256:25ea0d673ae30af41a0c442f81cf3b38c7e79fdc7b60335a4c14e05eb0947421"},
 ]
 ariadne = [
-    {file = "ariadne-0.16.1-py3-none-any.whl", hash = "sha256:e600e27afbf04645604fdc7b25bf15f60e036acc56f6ea6febd3b6114b573b57"},
-    {file = "ariadne-0.16.1.tar.gz", hash = "sha256:77ab1f77ca8c091f8c095c9bafc9ee589243ea50b2f94ab6bea9985fced5d3d0"},
+    {file = "ariadne-0.17.0-py3-none-any.whl", hash = "sha256:3359c164d647694658d33b250495a86ddb368a7bfc2719aeba88bc3ff3985df0"},
+    {file = "ariadne-0.17.0.tar.gz", hash = "sha256:afc5fd2706380ef114f1020dce74e0a42d27b28c8a8565c28191aaaa1808ea21"},
 ]
 attrs = [
     {file = "attrs-22.1.0-py2.py3-none-any.whl", hash = "sha256:86efa402f67bf2df34f51a335487cf46b1ec130d02b8d39fd248abfd30da551c"},
@@ -665,8 +666,8 @@ sniffio = [
     {file = "sniffio-1.3.0.tar.gz", hash = "sha256:e60305c5e5d314f5389259b7f22aaa33d8f7dee49763119234af3755c55b9101"},
 ]
 starlette = [
-    {file = "starlette-0.20.4-py3-none-any.whl", hash = "sha256:c0414d5a56297d37f3db96a84034d61ce29889b9eaccf65eb98a0b39441fcaa3"},
-    {file = "starlette-0.20.4.tar.gz", hash = "sha256:42fcf3122f998fefce3e2c5ad7e5edbf0f02cf685d646a83a08d404726af5084"},
+    {file = "starlette-0.23.1-py3-none-any.whl", hash = "sha256:ec69736c90be8dbfc6ec6800ba6feb79c8c44f9b1706c0b2bb27f936bcf362cc"},
+    {file = "starlette-0.23.1.tar.gz", hash = "sha256:8510e5b3d670326326c5c1d4cb657cc66832193fe5d5b7015a51c7b1e1b1bf42"},
 ]
 tomli = [
     {file = "tomli-2.0.1-py3-none-any.whl", hash = "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc"},
