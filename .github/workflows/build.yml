@@ -21,10 +21,7 @@ jobs:
         with:
           python-version: "3.10"
           cache: pip
-      - name: Install poetry
-        env:
-          PIP_DISABLE_PIP_VERSION_CHECK: 1
-        run: pip install poetry==1.1.12
+          cache-dependency-path: "**/poetry.lock"
       - name: Install Python packages
         run: poetry install
       - name: Type check with mypy
