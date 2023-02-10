@@ -414,19 +414,19 @@ files = [
 
 [[package]]
 name = "platformdirs"
-version = "2.6.2"
+version = "3.0.0"
 description = "A small Python package for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "platformdirs-2.6.2-py3-none-any.whl", hash = "sha256:83c8f6d04389165de7c9b6f0c682439697887bca0aa2f1c87ef1826be3584490"},
-    {file = "platformdirs-2.6.2.tar.gz", hash = "sha256:e1fea1fe471b9ff8332e229df3cb7de4f53eeea4998d3b6bfff542115e998bd2"},
+    {file = "platformdirs-3.0.0-py3-none-any.whl", hash = "sha256:b1d5eb14f221506f50d6604a561f4c5786d9e80355219694a1b244bcd96f4567"},
+    {file = "platformdirs-3.0.0.tar.gz", hash = "sha256:8a1228abb1ef82d788f74139988b137e78692984ec7b08eaa6c65f1723af28f9"},
 ]
 
 [package.extras]
-docs = ["furo (>=2022.12.7)", "proselint (>=0.13)", "sphinx (>=5.3)", "sphinx-autodoc-typehints (>=1.19.5)"]
-test = ["appdirs (==1.4.4)", "covdefaults (>=2.2.2)", "pytest (>=7.2)", "pytest-cov (>=4)", "pytest-mock (>=3.10)"]
+docs = ["furo (>=2022.12.7)", "proselint (>=0.13)", "sphinx (>=6.1.3)", "sphinx-autodoc-typehints (>=1.22,!=1.23.4)"]
+test = ["appdirs (==1.4.4)", "covdefaults (>=2.2.2)", "pytest (>=7.2.1)", "pytest-cov (>=4)", "pytest-mock (>=3.10)"]
 
 [[package]]
 name = "pluggy"
@@ -620,14 +620,14 @@ files = [
 
 [[package]]
 name = "types-aiofiles"
-version = "22.1.0.6"
+version = "22.1.0.7"
 description = "Typing stubs for aiofiles"
 category = "dev"
 optional = false
 python-versions = "*"
 files = [
-    {file = "types-aiofiles-22.1.0.6.tar.gz", hash = "sha256:4399a20ff93f81dd4cc9ac25a76e0c508cd5bbccc0b1b6f972129213c9560b97"},
-    {file = "types_aiofiles-22.1.0.6-py3-none-any.whl", hash = "sha256:416d5299b28b5070126b6618a6714e70d7bacb6082cc83aa19432d868f67b0d8"},
+    {file = "types-aiofiles-22.1.0.7.tar.gz", hash = "sha256:ba2ac6cfa4fecccab42f3648da525418b787c311dd81318b2b2fe1277242ba16"},
+    {file = "types_aiofiles-22.1.0.7-py3-none-any.whl", hash = "sha256:03d6f7528a2b41633481bcda65e19bd6b5e0a8ec9d7ce68c0ea050437bfcd2cf"},
 ]
 
 [[package]]
