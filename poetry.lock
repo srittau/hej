@@ -47,24 +47,26 @@ trio = ["trio (>=0.16,<0.22)"]
 
 [[package]]
 name = "ariadne"
-version = "0.17.1"
+version = "0.18.1"
 description = "Ariadne is a Python library for implementing GraphQL servers."
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "ariadne-0.17.1-py3-none-any.whl", hash = "sha256:62e50d28e40ebf6d99c690e261798d28b6bee21ad14154e409d0c0fc941ab83d"},
-    {file = "ariadne-0.17.1.tar.gz", hash = "sha256:07df3097f36434ecaaf7d00ab1541e9bd4d9d2678e9ef83b21d588100236bf2f"},
+    {file = "ariadne-0.18.1-py2.py3-none-any.whl", hash = "sha256:de6d9674f6a7d82f9f069023f1d20356afdab6ce9a46650df7d84c081efa8b47"},
+    {file = "ariadne-0.18.1.tar.gz", hash = "sha256:082612bd855c0431e28788d675d6fe4b6f52100c10380a420fab276029a76d1f"},
 ]
 
 [package.dependencies]
 graphql-core = ">=3.2.0,<3.3"
-starlette = "<1.0"
+starlette = ">0.17,<1.0"
 typing-extensions = ">=3.6.0"
 
 [package.extras]
 asgi-file-uploads = ["python-multipart (>=0.0.5)"]
-file-uploads = ["python-multipart (>=0.0.5)"]
+dev = ["black", "mypy", "pylint"]
+test = ["aiodataloader", "freezegun", "graphql-sync-dataloaders", "httpx", "opentracing", "pytest", "pytest-asyncio", "pytest-benchmark", "pytest-cov", "pytest-mock", "python-multipart (>=0.0.5)", "snapshottest", "werkzeug"]
+tracing = ["opentracing"]
 
 [[package]]
 name = "attrs"
@@ -586,14 +588,14 @@ files = [
 
 [[package]]
 name = "starlette"
-version = "0.24.0"
+version = "0.25.0"
 description = "The little ASGI library that shines."
 category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "starlette-0.24.0-py3-none-any.whl", hash = "sha256:75e2b24d71ff4f7cb9a3338f83d234c2d4135bf80f52aeb105c02a01d72a5df1"},
-    {file = "starlette-0.24.0.tar.gz", hash = "sha256:7925947f177a19e906c6ace10f07c64c4f9fdf7d509caaac6589f7cc0cfd95f3"},
+    {file = "starlette-0.25.0-py3-none-any.whl", hash = "sha256:774f1df1983fd594b9b6fb3ded39c2aa1979d10ac45caac0f4255cbe2acb8628"},
+    {file = "starlette-0.25.0.tar.gz", hash = "sha256:854c71e73736c429c2bdb07801f2c76c9cba497e7c3cf4988fde5e95fe4cdb3c"},
 ]
 
 [package.dependencies]
@@ -822,4 +824,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10"
-content-hash = "ba02788caf3129fe7e2b733d4b4f7815ee9218d0d33f8d7fe92e2da9ddf88e6d"
+content-hash = "fc11356fff89a8f44e763747ffd1ac60884ccbfa0e586c605ca5e488a342b077"

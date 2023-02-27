@@ -9,10 +9,10 @@ license = "MIT"
 python = "~3.10"
 aiofiles = "~23.1.0"
 aiosqlite = "~0.18.0"
-ariadne = "~0.17.0"
+ariadne = "~0.18.1"
 click = "^8.0.3"
 graphql-core = "^3.1.7"
-starlette = "~0.24.0"
+starlette = "~0.25.0"
 uvicorn = { version = "~0.20.0", extras = ["standard"] }
 
 [tool.poetry.dev-dependencies]
