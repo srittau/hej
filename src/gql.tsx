@@ -1,33 +1,27 @@
 import {
-  ApolloClient,
-  ApolloProvider,
-  InMemoryCache,
-  gql,
+  QueryClient,
+  QueryClientProvider,
   useMutation,
   useQuery,
-} from "@apollo/client";
+  useQueryClient,
+} from "@tanstack/react-query";
+import { gql, GraphQLClient, Variables } from "graphql-request";
 import React, { useEffect, useState } from "react";
-import { setAuthCookie } from "./auth";
 
+import { setAuthCookie } from "./auth";
 import { Note } from "./Note";
 
-const client = new ApolloClient({
-  uri: "/graphql/",
-  cache: new InMemoryCache({
-    typePolicies: {
-      Note: {
-        keyFields: ["uuid"],
-      },
-    },
-  }),
-});
+const queryClient = new QueryClient();
+const gqlClient = new GraphQLClient("/graphql/");
 
 interface GqlProviderProps {
   children?: React.ReactNode;
 }
 
 export function GqlProvider({ children }: GqlProviderProps) {
-  return <ApolloProvider client={client}>{children}</ApolloProvider>;
+  return (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  );
 }
 
 const LOGIN = gql`
@@ -36,8 +30,12 @@ const LOGIN = gql`
   }
 `;
 
+interface LoginVars extends Variables {
+  password: string;
+}
+
 interface LoginResponse {
-  sessionKey: string;
+  sessionKey: string | null;
 }
 
 export type LoginStatus = "not-logged-in" | "logged-in" | "wrong-password";
@@ -47,23 +45,24 @@ export function useLogin(): [
   login: (password: string) => void,
 ] {
   const [status, setStatus] = useState<LoginStatus>("not-logged-in");
-  const [login, { data }] = useMutation<LoginResponse>(LOGIN);
-  console.log(data);
+  const mutation = useMutation((password: string) =>
+    gqlClient.request<LoginResponse, LoginVars>(LOGIN, { password }),
+  );
 
   useEffect(() => {
-    if (!data) return;
-    if (data.sessionKey === null) {
+    if (!mutation.data) return;
+    if (mutation.data.sessionKey === null) {
       setStatus("wrong-password");
     } else {
-      setAuthCookie(data.sessionKey);
+      setAuthCookie(mutation.data.sessionKey);
       setStatus("logged-in");
     }
-  }, [data]);
+  }, [mutation.data]);
 
   return [
     status,
     (password) => {
-      login({ variables: { password } });
+      mutation.mutate(password);
     },
   ];
 }
@@ -75,17 +74,24 @@ const LOGOUT = gql`
 `;
 
 export function useLogout(): () => void {
-  const [logout] = useMutation(LOGOUT);
-  return () => logout();
+  const mutation = useMutation(() => gqlClient.request<unknown>(LOGOUT));
+  return () => mutation.mutate();
 }
 
+const NOTE_FRAGMENT = gql`
+  fragment NoteFragment on Note {
+    uuid
+    title
+    text
+    lastChanged
+  }
+`;
+
 const ALL_NOTES = gql`
+  ${NOTE_FRAGMENT}
   query allNotes {
     notes {
-      uuid
-      title
-      text
-      lastChanged
+      ...NoteFragment
     }
   }
 `;
@@ -95,17 +101,26 @@ interface AllNotesResponse {
 }
 
 export function useNotes(): readonly Note[] {
-  const { data } = useQuery<AllNotesResponse>(ALL_NOTES);
+  const { data } = useQuery({
+    queryKey: ["notes", "list", "all"],
+    queryFn: () => gqlClient.request<AllNotesResponse>(ALL_NOTES),
+  });
   return data?.notes ?? [];
 }
 
 const CREATE_NOTE = gql`
+  ${NOTE_FRAGMENT}
   mutation createNote($title: String!, $text: String!) {
     note: createNote(title: $title, text: $text) {
-      uuid
+      ...NoteFragment
     }
   }
 `;
+
+interface CreateNoteVars extends Variables {
+  title: string;
+  text: string;
+}
 
 interface CreateNoteResponse {
   note: Note;
@@ -115,46 +130,56 @@ export function useCreateNote(): [
   createNote: () => void,
   uuid: string | undefined,
 ] {
-  const [create, { data }] = useMutation<CreateNoteResponse>(CREATE_NOTE, {
-    refetchQueries: [ALL_NOTES],
-  });
-  function createNote() {
-    create({ variables: { title: "", text: "" } });
-  }
-  return [createNote, data?.note.uuid];
+  const client = useQueryClient();
+
+  const mutation = useMutation(
+    () =>
+      gqlClient.request<CreateNoteResponse, CreateNoteVars>(CREATE_NOTE, {
+        title: "",
+        text: "",
+      }),
+    {
+      onSuccess() {
+        client.invalidateQueries(["notes", "list"]);
+      },
+    },
+  );
+
+  return [() => mutation.mutate(), mutation.data?.note.uuid];
 }
 
 const UPDATE_NOTE = gql`
+  ${NOTE_FRAGMENT}
   mutation updateNote($uuid: ID!, $title: String, $text: String) {
     updateNote(uuid: $uuid, title: $title, text: $text) {
-      uuid
-      title
-      text
-      lastChanged
+      ...NoteFragment
     }
   }
 `;
 
+interface UpdateNoteVars extends Variables {
+  uuid: string;
+  title?: string;
+  text?: string;
+}
+
 export function useUpdateNote(): (note: Note) => void {
-  const [update] = useMutation(UPDATE_NOTE);
-  function updateNote(newNote: Note) {
-    update({
-      variables: {
+  const client = useQueryClient();
+  const mutation = useMutation(
+    (newNote: Note) =>
+      gqlClient.request<Note, UpdateNoteVars>(UPDATE_NOTE, {
         uuid: newNote.uuid,
         title: newNote.title,
         text: newNote.text,
+      }),
+    {
+      onSuccess(newNote) {
+        client.invalidateQueries(["notes", "list"]);
+        client.invalidateQueries(["notes", "details", newNote.uuid]);
       },
-      optimisticResponse: {
-        updateNote: {
-          __typename: "Note",
-          uuid: newNote.uuid,
-          title: newNote.title,
-          text: newNote.text,
-        },
-      },
-    });
-  }
-  return updateNote;
+    },
+  );
+  return (newNote) => mutation.mutate(newNote);
 }
 
 const DELETE_NOTE = gql`
@@ -163,9 +188,20 @@ const DELETE_NOTE = gql`
   }
 `;
 
+interface DeleteNoteVars extends Variables {
+  uuid: string;
+}
+
 export function useDeleteNote(): (uuid: string) => void {
-  const [delete_] = useMutation(DELETE_NOTE, {
-    refetchQueries: [ALL_NOTES],
-  });
-  return (uuid) => delete_({ variables: { uuid } });
+  const client = useQueryClient();
+  const mutation = useMutation(
+    (uuid: string) =>
+      gqlClient.request<boolean, DeleteNoteVars>(DELETE_NOTE, { uuid }),
+    {
+      onSuccess() {
+        client.invalidateQueries(["notes", "list"]);
+      },
+    },
+  );
+  return (uuid) => mutation.mutate(uuid);
 }
