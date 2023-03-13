@@ -9,13 +9,13 @@ COPY public/ public/
 COPY src/ src/
 RUN yarn build
 
-FROM python:3.10 AS build-py
+FROM python:3.11 AS build-py
 RUN pip install -U pip && pip install poetry
 COPY pyproject.toml ./pyproject.toml
 COPY poetry.lock ./poetry.lock
 RUN poetry export -o requirements.txt
 
-FROM srittau/uvicorn:3.10
+FROM srittau/uvicorn:3.11
 WORKDIR /app
 RUN mkdir /app/data
 COPY --from=build-js /build/dist/ /app/www-data/

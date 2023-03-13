@@ -6,7 +6,7 @@ authors = ["Sebastian Rittau <srittau@rittau.biz>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "~3.10"
+python = "~3.11"
 aiofiles = "~23.1.0"
 aiosqlite = "~0.18.0"
 ariadne = "~0.18.1"
