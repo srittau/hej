@@ -3,7 +3,7 @@
 FROM node:18-alpine AS build-js
 RUN mkdir /build
 WORKDIR /build
-COPY package.json yarn.lock tsconfig.json ./
+COPY package.json yarn.lock tsconfig.json index.html ./
 RUN yarn install --frozen-lockfile
 COPY public/ public/
 COPY src/ src/
@@ -18,7 +18,7 @@ RUN poetry export -o requirements.txt
 FROM srittau/uvicorn:3.10
 WORKDIR /app
 RUN mkdir /app/data
-COPY --from=build-js /build/build/ /app/www-data/
+COPY --from=build-js /build/dist/ /app/www-data/
 COPY ./schema.graphql ./db/schema.sql /app/
 COPY --from=build-py requirements.txt /app/requirements.txt
 RUN /app/virtualenv/bin/pip install -U pip && /app/virtualenv/bin/pip install -r /app/requirements.txt

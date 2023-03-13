@@ -6,7 +6,7 @@ export function useAuthCookie(): string | undefined {
   const [cookie, setCookie] = useState(getCookieValue(COOKIE_NAME));
 
   useEffect(() => {
-    let timer = window.setInterval(() => {
+    const timer = window.setInterval(() => {
       setCookie(getCookieValue(COOKIE_NAME));
     }, 100);
     return () => {

@@ -1,11 +1,9 @@
 {
   "compilerOptions": {
     "target": "es2018",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "baseUrl": "src",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "types": ["vite/client"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -20,8 +18,5 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "noImplicitReturns": true
-  },
-  "include": [
-    "src"
-  ]
+  }
 }

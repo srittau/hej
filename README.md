@@ -10,4 +10,10 @@ Build and run the docker image:
 docker compose build && docker compose up
 ```
 
-Open the UI at http://localhost:8080/, the development password is "sikrit".
+In a second terminal, run the application:
+
+```bash
+yarn start
+```
+
+Open the UI at http://localhost:5173/, the development password is "sikrit".
