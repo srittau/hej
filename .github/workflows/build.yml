@@ -43,12 +43,12 @@ jobs:
           cache: yarn
       - name: Install npm packages
         run: yarn install --frozen-lockfile
-      - name: Lint TypeScript with ESLint
+      - name: Lint TypeScript
         run: yarn run lint
-      - name: Check formatting with prettier
+      - name: Check formatting
         run: yarn run prettier
-      - name: Run tests with jest
-        run: CI=true yarn run test
+      - name: Run tests
+        run: yarn run test:ci
 
   build-docker:
     runs-on: ubuntu-latest
