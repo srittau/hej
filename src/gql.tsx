@@ -5,11 +5,12 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { gql, GraphQLClient, Variables } from "graphql-request";
+// eslint-disable-next-line import/no-unresolved
+import { GraphQLClient, Variables, gql } from "graphql-request";
 import React, { useEffect, useState } from "react";
 
-import { setAuthCookie } from "./auth";
 import { Note } from "./Note";
+import { setAuthCookie } from "./auth";
 
 const queryClient = new QueryClient();
 const gqlClient = new GraphQLClient("/graphql/");
@@ -137,7 +138,7 @@ export function useCreateNote(): () => Promise<Note> {
       }),
     {
       onSuccess() {
-        client.invalidateQueries(["notes", "list"]);
+        void client.invalidateQueries(["notes", "list"]);
       },
     },
   );
@@ -174,8 +175,8 @@ export function useUpdateNote(): (note: Note) => void {
       }),
     {
       onSuccess(newNote) {
-        client.invalidateQueries(["notes", "list"]);
-        client.invalidateQueries(["notes", "details", newNote.uuid]);
+        void client.invalidateQueries(["notes", "list"]);
+        void client.invalidateQueries(["notes", "details", newNote.uuid]);
       },
     },
   );
@@ -199,7 +200,7 @@ export function useDeleteNote(): (uuid: string) => void {
       gqlClient.request<boolean, DeleteNoteVars>(DELETE_NOTE, { uuid }),
     {
       onSuccess() {
-        client.invalidateQueries(["notes", "list"]);
+        void client.invalidateQueries(["notes", "list"]);
       },
     },
   );

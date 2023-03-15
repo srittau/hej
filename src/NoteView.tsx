@@ -1,7 +1,7 @@
 import React from "react";
 
-import { useDeleteNote, useUpdateNote } from "./gql";
 import { Note } from "./Note";
+import { useDeleteNote, useUpdateNote } from "./gql";
 import "./NoteView.css";
 
 interface NoteViewProps {

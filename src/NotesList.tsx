@@ -1,5 +1,5 @@
-import { useNotes } from "./gql";
 import NoteItem from "./NoteItem";
+import { useNotes } from "./gql";
 
 interface NotesListProps {
   onClickNote?: (uuid: string) => void;

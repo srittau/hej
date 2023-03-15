@@ -3,11 +3,11 @@ import { useState } from "react";
 import "./AppPage.css";
 
 import AddNote from "./AddNote";
-import NotesList from "./NotesList";
+import Logout from "./Logout";
 import { Note } from "./Note";
 import NoteContainer from "./NoteContainer";
+import NotesList from "./NotesList";
 import { useNotes } from "./gql";
-import Logout from "./Logout";
 
 export default function AppPage() {
   const [note, setActiveUUID] = useActiveNote();

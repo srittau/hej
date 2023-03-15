@@ -11,6 +11,7 @@ module.exports = {
     "plugin:import/typescript",
     "plugin:jsx-a11y/recommended",
     "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
     "plugin:react-hooks/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
@@ -29,8 +30,15 @@ module.exports = {
     },
   },
   rules: {
-    "@typescript-eslint/no-floating-promises": "off", // TODO: enable
-    "import/no-unresolved": "off", // TODO: enable
-    "react/react-in-jsx-scope": "off",
+    "import/first": "error",
+    "import/newline-after-import": "warn",
+    "import/no-useless-path-segments": "error",
+    "import/order": [
+      "warn",
+      {
+        alphabetize: { order: "asc" },
+        "newlines-between": "always",
+      },
+    ],
   },
 };

@@ -1,5 +1,5 @@
-import { useCreateNote } from "./gql";
 import { Note } from "./Note";
+import { useCreateNote } from "./gql";
 
 interface AddNoteProps {
   onNoteAdded?: (note: Note) => void;

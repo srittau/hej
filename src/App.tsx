@@ -1,6 +1,6 @@
 import AppPage from "./AppPage";
-import { useAuthCookie } from "./auth";
 import LoginPage from "./LoginPage";
+import { useAuthCookie } from "./auth";
 
 export default function App() {
   const cookie = useAuthCookie();
