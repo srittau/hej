@@ -1,12 +1,12 @@
-import { Note } from "./Note";
+import { useNotes } from "./gql";
 import NoteItem from "./NoteItem";
 
 interface NotesListProps {
-  notes: readonly Note[];
   onClickNote?: (uuid: string) => void;
 }
 
-function NotesList({ notes, onClickNote }: NotesListProps) {
+export default function NotesList({ onClickNote }: NotesListProps) {
+  const notes = useNotes();
   return (
     <div className="notes-list">
       <ul>
@@ -17,5 +17,3 @@ function NotesList({ notes, onClickNote }: NotesListProps) {
     </div>
   );
 }
-
-export default NotesList;

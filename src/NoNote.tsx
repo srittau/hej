@@ -1,14 +1,15 @@
+import AddNote from "./AddNote";
+import { Note } from "./Note";
+
 interface NoNoteProps {
-  onAddClick?: () => void;
+  onNoteAdded?: (note: Note) => void;
 }
 
-function NoNote({ onAddClick }: NoNoteProps) {
+export default function NoNote({ onNoteAdded }: NoNoteProps) {
   return (
     <div className="no-note">
       Please choose a note from the sidebar or{" "}
-      <button onClick={() => onAddClick?.()}>create a new note</button>.
+      <AddNote onNoteAdded={onNoteAdded}>create a new note</AddNote>.
     </div>
   );
 }
-
-export default NoNote;

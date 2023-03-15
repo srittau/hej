@@ -126,10 +126,7 @@ interface CreateNoteResponse {
   note: Note;
 }
 
-export function useCreateNote(): [
-  createNote: () => void,
-  uuid: string | undefined,
-] {
+export function useCreateNote(): () => Promise<Note> {
   const client = useQueryClient();
 
   const mutation = useMutation(
@@ -145,7 +142,10 @@ export function useCreateNote(): [
     },
   );
 
-  return [() => mutation.mutate(), mutation.data?.note.uuid];
+  return async () => {
+    const { note } = await mutation.mutateAsync();
+    return note;
+  };
 }
 
 const UPDATE_NOTE = gql`

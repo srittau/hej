@@ -1,13 +1,22 @@
+import { useCreateNote } from "./gql";
+import { Note } from "./Note";
+
 interface AddNoteProps {
-  onClick?: () => void;
+  onNoteAdded?: (note: Note) => void;
+  children?: React.ReactNode;
 }
 
-function AddNote({ onClick }: AddNoteProps) {
+export default function AddNote({ onNoteAdded, children }: AddNoteProps) {
+  const createNote = useCreateNote();
+
+  async function onClick() {
+    const note = await createNote();
+    onNoteAdded?.(note);
+  }
+
   return (
-    <button className="add-note" onClick={() => onClick?.()}>
-      Add note
+    <button className="add-note" onClick={() => void onClick()}>
+      {children}
     </button>
   );
 }
-
-export default AddNote;
