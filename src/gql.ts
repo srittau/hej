@@ -1,29 +1,18 @@
 import {
   QueryClient,
-  QueryClientProvider,
   useMutation,
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
 // eslint-disable-next-line import/no-unresolved
 import { GraphQLClient, Variables, gql } from "graphql-request";
-import React, { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Note } from "./Note";
 import { setAuthCookie } from "./auth";
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 const gqlClient = new GraphQLClient("/graphql/");
-
-interface GqlProviderProps {
-  children?: React.ReactNode;
-}
-
-export function GqlProvider({ children }: GqlProviderProps) {
-  return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-  );
-}
 
 const LOGIN = gql`
   mutation login($password: String!) {
@@ -104,9 +93,10 @@ interface AllNotesResponse {
 export function useNotes(): readonly Note[] {
   const { data } = useQuery({
     queryKey: ["notes", "list", "all"],
-    queryFn: () => gqlClient.request<AllNotesResponse>(ALL_NOTES),
+    queryFn: () =>
+      gqlClient.request<AllNotesResponse>(ALL_NOTES).then(({ notes }) => notes),
   });
-  return data?.notes ?? [];
+  return data ?? [];
 }
 
 const CREATE_NOTE = gql`
@@ -152,11 +142,15 @@ export function useCreateNote(): () => Promise<Note> {
 const UPDATE_NOTE = gql`
   ${NOTE_FRAGMENT}
   mutation updateNote($uuid: ID!, $title: String, $text: String) {
-    updateNote(uuid: $uuid, title: $title, text: $text) {
+    note: updateNote(uuid: $uuid, title: $title, text: $text) {
       ...NoteFragment
     }
   }
 `;
+
+interface UpdateNoteResponse {
+  note: Note;
+}
 
 interface UpdateNoteVars extends Variables {
   uuid: string;
@@ -164,23 +158,50 @@ interface UpdateNoteVars extends Variables {
   text?: string;
 }
 
-export function useUpdateNote(): (note: Note) => void {
+export function useUpdateNoteInCache(): (newNote: Note) => void {
   const client = useQueryClient();
+  return useCallback(
+    (newNote: Note) => {
+      client.setQueriesData<Note>(["notes", "details", newNote.uuid], newNote);
+      client.setQueriesData<Note[]>(["notes", "list"], (oldData) => {
+        if (!oldData) return oldData;
+        return oldData.map((note: Note) =>
+          note.uuid === newNote.uuid ? newNote : note,
+        );
+      });
+    },
+    [client],
+  );
+}
+
+export function useUpdateNote(): [
+  updateNote: (note: Note) => Promise<Note>,
+  loading: boolean,
+] {
+  const updateCache = useUpdateNoteInCache();
   const mutation = useMutation(
     (newNote: Note) =>
-      gqlClient.request<Note, UpdateNoteVars>(UPDATE_NOTE, {
+      gqlClient.request<UpdateNoteResponse, UpdateNoteVars>(UPDATE_NOTE, {
         uuid: newNote.uuid,
         title: newNote.title,
         text: newNote.text,
       }),
     {
-      onSuccess(newNote) {
-        void client.invalidateQueries(["notes", "list"]);
-        void client.invalidateQueries(["notes", "details", newNote.uuid]);
+      onSuccess({ note: newNote }) {
+        updateCache(newNote);
       },
     },
   );
-  return (newNote) => mutation.mutate(newNote);
+
+  const updateNote = useCallback(
+    async (newNote: Note) => {
+      const { note } = await mutation.mutateAsync(newNote);
+      return note;
+    },
+    [mutation],
+  );
+
+  return [updateNote, mutation.isLoading];
 }
 
 const DELETE_NOTE = gql`

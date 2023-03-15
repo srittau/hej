@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Pulse } from "react-svg-spinners";
 
 import { Note } from "./Note";
-import { useDeleteNote, useUpdateNote } from "./gql";
+import { useDeleteNote, useUpdateNote, useUpdateNoteInCache } from "./gql";
+
 import "./NoteView.css";
+
+const DEBOUNCE_MS = 500;
 
 interface NoteViewProps {
   note: Note;
@@ -10,7 +14,7 @@ interface NoteViewProps {
 }
 
 export default function NoteView({ note, onDeleteNote }: NoteViewProps) {
-  const updateNote = useUpdateNote();
+  const [updateNote, updating] = useDebouncedUpdate();
   const deleteNote = useDeleteNote();
 
   const onTitleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,10 +33,37 @@ export default function NoteView({ note, onDeleteNote }: NoteViewProps) {
       <div className="note-title">
         <input type="text" value={note.title} onChange={onTitleChange} />
       </div>
+      <div className={`note-spinner ${updating ? "active" : "inactive"}`}>
+        <Pulse />
+      </div>
       <button onClick={onDelete}>Delete note</button>
       <div className="note-text">
         <textarea value={note.text} onChange={onTextChange} />
       </div>
     </div>
   );
+}
+
+function useDebouncedUpdate(): [
+  updateNote: (note: Note) => void,
+  updating: boolean,
+] {
+  const [update, loading] = useUpdateNote();
+  const updateCache = useUpdateNoteInCache();
+  const [newNote, setNewNote] = useState<Note>();
+
+  useEffect(() => {
+    if (!newNote) return;
+    updateCache(newNote);
+    const timeout = setTimeout(() => {
+      try {
+        void (async () => await update(newNote))();
+      } finally {
+        setNewNote(undefined);
+      }
+    }, DEBOUNCE_MS);
+    return () => clearTimeout(timeout);
+  }, [newNote, update, updateCache]);
+
+  return [setNewNote, loading || newNote !== undefined];
 }

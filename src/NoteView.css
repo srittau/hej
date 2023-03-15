@@ -1,11 +1,32 @@
-.note-title {
-  margin-bottom: 4px;
+.note-view {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: .5rem;
 }
+
+.note-title {
+    align-self: center;
+}
+
 .note-title > input {
-  width: 100%;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.note-spinner {
+    transition: opacity .1s;
+}
+.note-spinner.inactive {
+    opacity: 0;
+}
+
+.note-view > button {
+    grid-column: span 2;
+    justify-self: start;
 }
 
 .note-text > textarea {
-  width: 100%;
-  height: calc(100vh - 50px);
+    box-sizing: border-box;
+    width: 100%;
+    height: calc(100vh - 50px);
 }
