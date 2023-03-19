@@ -11,6 +11,8 @@ import { useCallback, useEffect, useState } from "react";
 import { Note } from "./Note";
 import { setAuthCookie } from "./auth";
 
+const REFETCH_MS = 60 * 1000;
+
 export const queryClient = new QueryClient();
 const gqlClient = new GraphQLClient("/graphql/");
 
@@ -95,6 +97,8 @@ export function useNotes(): readonly Note[] {
     queryKey: ["notes", "list", "all"],
     queryFn: () =>
       gqlClient.request<AllNotesResponse>(ALL_NOTES).then(({ notes }) => notes),
+    refetchInterval: REFETCH_MS,
+    refetchIntervalInBackground: false,
   });
   return data ?? [];
 }
