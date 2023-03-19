@@ -1,11 +1,11 @@
 .app-page {
   box-sizing: border-box;
   height: 100vh;
-  padding: 8px;
+  padding: .5rem;
   display: grid;
-  grid-template-columns: 300px 1fr;
+  grid-template-columns: 18rem 1fr;
   grid-template-rows: auto 1fr auto;
-  grid-gap: 8px;
+  grid-gap: .5rem;
 }
 
 .app-page > .add-note {
