@@ -16,7 +16,7 @@ export default function NoteContainer({
   return (
     <div className="note-container">
       {note ? (
-        <NoteView note={note} onDeleteNote={onDeleteNote} />
+        <NoteView note={note} onDeleteNote={onDeleteNote} key={note.uuid} />
       ) : (
         <NoNote onNoteAdded={onNoteAdded} />
       )}
