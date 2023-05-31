@@ -162,15 +162,21 @@ interface UpdateNoteVars extends Variables {
   text?: string;
 }
 
-export function useUpdateNoteInCache(): (newNote: Note) => void {
+export function useUpdateNoteInCache(): (
+  uuid: string,
+  title?: string,
+  text?: string,
+) => void {
   const client = useQueryClient();
   return useCallback(
-    (newNote: Note) => {
-      client.setQueriesData<Note>(["notes", "details", newNote.uuid], newNote);
+    (uuid: string, title?: string, text?: string) => {
+      client.setQueriesData<Note>(["notes", "details", uuid], (oldNote) =>
+        oldNote ? updateNote(oldNote, title, text) : undefined,
+      );
       client.setQueriesData<Note[]>(["notes", "list"], (oldData) => {
         if (!oldData) return oldData;
         return oldData.map((note: Note) =>
-          note.uuid === newNote.uuid ? newNote : note,
+          note.uuid === uuid ? updateNote(note, title, text) : note,
         );
       });
     },
@@ -178,31 +184,41 @@ export function useUpdateNoteInCache(): (newNote: Note) => void {
   );
 }
 
-export function useUpdateNote(): [
-  updateNote: (note: Note) => Promise<Note>,
+function updateNote(note: Note, title?: string, text?: string): Note {
+  const newNote = { ...note };
+  if (title !== undefined) newNote.title = title;
+  if (text !== undefined) newNote.text = text;
+  return newNote;
+}
+
+export function useUpdateNote(
+  uuid: string,
+): [
+  updateNote: (data: { title?: string; text?: string }) => Promise<Note>,
   loading: boolean,
 ] {
   const updateCache = useUpdateNoteInCache();
   const mutation = useMutation(
-    (newNote: Note) =>
+    ({ title, text }: { title?: string; text?: string }) =>
       gqlClient.request<UpdateNoteResponse, UpdateNoteVars>(UPDATE_NOTE, {
-        uuid: newNote.uuid,
-        title: newNote.title,
-        text: newNote.text,
+        uuid,
+        title,
+        text,
       }),
     {
-      onSuccess({ note: newNote }) {
-        updateCache(newNote);
+      onSuccess({ note }) {
+        updateCache(uuid, note.title, note.text);
       },
     },
   );
 
+  const mutateAsync = mutation.mutateAsync;
   const updateNote = useCallback(
-    async (newNote: Note) => {
-      const { note } = await mutation.mutateAsync(newNote);
+    async (data: { title?: string; text?: string }) => {
+      const { note } = await mutateAsync(data);
       return note;
     },
-    [mutation],
+    [mutateAsync],
   );
 
   return [updateNote, mutation.isLoading];

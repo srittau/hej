@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Pulse } from "react-svg-spinners";
 
 import { Note } from "./Note";
 import { useDeleteNote, useUpdateNote, useUpdateNoteInCache } from "./gql";
+import { useDebouncedValue } from "./hooks";
 
 import "./NoteView.css";
-
-const DEBOUNCE_MS = 500;
 
 interface NoteViewProps {
   note: Note;
@@ -14,18 +13,10 @@ interface NoteViewProps {
 }
 
 export default function NoteView({ note, onDeleteNote }: NoteViewProps) {
-  const [updateNote, updating] = useDebouncedUpdate();
-  const [title, text, setTitle, setText] = useNoteText(note);
+  const { title, text, updateTitle, updateText, updating } =
+    useDebouncedUpdate(note);
   const deleteNote = useDeleteNote();
 
-  const onTitleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(evt.target.value);
-    updateNote({ ...note, title: evt.target.value });
-  };
-  const onTextChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setText(evt.target.value);
-    updateNote({ ...note, text: evt.target.value });
-  };
   function onDelete() {
     void deleteNote(note.uuid);
     onDeleteNote?.(note.uuid);
@@ -34,59 +25,51 @@ export default function NoteView({ note, onDeleteNote }: NoteViewProps) {
   return (
     <div className="note-view">
       <div className="note-title">
-        <input type="text" value={title} onChange={onTitleChange} />
+        <input
+          type="text"
+          value={title}
+          onChange={(evt) => updateTitle(evt.target.value)}
+        />
       </div>
       <div className={`note-spinner ${updating ? "active" : "inactive"}`}>
         <Pulse />
       </div>
       <button onClick={onDelete}>Delete note</button>
       <div className="note-text">
-        <textarea value={text} onChange={onTextChange} />
+        <textarea
+          value={text}
+          onChange={(evt) => updateText(evt.target.value)}
+        />
       </div>
     </div>
   );
 }
 
-function useNoteText(
-  note: Note,
-): [string, string, (title: string) => void, (text: string) => void] {
-  const [prevTitle, setPrevTitle] = useState(note.title);
-  const [prevText, setPrevText] = useState(note.text);
-  const [title, setTitle] = useState(note.title);
-  const [text, setText] = useState(note.text);
-
-  if (prevTitle !== note.title) {
-    setTitle(note.title);
-    setPrevTitle(note.title);
-  }
-  if (prevText !== note.text) {
-    setText(note.text);
-    setPrevText(note.text);
-  }
-
-  return [title, text, setTitle, setText];
-}
-
-function useDebouncedUpdate(): [
-  updateNote: (note: Note) => void,
-  updating: boolean,
-] {
-  const [update, loading] = useUpdateNote();
+function useDebouncedUpdate(initialNote: Note): {
+  title: string;
+  text: string;
+  updateTitle: (title: string) => void;
+  updateText: (text: string) => void;
+  updating: boolean;
+} {
+  const [update, loading] = useUpdateNote(initialNote.uuid);
   const updateCache = useUpdateNoteInCache();
-  const [newNote, setNewNote] = useState<Note>();
+  const [title, setTitle] = useState(initialNote.title);
+  const [text, setText] = useState(initialNote.text);
+  const [debouncedTitle, isTitleBouncing] = useDebouncedValue(title);
+  const [debouncedText, isTextBouncing] = useDebouncedValue(text);
 
   useEffect(() => {
-    if (!newNote) return;
-    updateCache(newNote);
-    const timeout = setTimeout(() => {
-      try {
-        void (async () => await update(newNote))();
-      } finally {
-        setNewNote(undefined);
-      }
-    }, DEBOUNCE_MS);
-    return () => clearTimeout(timeout);
-  }, [newNote, update, updateCache]);
+    updateCache(initialNote.uuid, debouncedTitle, debouncedText);
+    void (async () =>
+      await update({ title: debouncedTitle, text: debouncedText }))();
+  }, [initialNote.uuid, debouncedTitle, debouncedText, updateCache, update]);
 
-  return [setNewNote, loading || newNote !== undefined];
+  return {
+    title,
+    text,
+    updateTitle: setTitle,
+    updateText: setText,
+    updating: loading || isTitleBouncing || isTextBouncing,
+  };
 }
