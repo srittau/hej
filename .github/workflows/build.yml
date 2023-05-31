@@ -14,6 +14,7 @@ permissions:
 
 jobs:
   test-python:
+    name: Test Python
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -34,6 +35,7 @@ jobs:
         run: poetry run pytest
 
   test-javascript:
+    name: Test JavaScript
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -51,6 +53,7 @@ jobs:
         run: yarn run test:ci
 
   build-docker:
+    name: Build and Publish Docker image
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     needs:
@@ -61,5 +64,7 @@ jobs:
       - name: Build the Docker image
         run: |
           docker images
-          docker-compose build --pull
+          docker compose build --pull
           docker images
+      - name: Push the Docker image
+        run: docker compose push

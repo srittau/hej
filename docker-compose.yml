@@ -5,7 +5,7 @@ volumes:
 
 services:
   hej:
-    image: srittau/hej:latest
+    image: ghcr.io/srittau/hej:latest
     build: .
     ports:
       - 127.0.0.1:8080:80
