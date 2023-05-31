@@ -12,6 +12,10 @@ permissions:
   contents: read
   packages: write
 
+env:
+  DOCKER_REGISTRY: ghcr.io
+  IMAGE_NAME: srittau/hej
+
 jobs:
   test-python:
     name: Test Python
@@ -66,5 +70,12 @@ jobs:
           docker images
           docker compose build --pull
           docker images
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.DOCKER_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Push the Docker image
         run: docker compose push
