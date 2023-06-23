@@ -7,6 +7,7 @@ import {
 // eslint-disable-next-line import/no-unresolved
 import { GraphQLClient, Variables, gql } from "graphql-request";
 import { useCallback, useEffect, useState } from "react";
+import { Params } from "react-router-dom";
 
 import { Note } from "./Note";
 import { setAuthCookie } from "./auth";
@@ -92,16 +93,34 @@ interface AllNotesResponse {
   notes: readonly Note[];
 }
 
+const allNotesQuery = {
+  queryKey: ["notes", "list", "all"],
+  queryFn: () =>
+    gqlClient.request<AllNotesResponse>(ALL_NOTES).then(({ notes }) => notes),
+  refetchInterval: REFETCH_MS,
+  refetchIntervalInBackground: false,
+};
+
 export function useNotes(): readonly Note[] {
-  const { data } = useQuery({
-    queryKey: ["notes", "list", "all"],
-    queryFn: () =>
-      gqlClient.request<AllNotesResponse>(ALL_NOTES).then(({ notes }) => notes),
-    refetchInterval: REFETCH_MS,
-    refetchIntervalInBackground: false,
-  });
+  const { data } = useQuery(allNotesQuery);
   return data ?? [];
 }
+
+export const allNotesLoader = (queryClient: QueryClient) => async () =>
+  queryClient.ensureQueryData(allNotesQuery);
+
+// TODO: Query that only fetches the note with the given uuid.
+export function useNote(uuid: string): Note | undefined {
+  const notes = useNotes();
+  return notes.find((n) => n.uuid === uuid);
+}
+
+export const noteLoader =
+  (queryClient: QueryClient) =>
+  async ({ params }: { params: Params<string> }): Promise<Note | undefined> => {
+    const notes = await queryClient.ensureQueryData(allNotesQuery);
+    return notes.find((n) => n.uuid === params.uuid);
+  };
 
 const CREATE_NOTE = gql`
   ${NOTE_FRAGMENT}
@@ -121,26 +140,16 @@ interface CreateNoteResponse {
   note: Note;
 }
 
-export function useCreateNote(): () => Promise<Note> {
-  const client = useQueryClient();
-
-  const mutation = useMutation(
-    () =>
-      gqlClient.request<CreateNoteResponse, CreateNoteVars>(CREATE_NOTE, {
-        title: "",
-        text: "",
-      }),
+export async function createNote() {
+  const { note } = await gqlClient.request<CreateNoteResponse, CreateNoteVars>(
+    CREATE_NOTE,
     {
-      onSuccess() {
-        void client.invalidateQueries(["notes", "list"]);
-      },
+      title: "",
+      text: "",
     },
   );
-
-  return async () => {
-    const { note } = await mutation.mutateAsync();
-    return note;
-  };
+  await queryClient.invalidateQueries(["notes", "list"]);
+  return note;
 }
 
 const UPDATE_NOTE = gql`
@@ -234,16 +243,13 @@ interface DeleteNoteVars extends Variables {
   uuid: string;
 }
 
-export function useDeleteNote(): (uuid: string) => void {
-  const client = useQueryClient();
-  const mutation = useMutation(
-    (uuid: string) =>
-      gqlClient.request<boolean, DeleteNoteVars>(DELETE_NOTE, { uuid }),
+export async function deleteNote(uuid: string): Promise<boolean> {
+  const success = await gqlClient.request<boolean, DeleteNoteVars>(
+    DELETE_NOTE,
     {
-      onSuccess() {
-        void client.invalidateQueries(["notes", "list"]);
-      },
+      uuid,
     },
   );
-  return (uuid) => mutation.mutate(uuid);
+  await queryClient.invalidateQueries(["notes", "list"]);
+  return success;
 }

@@ -1,25 +1,31 @@
 import { useEffect, useState } from "react";
+import { useParams, useSubmit } from "react-router-dom";
 import { Pulse } from "react-svg-spinners";
 
 import { Note } from "./Note";
-import { useDeleteNote, useUpdateNote, useUpdateNoteInCache } from "./gql";
+import { useNote, useUpdateNote, useUpdateNoteInCache } from "./gql";
 import { useDebouncedValue } from "./hooks";
 
 import "./NoteView.css";
 
-interface NoteViewProps {
-  note: Note;
-  onDeleteNote?: (uuid: string) => void;
+export default function NoteView() {
+  const { uuid } = useParams<string>();
+  const note = useNote(uuid ?? "");
+  if (!note) return;
+  return <NoteContent note={note} key={uuid} />;
 }
 
-export default function NoteView({ note, onDeleteNote }: NoteViewProps) {
+interface NoteContentProps {
+  note: Note;
+}
+
+function NoteContent({ note }: NoteContentProps) {
   const { title, text, updateTitle, updateText, updating } =
     useDebouncedUpdate(note);
-  const deleteNote = useDeleteNote();
+  const submit = useSubmit();
 
   function onDelete() {
-    void deleteNote(note.uuid);
-    onDeleteNote?.(note.uuid);
+    submit(null, { method: "delete", action: `/notes/${note.uuid}` });
   }
 
   return (

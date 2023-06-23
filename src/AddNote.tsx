@@ -1,21 +1,17 @@
-import { Note } from "./Note";
-import { useCreateNote } from "./gql";
+import { useSubmit } from "react-router-dom";
 
 interface AddNoteProps {
-  onNoteAdded?: (note: Note) => void;
   children?: React.ReactNode;
 }
 
-export default function AddNote({ onNoteAdded, children }: AddNoteProps) {
-  const createNote = useCreateNote();
-
-  async function onClick() {
-    const note = await createNote();
-    onNoteAdded?.(note);
-  }
-
+export default function AddNote({ children }: AddNoteProps) {
+  const submit = useSubmit();
   return (
-    <button className="add-note" onClick={() => void onClick()}>
+    <button
+      type="button"
+      className="add-note"
+      onClick={() => submit(null, { method: "post", action: "/" })}
+    >
       {children}
     </button>
   );
