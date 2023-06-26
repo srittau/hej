@@ -482,17 +482,18 @@
   resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.25.24.tgz#8c7688559979f7079aacaf31aa881c3aa410b718"
   integrity sha512-XJfwUVUKDHF5ugKwIcxEgc9k8b7HbznCp6eUfWgu710hMPNIO4aw4/zB5RogDQz8nd6gyCDpU9O/m6qYEWY6yQ==
 
-"@tanstack/query-core@4.29.15":
-  version "4.29.15"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-4.29.15.tgz#6f8721341dbece517326a8e402d29ea3365538a8"
-  integrity sha512-Recc1d5rjHesKhzlH3Aw66v+vQxtB9OHEXP/vxgEcEJ0DwEpfe3EQ4id20vuBJHY2XRjfgWGmUs6ZgK6PSsTXA==
+"@tanstack/query-core@4.29.17":
+  version "4.29.17"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-4.29.17.tgz#bbef3a30190732ae3554187702f6e34c5caaefd8"
+  integrity sha512-iDbO8yZOpm1lqgq6L8mpxGbKaoiyZSjthxEB3WGU7mNPYss9q4H3Q67+e2xXGwkemEVmtEX/WwvtFitrvVU8TA==
 
-"@tanstack/react-query@^4.26.1":
-  version "4.29.15"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-4.29.15.tgz#83598e46964185199c59757e6b9c63c15eff81c1"
-  integrity sha512-1zDkv95ljuJ623hhbYU8YIprPW2x6774kh3IQNEuZav62+S+Zr26uUOrE2zGRp9I1uO5Liw/0uYB3dWXQP5+3Q==
+"@tanstack/react-query@^4.29.17":
+  version "4.29.17"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-4.29.17.tgz#bfd5da849bb7fd1b66eb9d47853ee030864a435e"
+  integrity sha512-udOy/jgqiBHBAP93YPAU3QoVYO+Rtx9HT/10xGDQzC8iQU/wIxcIaT/usX+1NSzoUFYU5hUcPaNErPWZnR7XgA==
   dependencies:
-    "@tanstack/query-core" "4.29.15"
+    "@tanstack/query-core" "4.29.17"
+    client-only "0.0.1"
     use-sync-external-store "^1.2.0"
 
 "@testing-library/dom@^9.0.0":
@@ -1067,6 +1068,11 @@ ci-info@^3.2.0:
   version "3.8.0"
   resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-3.8.0.tgz#81408265a5380c929f0bc665d62256628ce9ef91"
   integrity sha512-eXTggHWSooYhq49F2opQhuHWgzucfF2YgODK4e1566GQs5BIfP30B0oenwBJHfWxAs2fyPB1s7Mg949zLf61Yw==
+
+client-only@0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/client-only/-/client-only-0.0.1.tgz#38bba5d403c41ab150bff64a95c85013cf73bca1"
+  integrity sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==
 
 color-convert@^1.9.0:
   version "1.9.3"
