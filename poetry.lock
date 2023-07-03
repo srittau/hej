@@ -48,13 +48,13 @@ trio = ["trio (<0.22)"]
 
 [[package]]
 name = "ariadne"
-version = "0.20.0"
+version = "0.20.1"
 description = "Ariadne is a Python library for implementing GraphQL servers."
 optional = false
 python-versions = "*"
 files = [
-    {file = "ariadne-0.20.0-py2.py3-none-any.whl", hash = "sha256:87029b3d548d33aa3b289c4a47dff279003df3fc507e0b2919ca20c50e5f3019"},
-    {file = "ariadne-0.20.0.tar.gz", hash = "sha256:0eeaff2b69851d8e47cea27082883a89596cec5c69474c9bb23428aad3aecabb"},
+    {file = "ariadne-0.20.1-py2.py3-none-any.whl", hash = "sha256:5921f9dd030c336fa6ef74770d8f80f7d813f751a5901051f8ec3bde74f92bb3"},
+    {file = "ariadne-0.20.1.tar.gz", hash = "sha256:19b863bf1d237dc5bd34cebae10bd66a63cfb26ea3cfb561ee7d568ed0067989"},
 ]
 
 [package.dependencies]
