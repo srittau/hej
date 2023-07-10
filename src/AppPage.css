@@ -1,25 +1,25 @@
 .app-page {
-  box-sizing: border-box;
-  height: 100vh;
-  padding: .5rem;
-  display: grid;
-  grid-template-columns: 18rem 1fr;
-  grid-template-rows: auto 1fr auto;
-  grid-gap: .5rem;
+    box-sizing: border-box;
+    height: 100vh;
+    padding: 0.5rem;
+    display: grid;
+    grid-template-columns: 18rem 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-gap: 0.5rem;
 }
 
 .app-page > .add-note {
-  grid-area: 1 / 1;
+    grid-area: 1 / 1;
 }
 
 .app-page > .notes-list {
-  grid-area: 2 / 1;
+    grid-area: 2 / 1;
 }
 
 .app-page > .note-container {
-  grid-area: 1 / 2 / span 3;
+    grid-area: 1 / 2 / span 3;
 }
 
 .app-page > .logout-button {
-  grid-area: 3 / 1;
+    grid-area: 3 / 1;
 }

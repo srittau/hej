@@ -3,7 +3,7 @@
     display: grid;
     grid-template-columns: 1fr auto;
     grid-template-rows: auto auto 1fr;
-    gap: .5rem;
+    gap: 0.5rem;
 }
 
 .note-title {
@@ -16,7 +16,7 @@
 }
 
 .note-spinner {
-    transition: opacity .1s;
+    transition: opacity 0.1s;
 }
 .note-spinner.inactive {
     opacity: 0;
