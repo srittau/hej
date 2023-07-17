@@ -24,14 +24,14 @@ from .note import Note
 list_ = list
 
 
-@click.group()  # type: ignore[arg-type]
+@click.group()
 @click.option("--database", help="path to the database file")
 @click.pass_context
 def cli(ctx: Context, *, database: str | None = None) -> None:
     ctx.obj["db_url"] = db_url(database)
 
 
-@cli.command()  # type: ignore[arg-type,attr-defined,misc]
+@cli.command()  # type: ignore[attr-defined,misc]
 @click.argument("title")
 @click.argument("text", required=False)
 @click.pass_context
@@ -45,7 +45,7 @@ def create(ctx: Context, *, title: str, text: str | None = None) -> None:
     click.echo(f"Note created with UUID {note.uuid}")
 
 
-@cli.command()  # type: ignore[arg-type,attr-defined,misc]
+@cli.command()  # type: ignore[attr-defined,misc]
 @click.argument("uuid", type=click.UUID)
 @click.argument("title")
 @click.argument("text", required=False)
@@ -84,7 +84,7 @@ def list(ctx: Context) -> None:
     click.echo(f"Total {len(notes)} notes")
 
 
-@cli.command()  # type: ignore[arg-type,attr-defined,misc]
+@cli.command()  # type: ignore[attr-defined,misc]
 @click.pass_context
 @click.argument("uuid", type=click.UUID)
 def view(ctx: Context, *, uuid: UUID) -> None:
@@ -104,7 +104,7 @@ def view(ctx: Context, *, uuid: UUID) -> None:
     click.echo(f"Last changed: {note.last_changed}")
 
 
-@cli.command()  # type: ignore[arg-type,attr-defined,misc]
+@cli.command()  # type: ignore[attr-defined,misc]
 @click.argument("uuid", type=click.UUID)
 @click.pass_context
 def delete(ctx: Context, *, uuid: UUID) -> None:
