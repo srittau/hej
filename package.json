@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@tanstack/react-query": "^4.26.1",
+    "@tanstack/react-query": "^4.29.25",
     "graphql": "^16.2.0",
     "graphql-request": "^6.0.0",
     "react": "^18.0.0",
