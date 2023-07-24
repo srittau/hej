@@ -31,7 +31,7 @@ def cli(ctx: Context, *, database: str | None = None) -> None:
     ctx.obj["db_url"] = db_url(database)
 
 
-@cli.command()  # type: ignore[attr-defined,misc]
+@cli.command()
 @click.argument("title")
 @click.argument("text", required=False)
 @click.pass_context
@@ -45,7 +45,7 @@ def create(ctx: Context, *, title: str, text: str | None = None) -> None:
     click.echo(f"Note created with UUID {note.uuid}")
 
 
-@cli.command()  # type: ignore[attr-defined,misc]
+@cli.command()
 @click.argument("uuid", type=click.UUID)
 @click.argument("title")
 @click.argument("text", required=False)
@@ -69,7 +69,7 @@ def _read_text(text: str | None) -> str:
         return sys.stdin.read()
 
 
-@cli.command()  # type: ignore[attr-defined,misc]
+@cli.command()
 @click.pass_context
 def list(ctx: Context) -> None:
     async def list_notes() -> list_[Note]:
@@ -84,7 +84,7 @@ def list(ctx: Context) -> None:
     click.echo(f"Total {len(notes)} notes")
 
 
-@cli.command()  # type: ignore[attr-defined,misc]
+@cli.command()
 @click.pass_context
 @click.argument("uuid", type=click.UUID)
 def view(ctx: Context, *, uuid: UUID) -> None:
@@ -104,7 +104,7 @@ def view(ctx: Context, *, uuid: UUID) -> None:
     click.echo(f"Last changed: {note.last_changed}")
 
 
-@cli.command()  # type: ignore[attr-defined,misc]
+@cli.command()
 @click.argument("uuid", type=click.UUID)
 @click.pass_context
 def delete(ctx: Context, *, uuid: UUID) -> None:
@@ -119,4 +119,4 @@ def delete(ctx: Context, *, uuid: UUID) -> None:
 
 
 def main() -> None:
-    cli(obj={})  # type: ignore[misc]
+    cli(obj={})
