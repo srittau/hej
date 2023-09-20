@@ -1,12 +1,17 @@
-## Preparing the environment
+## Prerequisites
+
+- Python 3.11+
+- Poetry
+- Node.js 18+
+- yarn
+
+## Preparing the Development Environment
 
 Create a Python virtual environment, activate it, and install dependencies:
 
 ```
-$ python3.11 -m venv .venv
-$ source .venv/bin/activate
-$ pip install -U pip
-$ pip install -r requirements.txt
+$ poetry install
+$ poetry shell
 ```
 
 Prepare the JavaScript environment using yarn:
@@ -15,30 +20,36 @@ Prepare the JavaScript environment using yarn:
 $ yarn install --frozen-lockfile
 ```
 
-Optional: Build the docker container:
+## Running the Tests
+
+Running the Python tests and linter, using the activated virtual environment:
 
 ```
-$ docker-compose build
-```
-
-## Running the tests
-
-Running the Python tests, using the activated virtual environment:
-
-```
-$ pytest
+$ poe test
+$ poe lint
+$ poe typecheck
 ```
 
 Running the JavaScript tests:
 
 ```
-$ yarn test --watchAll=false
+$ yarn test
 ```
 
-During development it's often easier to run the tests in interactive mode using just `yarn test`.
+## Running the Test Server
 
-## Starting the test servers
+In one terminal, run:
 
-To start the backend server, run `./start.sh` in an activated virtual
-environment. Then you can start the react development server using
-`yarn start`.
+```
+$ poe start
+```
+
+In another terminal, run:
+
+```
+$ yarn start
+```
+
+Open http://localhost:5173/ in your browser. The password is `sikrit`.
+
+Changes to either the frontend or the backend should be automatically reloaded.
