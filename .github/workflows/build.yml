@@ -32,11 +32,11 @@ jobs:
       - name: Install Python packages
         run: poetry install
       - name: Type check with mypy
-        run: poetry run mypy --no-incremental pylibs
+        run: poetry run poe typecheck --no-incremental
       - name: Lint with flake8
-        run: poetry run flake8 pylibs
+        run: poetry run poe lint
       - name: Run tests with pytest
-        run: poetry run pytest
+        run: poetry run poe test
 
   test-javascript:
     name: Test JavaScript
