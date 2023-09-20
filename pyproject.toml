@@ -65,3 +65,7 @@ warn_unused_ignores = true
 test = "pytest"
 lint = "flake8 pylibs"
 typecheck = "mypy pylibs"
+
+[tool.poe.tasks.start]
+env = { PYTHONPATH = "pylibs", HEJ_SESSION_KEY = "sikrit" }
+cmd = "uvicorn --reload hej.app:app"

@@ -12,7 +12,7 @@ def static_path() -> Path:
     path = os.getenv("HEJ_STATIC_PATH")
     if path is not None:
         return Path(path)
-    return Path("build")
+    return Path("dist")
 
 
 app = Starlette(debug=debug())
