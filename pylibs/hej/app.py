@@ -1,3 +1,4 @@
+import logging
 import os
 from pathlib import Path
 
@@ -25,5 +26,6 @@ def create_app() -> Starlette:
     return app
 
 
+logging.basicConfig(level=logging.INFO)
 migrate_db()
 app = create_app()
