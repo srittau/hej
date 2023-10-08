@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 import datetime
+import logging
 import os
+import shutil
+import time
 from collections.abc import Iterable
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -10,28 +13,39 @@ from types import TracebackType
 from typing import Any, AsyncGenerator, AsyncIterable
 from uuid import UUID, uuid4
 
-import aiofiles
 import aiosqlite
 from aiosqlite import Connection
+from dbupgrade import MAX_API_LEVEL, MAX_VERSION, VersionInfo, db_upgrade
+from dbupgrade.result import UpgradeResult
 
-from hej.exc import UnknownItemError
-from hej.note import Note
+from .exc import UnknownItemError
+from .note import Note
+
+LOGGER = logging.getLogger(__name__)
 
 
 def db_schema_path() -> Path:
     path = os.getenv("HEJ_DB_SCHEMA_PATH")
     if path is not None:
-        return Path(path)
-    return Path(__file__).parent.parent.parent / "db" / "schema.sql"
+        p = Path(path)
+    else:
+        p = Path(__file__).parent.parent.parent / "db" / "versions"
+    if not p.is_dir():
+        raise RuntimeError(f"schema path {p} is not a directory")
+    return p
+
+
+def db_path(database: str | None = None) -> Path:
+    if database is not None:
+        return Path(database)
+    db_path = os.getenv("HEJ_DB_PATH")
+    if db_path is not None:
+        return Path(db_path)
+    return Path.home() / ".hej.sqlite"
 
 
 def db_url(database: str | None = None) -> str:
-    if database is not None:
-        return f"file:{database}"
-    db_path = os.getenv("HEJ_DB_PATH")
-    if db_path is not None:
-        return db_path
-    return str(Path.home() / ".hej.sqlite")
+    return f"file:{db_path(database)}"
 
 
 def db_datetime(dt: datetime.datetime) -> str:
@@ -69,8 +83,8 @@ class _ConnectionBase:
 
 
 class Database(_ConnectionBase):
-    def __init__(self, dbname: str) -> None:
-        self.dbname = dbname
+    def __init__(self, db_name: str) -> None:
+        self.db_name = db_name
         self._db: Connection | None = None
 
     @property
@@ -80,23 +94,8 @@ class Database(_ConnectionBase):
         return self._db
 
     async def __aenter__(self) -> Database:
-        self._db = await aiosqlite.connect(self.dbname)
-        try:
-            await self._initialize_db(self._db)
-        except:  # noqa E722
-            await self._db.close()
-            raise
+        self._db = await aiosqlite.connect(self.db_name)
         return self
-
-    async def _initialize_db(self, db: Connection) -> None:
-        async with db.execute("SELECT COUNT(*) FROM sqlite_master") as c:
-            count = await c.fetchone()
-            assert count is not None
-        if count[0] > 0:
-            return
-        async with aiofiles.open(db_schema_path()) as f:
-            sql = await f.read()
-        await db.executescript(sql)
 
     async def __aexit__(
         self,
@@ -115,6 +114,10 @@ class Database(_ConnectionBase):
     ) -> None:
         async with self.begin() as t:
             await t.db.execute(sql, parameters)
+
+    async def execute_script(self, sql: str) -> None:
+        assert self._db is not None
+        await self._db.executescript(sql)
 
 
 class Transaction(_ConnectionBase):
@@ -141,18 +144,44 @@ class Transaction(_ConnectionBase):
 
 
 @asynccontextmanager
-async def open_db(dbname: str) -> AsyncGenerator[Database, None]:
-    async with Database(dbname) as db:
+async def open_db(db_name: str) -> AsyncGenerator[Database, None]:
+    async with Database(db_name) as db:
         yield db
 
 
 @asynccontextmanager
-async def open_transaction(
-    dbname: str,
-) -> AsyncGenerator[Transaction, None]:
-    async with open_db(dbname) as db:
+async def open_transaction(db_name: str) -> AsyncGenerator[Transaction, None]:
+    async with open_db(db_name) as db:
         async with db.begin() as t:
             yield t
+
+
+def migrate_db() -> None:
+    path = db_path()
+    t = int(time.time())
+    new_path = path.parent / f"{path.name}.{t}"
+    shutil.copy(path, new_path)
+    result = initialize_db(path)
+    if not result.success:
+        LOGGER.error(
+            f"Database migration failed, old database kept as {new_path}"
+        )
+        raise RuntimeError("database migration failed")
+    if result.old_version.version != result.new_version.version:
+        LOGGER.info(
+            f"Migrated database from #{result.old_version.version} to "
+            f"#{result.new_version.version}"
+        )
+        LOGGER.info(f"Database backup kept as {new_path}")
+    else:
+        LOGGER.info("Database is up to date")
+        os.remove(new_path)
+
+
+def initialize_db(db_path: Path) -> UpgradeResult:
+    db_url = f"sqlite:///{db_path}"
+    version = VersionInfo(MAX_VERSION, MAX_API_LEVEL)
+    return db_upgrade("hej", db_url, str(db_schema_path()), version)
 
 
 async def select_all_notes(db: _ConnectionBase) -> list[Note]:

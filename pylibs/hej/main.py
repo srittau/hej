@@ -2,6 +2,9 @@ from __future__ import annotations
 
 import asyncio
 import sys
+from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
+from pathlib import Path
 from uuid import UUID
 
 import click
@@ -11,8 +14,10 @@ from click.exceptions import BadParameter
 from hej.exc import UnknownItemError
 
 from .db import (
-    db_url,
+    Transaction,
+    db_path,
     delete_note,
+    initialize_db,
     insert_note,
     open_transaction,
     select_all_notes,
@@ -24,11 +29,19 @@ from .note import Note
 list_ = list
 
 
+@asynccontextmanager
+async def transaction(db_path: Path) -> AsyncGenerator[Transaction, None]:
+    initialize_db(db_path)
+    db_url = f"file:{db_path}"
+    async with open_transaction(db_url) as t:
+        yield t
+
+
 @click.group()
 @click.option("--database", help="path to the database file")
 @click.pass_context
 def cli(ctx: Context, *, database: str | None = None) -> None:
-    ctx.obj["db_url"] = db_url(database)
+    ctx.obj["db_path"] = db_path(database)
 
 
 @cli.command()
@@ -37,7 +50,7 @@ def cli(ctx: Context, *, database: str | None = None) -> None:
 @click.pass_context
 def create(ctx: Context, *, title: str, text: str | None = None) -> None:
     async def create_note() -> Note:
-        async with open_transaction(ctx.obj["db_url"]) as db:
+        async with transaction(ctx.obj["db_path"]) as db:
             return await insert_note(db, title, full_text)
 
     full_text = _read_text(text)
@@ -52,7 +65,7 @@ def create(ctx: Context, *, title: str, text: str | None = None) -> None:
 @click.pass_context
 def update(ctx: Context, *, uuid: UUID, title: str, text: str) -> None:
     async def change_note() -> Note:
-        async with open_transaction(ctx.obj["db_url"]) as db:
+        async with transaction(ctx.obj["db_path"]) as db:
             return await update_note(db, uuid, title, full_text)
 
     full_text = _read_text(text)
@@ -73,7 +86,7 @@ def _read_text(text: str | None) -> str:
 @click.pass_context
 def list(ctx: Context) -> None:
     async def list_notes() -> list_[Note]:
-        async with open_transaction(ctx.obj["db_url"]) as db:
+        async with transaction(ctx.obj["db_path"]) as db:
             return await select_all_notes(db)
 
     notes = asyncio.run(list_notes())
@@ -89,7 +102,7 @@ def list(ctx: Context) -> None:
 @click.argument("uuid", type=click.UUID)
 def view(ctx: Context, *, uuid: UUID) -> None:
     async def read_note() -> Note:
-        async with open_transaction(ctx.obj["db_url"]) as db:
+        async with transaction(ctx.obj["db_path"]) as db:
             return await select_note(db, uuid)
 
     try:
@@ -109,7 +122,7 @@ def view(ctx: Context, *, uuid: UUID) -> None:
 @click.pass_context
 def delete(ctx: Context, *, uuid: UUID) -> None:
     async def remove_note() -> None:
-        async with open_transaction(ctx.obj["db_url"]) as db:
+        async with transaction(ctx.obj["db_path"]) as db:
             await delete_note(db, uuid)
 
     try:

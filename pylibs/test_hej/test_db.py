@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 import datetime
-from tempfile import NamedTemporaryFile
+from pathlib import Path
 from typing import AsyncGenerator
 from uuid import UUID
 
+import aiofiles
 import pytest
 import pytest_asyncio
 
@@ -28,43 +29,21 @@ _UUID2 = UUID("dd877ebd-a9cf-466d-99f2-1327e2068ff2")
 
 @pytest_asyncio.fixture
 async def db() -> AsyncGenerator[Database, None]:  # type: ignore[misc]
+    async with aiofiles.open(
+        Path(__file__).parent.parent.parent / "db" / "schema.sql"
+    ) as f:
+        schema = await f.read()
     async with open_db(":memory:") as db:
+        await db.execute_script(schema)
         yield db
-
-
-@pytest.mark.asyncio
-async def test_open_db__initialized() -> None:
-    async with open_db(":memory:") as db:
-        notes = await db.db.execute_fetchall("SELECT * FROM notes")
-        assert len(notes) == 0  # type: ignore
-
-
-@pytest.mark.asyncio
-async def test_open_db__dont_initialize_twice() -> None:
-    with NamedTemporaryFile() as db_file:
-        async with open_db(db_file.name) as db:
-            async with db.begin() as t:
-                await t.db.execute(
-                    "INSERT INTO notes VALUES(?, ?, ?, ?)",
-                    [
-                        str(_UUID),
-                        "Test",
-                        "",
-                        db_datetime(datetime.datetime.utcnow()),
-                    ],
-                )
-        async with open_db(db_file.name) as db:
-            notes = await db.db.execute_fetchall("SELECT * FROM notes")
-            assert len(notes) == 1  # type: ignore
 
 
 @pytest.mark.asyncio
 async def test_open_transaction() -> None:
     async with open_transaction(":memory:") as t:
-        async with t.db.execute("SELECT COUNT(*) FROM notes") as c:
+        async with t.db.execute("CREATE TABLE foo(bar)") as c:
             res = await c.fetchone()
-            assert res is not None
-            assert res[0] == 0
+            assert res is None
 
 
 async def _insert_note(
