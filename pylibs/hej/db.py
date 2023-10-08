@@ -31,7 +31,7 @@ def db_url(database: str | None = None) -> str:
     db_path = os.getenv("HEJ_DB_PATH")
     if db_path is not None:
         return db_path
-    return str(Path.home() / ".hey.sqlite")
+    return str(Path.home() / ".hej.sqlite")
 
 
 def db_datetime(dt: datetime.datetime) -> str:
