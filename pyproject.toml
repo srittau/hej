@@ -68,5 +68,8 @@ lint = "flake8 pylibs"
 typecheck = "mypy pylibs"
 
 [tool.poe.tasks.start]
-env = { PYTHONPATH = "pylibs", HEJ_SESSION_KEY = "sikrit" }
 cmd = "uvicorn --reload hej.app:app"
+[tool.poe.tasks.start.env]
+PYTHONPATH = "pylibs"
+HEJ_SESSION_KEY = "sikrit"
+HEJ_DB_PATH = "test-db/hej.sqlite"

@@ -158,6 +158,7 @@ async def open_transaction(db_name: str) -> AsyncGenerator[Transaction, None]:
 
 def migrate_db() -> None:
     path = db_path()
+    path.touch()
     t = int(time.time())
     new_path = path.parent / f"{path.name}.{t}"
     shutil.copy(path, new_path)

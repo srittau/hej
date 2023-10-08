@@ -53,3 +53,5 @@ $ yarn start
 Open http://localhost:5173/ in your browser. The password is `sikrit`.
 
 Changes to either the frontend or the backend should be automatically reloaded.
+
+The test database is found at `./test-db/hej.sqlite`.
