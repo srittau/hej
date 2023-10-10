@@ -1,36 +1,44 @@
-import React, { useState } from "react";
+import { Button, Container, Paper, PasswordInput, Stack } from "@mantine/core";
+import { useForm } from "@mantine/form";
 
 import { useLogin } from "./gql";
 
-import "./LoginPage.css";
-
 export default function LoginPage() {
-  const [loginStatus, login] = useLogin();
-  const [password, setPassword] = useState("");
+  const form = useForm({
+    initialValues: {
+      password: "",
+    },
 
-  function onSubmit(evt: React.FormEvent) {
-    evt.preventDefault();
-    login(password);
-  }
+    validate: {
+      password: (value) => (value.length === 0 ? "Password is required" : null),
+    },
+  });
+  const [loginStatus, login] = useLogin();
 
   return (
-    <div className="login-page">
-      <form onSubmit={onSubmit}>
-        <div>
-          Passwort:{" "}
-          <input
-            type="password"
-            value={password}
-            onChange={(evt) => setPassword(evt.target.value)}
-          />{" "}
-          {loginStatus === "wrong-password" && (
-            <span className="login-error">wrong password</span>
-          )}
-        </div>
-        <div>
-          <button type="submit">Login</button>
-        </div>
-      </form>
-    </div>
+    <Container size="420" my={40}>
+      <Paper p="xl" withBorder className="login-page">
+        <form onSubmit={form.onSubmit(() => login(form.values.password))}>
+          <Stack>
+            <PasswordInput
+              label="Password"
+              value={form.values.password}
+              required
+              autoComplete="current-password"
+              error={
+                (form.errors.password || loginStatus === "wrong-password") &&
+                "Invalid password"
+              }
+              onChange={(evt) =>
+                form.setFieldValue("password", evt.currentTarget.value)
+              }
+            />
+            <Button variant="filled" type="submit">
+              Login
+            </Button>
+          </Stack>
+        </form>
+      </Paper>
+    </Container>
   );
 }
