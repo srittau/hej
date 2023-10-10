@@ -1,12 +1,11 @@
+import { Button, Loader, TextInput, Textarea } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useParams, useSubmit } from "react-router-dom";
-import { Pulse } from "react-svg-spinners";
 
 import { Note } from "./Note";
+import classes from "./NoteView.module.css";
 import { useNote, useUpdateNote, useUpdateNoteInCache } from "./gql";
 import { useDebouncedValue } from "./hooks";
-
-import "./NoteView.css";
 
 export default function NoteView() {
   const { uuid } = useParams<string>();
@@ -29,24 +28,34 @@ function NoteContent({ note }: NoteContentProps) {
   }
 
   return (
-    <div className="note-view">
-      <div className="note-title">
-        <input
-          type="text"
-          value={title}
-          onChange={(evt) => updateTitle(evt.target.value)}
-        />
+    <div className={classes.noteView}>
+      <TextInput
+        type="text"
+        value={title}
+        className={classes.noteTitle}
+        onChange={(evt) => updateTitle(evt.target.value)}
+      />
+      <div
+        className={`${classes.noteSpinner} ${
+          updating ? classes.active : classes.inactive
+        }`}
+      >
+        <Loader type="dots" />{" "}
       </div>
-      <div className={`note-spinner ${updating ? "active" : "inactive"}`}>
-        <Pulse />
-      </div>
-      <button onClick={onDelete}>Delete note</button>
-      <div className="note-text">
-        <textarea
-          value={text}
-          onChange={(evt) => updateText(evt.target.value)}
-        />
-      </div>
+      <Button
+        variant="light"
+        type="button"
+        className={classes.noteActions}
+        onClick={onDelete}
+      >
+        Delete note
+      </Button>
+      <Textarea
+        multiline
+        value={text}
+        className={classes.noteText}
+        onChange={(evt) => updateText(evt.target.value)}
+      />
     </div>
   );
 }

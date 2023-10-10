@@ -1,10 +1,12 @@
+import { Text } from "@mantine/core";
+
 import AddNote from "./AddNote";
 
 export default function NoNote() {
   return (
-    <div className="no-note">
+    <Text>
       Please choose a note from the sidebar or{" "}
       <AddNote>create a new note</AddNote>.
-    </div>
+    </Text>
   );
 }

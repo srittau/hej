@@ -1,3 +1,5 @@
+import { Button } from "@mantine/core";
+
 import { unsetAuthCookie } from "./auth";
 import { useLogout } from "./gql";
 
@@ -10,10 +12,8 @@ export default function Logout() {
   }
 
   return (
-    <div className="logout-button">
-      <button type="button" onClick={logout}>
-        Logout
-      </button>
-    </div>
+    <Button type="button" variant="light" onClick={logout}>
+      Logout
+    </Button>
   );
 }

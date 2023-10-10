@@ -1,3 +1,4 @@
+import { Button } from "@mantine/core";
 import { useSubmit } from "react-router-dom";
 
 interface AddNoteProps {
@@ -7,12 +8,12 @@ interface AddNoteProps {
 export default function AddNote({ children }: AddNoteProps) {
   const submit = useSubmit();
   return (
-    <button
+    <Button
       type="button"
-      className="add-note"
+      variant="filled"
       onClick={() => submit(null, { method: "post", action: "/" })}
     >
       {children}
-    </button>
+    </Button>
   );
 }
