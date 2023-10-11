@@ -1,0 +1,9 @@
+.header {
+    height: 100%;
+    color: var(--mantine-color-text);
+    background: var(--mantine-color-blue-light);
+}
+
+.logo {
+    height: 80%;
+}
