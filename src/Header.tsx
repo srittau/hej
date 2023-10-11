@@ -10,7 +10,7 @@ interface HeaderProps {
 export default function Header({ opened, toggle }: HeaderProps) {
   return (
     <Group p="xs" className={classes.header}>
-      <Burger opened={opened} onClick={toggle} />
+      <Burger opened={opened} hiddenFrom="sm" onClick={toggle} />
       <Image src="/hej.png" className={classes.logo} />
       <Title size="h2">Hej</Title>
     </Group>

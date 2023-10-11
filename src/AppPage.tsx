@@ -10,11 +10,11 @@ export default function AppPage() {
 
   return (
     <AppShell
-      header={{ height: { base: "54", sm: 1 } }}
+      header={{ height: { base: "54" } }}
       navbar={{ width: 300, breakpoint: "sm", collapsed: { mobile: !opened } }}
       padding="md"
     >
-      <AppShell.Header hiddenFrom="md">
+      <AppShell.Header>
         <Header opened={opened} toggle={toggle} />
       </AppShell.Header>
       <AppShell.Navbar>
