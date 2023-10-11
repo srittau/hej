@@ -17,7 +17,7 @@ export default function AppPage() {
         <Burger opened={opened} onClick={toggle} />
       </AppShell.Header>
       <AppShell.Navbar>
-        <NavBar />
+        <NavBar onClose={toggle} />
       </AppShell.Navbar>
       <AppShell.Main>
         <Outlet />

@@ -4,11 +4,15 @@ import AddNote from "./AddNote";
 import Logout from "./Logout";
 import NotesList from "./NotesList";
 
-export default function NavBar() {
+interface NavBarProps {
+  onClose?: () => void;
+}
+
+export default function NavBar({ onClose }: NavBarProps) {
   return (
     <Stack p="md">
-      <AddNote>Add note</AddNote>
-      <NotesList />
+      <AddNote onClick={onClose}>Add note</AddNote>
+      <NotesList onNoteClick={() => onClose?.()} />
       <Logout />
     </Stack>
   );
