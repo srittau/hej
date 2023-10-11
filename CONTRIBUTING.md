@@ -41,7 +41,7 @@ $ yarn test
 In one terminal, run:
 
 ```
-$ poe start
+$ poetry run poe start
 ```
 
 In another terminal, run:
