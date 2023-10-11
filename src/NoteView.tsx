@@ -42,6 +42,12 @@ function NoteContent({ note }: NoteContentProps) {
       >
         <Loader type="dots" />{" "}
       </div>
+      <Textarea
+        multiline
+        value={text}
+        className={classes.noteText}
+        onChange={(evt) => updateText(evt.target.value)}
+      />
       <Button
         variant="light"
         type="button"
@@ -50,12 +56,6 @@ function NoteContent({ note }: NoteContentProps) {
       >
         Delete note
       </Button>
-      <Textarea
-        multiline
-        value={text}
-        className={classes.noteText}
-        onChange={(evt) => updateText(evt.target.value)}
-      />
     </div>
   );
 }
