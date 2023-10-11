@@ -1,7 +1,8 @@
-import { Button, Loader, TextInput, Textarea } from "@mantine/core";
+import { Loader, TextInput, Textarea } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useParams, useSubmit } from "react-router-dom";
 
+import DeleteNote from "./DeleteNote";
 import { Note } from "./Note";
 import classes from "./NoteView.module.css";
 import { useNote, useUpdateNote, useUpdateNoteInCache } from "./gql";
@@ -48,14 +49,7 @@ function NoteContent({ note }: NoteContentProps) {
         className={classes.noteText}
         onChange={(evt) => updateText(evt.target.value)}
       />
-      <Button
-        variant="light"
-        type="button"
-        className={classes.noteActions}
-        onClick={onDelete}
-      >
-        Delete note
-      </Button>
+      <DeleteNote className={classes.noteActions} onDelete={onDelete} />
     </div>
   );
 }
