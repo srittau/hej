@@ -13,7 +13,7 @@ export default function AddNote({ onClick, children }: AddNoteProps) {
       type="button"
       variant="filled"
       onClick={() => {
-        submit(null, { method: "post", action: "/" });
+        submit(null, { method: "post", action: "/notes" });
         onClick?.();
       }}
     >
