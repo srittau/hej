@@ -16,6 +16,10 @@ type Note {
   """
   text: String!
   """
+  Date the note was created.
+  """
+  creationDate: DateTime!
+  """
   Date the note was last changed.
   """
   lastChanged: DateTime!

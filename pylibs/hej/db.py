@@ -49,11 +49,16 @@ def db_url(database: str | None = None) -> str:
 
 
 def db_datetime(dt: datetime.datetime) -> str:
+    return dt.isoformat()[:19].replace("T", " ")
+
+
+def db_datetime_old(dt: datetime.datetime) -> str:
     return dt.isoformat()[:19] + "Z"
 
 
 def datetime_from_db(s: str) -> datetime.datetime:
-    assert s.endswith("Z")
+    if not s.endswith("Z"):
+        s += "Z"
     return datetime.datetime.fromisoformat(s[:-1])
 
 
@@ -185,16 +190,17 @@ def initialize_db(db_path: Path) -> UpgradeResult:
     return db_upgrade("hej", db_url, str(db_schema_path()), version)
 
 
+_NOTES_FIELDS = "uuid, title, text, creation_date, last_changed"
+
+
 async def select_all_notes(db: _ConnectionBase) -> list[Note]:
-    rows = db.execute_fetchall(
-        "SELECT uuid, title, text, last_changed FROM notes"
-    )
+    rows = db.execute_fetchall(f"SELECT {_NOTES_FIELDS} FROM notes")
     return [_note_from_db(row) async for row in rows]
 
 
 async def select_note(db: _ConnectionBase, uuid: UUID) -> Note:
     row = await db.execute_fetchone(
-        "SELECT uuid, title, text, last_changed FROM notes " "WHERE uuid = ?",
+        f"SELECT {_NOTES_FIELDS} FROM notes " "WHERE uuid = ?",
         [str(uuid)],
     )
     if row is None:
@@ -206,11 +212,11 @@ async def insert_note(db: _ConnectionBase, title: str, text: str) -> Note:
     uuid = uuid4()
     dt = datetime.datetime.utcnow()
     await db.execute(
-        "INSERT INTO notes(uuid, title, text, last_changed) "
-        "VALUES(?, ?, ?, ?)",
-        [str(uuid), title, text, db_datetime(dt)],
+        "INSERT INTO notes(uuid, title, text, creation_date, last_changed) "
+        "VALUES(?, ?, ?, ?, ?)",
+        [str(uuid), title, text, db_datetime(dt), db_datetime_old(dt)],
     )
-    return Note(uuid, title, text, dt)
+    return Note(uuid, title, text, dt, dt)
 
 
 async def update_note(
@@ -232,9 +238,9 @@ async def update_note(
     await db.execute(
         "UPDATE notes SET title = ?, text = ?, last_changed = ? "
         "WHERE uuid = ?",
-        [title, text, db_datetime(now), str(uuid)],
+        [title, text, db_datetime_old(now), str(uuid)],
     )
-    return Note(uuid, title, text, now)
+    return Note(uuid, title, text, old_note.creation_date, now)
 
 
 async def delete_note(db: _ConnectionBase, uuid: UUID) -> None:
@@ -246,5 +252,11 @@ async def delete_note(db: _ConnectionBase, uuid: UUID) -> None:
 
 
 def _note_from_db(row: Row) -> Note:
-    uuid_s, title, text, dt_str = row
-    return Note(UUID(uuid_s), title, text, datetime_from_db(dt_str))
+    uuid_s, title, text, created, last_changed_str = row
+    return Note(
+        UUID(uuid_s),
+        title,
+        text,
+        datetime_from_db(created),
+        datetime_from_db(last_changed_str),
+    )

@@ -12,6 +12,7 @@ import pytest_asyncio
 from hej.db import (
     Database,
     db_datetime,
+    db_datetime_old,
     delete_note,
     insert_note,
     open_db,
@@ -52,43 +53,58 @@ async def _insert_note(
     uuid: UUID,
     title: str = "",
     text: str = "",
+    creation_date: datetime.datetime = datetime.datetime(2000, 1, 1, 12, 0, 0),
     last_changed: datetime.datetime = datetime.datetime(2000, 1, 1, 12, 0, 0),
 ) -> None:
     await db.execute_commit(
-        "INSERT INTO notes(uuid, title, text, last_changed) "
-        "VALUES(?, ?, ?, ?)",
-        [str(uuid), title, text, db_datetime(last_changed)],
+        "INSERT INTO notes(uuid, title, text, creation_date, last_changed) "
+        "VALUES(?, ?, ?, ?, ?)",
+        [
+            str(uuid),
+            title,
+            text,
+            db_datetime(creation_date),
+            db_datetime_old(last_changed),
+        ],
     )
 
 
 @pytest.mark.asyncio
 async def test_select_all_notes(db: Database) -> None:
-    dt = datetime.datetime(2021, 9, 19, 4, 34, 12)
+    creation_date = datetime.datetime(2021, 5, 14, 13, 19, 4)
+    last_changed = datetime.datetime(2021, 9, 19, 4, 34, 12)
     await _insert_note(
         db,
         uuid=_UUID,
         title="Test Note",
         text="Test text",
-        last_changed=dt,
+        creation_date=creation_date,
+        last_changed=last_changed,
     )
     notes = await select_all_notes(db)
     assert len(notes) == 1
-    assert notes[0] == Note(_UUID, "Test Note", "Test text", dt)
+    assert notes[0] == Note(
+        _UUID, "Test Note", "Test text", creation_date, last_changed
+    )
 
 
 @pytest.mark.asyncio
 async def test_select_note(db: Database) -> None:
-    dt = datetime.datetime(2021, 9, 19, 4, 34, 12)
+    creation_date = datetime.datetime(2021, 5, 14, 13, 19, 4)
+    last_changed = datetime.datetime(2021, 9, 19, 4, 34, 12)
     await _insert_note(
         db,
         uuid=_UUID,
         title="Test Note",
         text="Test text",
-        last_changed=dt,
+        creation_date=creation_date,
+        last_changed=last_changed,
     )
     await _insert_note(db, uuid=_UUID2)
     note = await select_note(db, _UUID)
-    assert note == Note(_UUID, "Test Note", "Test text", dt)
+    assert note == Note(
+        _UUID, "Test Note", "Test text", creation_date, last_changed
+    )
 
 
 @pytest.mark.asyncio
@@ -106,13 +122,16 @@ async def test_insert_note(db: Database) -> None:
     assert note.title == "New Note"
     assert note.text == "New text"
     assert isinstance(note.last_changed, datetime.datetime)
-    row = await db.execute_fetchone("SELECT * FROM notes")
+    row = await db.execute_fetchone(
+        "SELECT uuid, title, text, creation_date, last_changed FROM notes"
+    )
     assert row is not None
     assert row == (
         str(note.uuid),
         "New Note",
         "New text",
-        db_datetime(note.last_changed),
+        db_datetime(note.creation_date),
+        db_datetime_old(note.last_changed),
     )
 
 
@@ -131,13 +150,15 @@ async def test_update_note(db: Database) -> None:
     assert note.title == "New Note"
     assert note.text == "New text"
     assert note.last_changed.year > 2000
-    row = await db.execute_fetchone("SELECT * FROM notes")
+    row = await db.execute_fetchone(
+        "SELECT uuid, title, text, last_changed FROM notes"
+    )
     assert row is not None
     assert row == (
         str(_UUID),
         "New Note",
         "New text",
-        db_datetime(note.last_changed),
+        db_datetime_old(note.last_changed),
     )
 
 
