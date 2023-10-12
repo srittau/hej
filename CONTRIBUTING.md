@@ -50,7 +50,9 @@ In another terminal, run:
 $ yarn start
 ```
 
-Open http://localhost:5173/ in your browser. The password is `sikrit`.
+The user interface can be accessed at http://localhost:5173/ in your browser.
+The password is `sikrit`. The GraphQL API can be accessed at
+http://localhost:5173/graphql/.
 
 Changes to either the frontend or the backend should be automatically reloaded.
 
