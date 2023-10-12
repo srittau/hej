@@ -13,7 +13,7 @@ export default function NoteView() {
     <>
       {note && (
         <Paper shadow="xs" p="md">
-          <Markdown>{`${note.title}\n\n${note.text}`}</Markdown>
+          <Markdown>{`# ${note.title}\n\n${note.text}`}</Markdown>
         </Paper>
       )}
       <AppLinkAction to={`/notes/${uuid}/editor`} replace icon={faEdit} />
