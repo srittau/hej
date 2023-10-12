@@ -38,11 +38,6 @@ const router = createBrowserRouter([
         path: "/notes/:uuid/editor",
         element: <NoteEditor />,
         loader: noteLoader(queryClient),
-        async action({ params }) {
-          if (!params.uuid) return;
-          if (!(await deleteNote(params.uuid))) return;
-          return redirect("/");
-        },
       },
       {
         path: "/notes/:uuid",

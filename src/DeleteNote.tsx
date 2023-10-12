@@ -1,12 +1,14 @@
 import { Button, Group, Modal, Stack, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { useParams, useSubmit } from "react-router-dom";
 
 interface DeleteNoteProps {
   className?: string;
-  onDelete?: () => void;
 }
 
-export default function DeleteNote({ className, onDelete }: DeleteNoteProps) {
+export default function DeleteNote({ className }: DeleteNoteProps) {
+  const { uuid } = useParams<string>();
+  const submit = useSubmit();
   const [opened, { open, close }] = useDisclosure(false);
 
   return (
@@ -22,7 +24,10 @@ export default function DeleteNote({ className, onDelete }: DeleteNoteProps) {
               variant="filled"
               onClick={() => {
                 close();
-                onDelete?.();
+                submit(null, {
+                  method: "delete",
+                  action: `/notes/${uuid}`,
+                });
               }}
             >
               Delete

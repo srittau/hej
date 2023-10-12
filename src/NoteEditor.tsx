@@ -1,7 +1,7 @@
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { Loader, TextInput, Textarea } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { useParams, useSubmit } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import AppLinkAction from "./AppLinkAction";
 import DeleteNote from "./DeleteNote";
@@ -29,11 +29,6 @@ interface NoteContentProps {
 function NoteContent({ note }: NoteContentProps) {
   const { title, text, updateTitle, updateText, updating } =
     useDebouncedUpdate(note);
-  const submit = useSubmit();
-
-  function onDelete() {
-    submit(null, { method: "delete", action: `/notes/${note.uuid}` });
-  }
 
   return (
     <div className={classes.noteView}>
@@ -59,7 +54,7 @@ function NoteContent({ note }: NoteContentProps) {
         className={classes.noteText}
         onChange={(evt) => updateText(evt.target.value)}
       />
-      <DeleteNote className={classes.noteActions} onDelete={onDelete} />
+      <DeleteNote className={classes.noteActions} />
     </div>
   );
 }
