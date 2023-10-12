@@ -1,5 +1,6 @@
 import logging
 import os
+import sys
 from pathlib import Path
 
 from starlette.applications import Starlette
@@ -7,6 +8,7 @@ from starlette.staticfiles import StaticFiles
 
 from .db import migrate_db
 from .debug import debug
+from .exc import DBMigrationError
 from .gql import app as gql_app
 
 
@@ -27,5 +29,8 @@ def create_app() -> Starlette:
 
 
 logging.basicConfig(level=logging.INFO)
-migrate_db()
+try:
+    migrate_db()
+except DBMigrationError:
+    sys.exit(1)
 app = create_app()

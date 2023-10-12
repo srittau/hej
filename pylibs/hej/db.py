@@ -18,7 +18,7 @@ from aiosqlite import Connection
 from dbupgrade import MAX_API_LEVEL, MAX_VERSION, VersionInfo, db_upgrade
 from dbupgrade.result import UpgradeResult
 
-from .exc import UnknownItemError
+from .exc import DBMigrationError, UnknownItemError
 from .note import Note
 
 LOGGER = logging.getLogger(__name__)
@@ -167,7 +167,7 @@ def migrate_db() -> None:
         LOGGER.error(
             f"Database migration failed, old database kept as {new_path}"
         )
-        raise RuntimeError("database migration failed")
+        raise DBMigrationError("database migration failed")
     if result.old_version.version != result.new_version.version:
         LOGGER.info(
             f"Migrated database from #{result.old_version.version} to "

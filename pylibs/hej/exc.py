@@ -21,3 +21,7 @@ class UnknownItemError(HejException):
         super().__init__(f"unknown item '{id}' in table '{table}'")
         self.table = table
         self.id = id
+
+
+class DBMigrationError(HejException):
+    pass
