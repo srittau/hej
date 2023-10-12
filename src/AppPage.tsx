@@ -7,7 +7,7 @@ import Header from "./Header";
 import NavBar from "./NavBar";
 
 export default function AppPage() {
-  const [opened, { toggle }] = useDisclosure();
+  const [opened, { toggle, close }] = useDisclosure();
 
   return (
     <AppContext.Provider value={{ sidebarOpened: opened }}>
@@ -24,7 +24,7 @@ export default function AppPage() {
           <Header opened={opened} toggle={toggle} />
         </AppShell.Header>
         <AppShell.Navbar>
-          <NavBar onClose={toggle} />
+          <NavBar onClose={close} />
         </AppShell.Navbar>
         <AppShell.Main>
           <Outlet />
