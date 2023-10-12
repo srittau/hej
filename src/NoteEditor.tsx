@@ -40,6 +40,8 @@ function NoteContent({ note }: NoteContentProps) {
       <TextInput
         type="text"
         value={title}
+        autoFocus // eslint-disable-line jsx-a11y/no-autofocus
+        aria-label="Note title"
         className={classes.noteTitle}
         onChange={(evt) => updateTitle(evt.target.value)}
       />
@@ -53,6 +55,7 @@ function NoteContent({ note }: NoteContentProps) {
       <Textarea
         multiline
         value={text}
+        aria-label="Note text"
         className={classes.noteText}
         onChange={(evt) => updateText(evt.target.value)}
       />
