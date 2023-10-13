@@ -14,7 +14,6 @@ interface NotesListProps {
 export default function NotesLinks({ onNoteClick }: NotesListProps) {
   const notes = useNotes();
   const { uuid } = useParams<string>();
-  console.log(uuid);
   return (
     <div className={classes.section}>
       {notes.map((note) => (
