@@ -9,7 +9,7 @@ import { GraphQLClient, Variables, gql } from "graphql-request";
 import { useCallback, useEffect, useState } from "react";
 import { Params } from "react-router-dom";
 
-import { Note } from "./Note";
+import { Note, NoteMeta } from "./Note";
 import { setAuthCookie } from "./auth";
 
 const REFETCH_MS = 60 * 1000;
@@ -71,14 +71,55 @@ export function useLogout(): () => void {
   return () => mutation.mutate();
 }
 
+const NOTE_META_FRAGMENT = gql`
+  fragment NoteMetaFragment on Note {
+    uuid
+    title
+    creationDate
+    lastChanged
+  }
+`;
+
 const NOTE_FRAGMENT = gql`
   fragment NoteFragment on Note {
     uuid
     title
-    text
+    creationDate
     lastChanged
+    text
   }
 `;
+
+const ALL_NOTES_META = gql`
+  ${NOTE_META_FRAGMENT}
+  query allNotesMeta {
+    notes {
+      ...NoteMetaFragment
+    }
+  }
+`;
+
+interface AllNotesMetaResponse {
+  notes: readonly NoteMeta[];
+}
+
+const allNotesMetaQuery = {
+  queryKey: ["notes", "list", "all-meta"],
+  queryFn: () =>
+    gqlClient
+      .request<AllNotesMetaResponse>(ALL_NOTES_META)
+      .then(({ notes }) => notes),
+  refetchInterval: REFETCH_MS,
+  refetchIntervalInBackground: false,
+};
+
+export function useNotesMeta(): readonly NoteMeta[] {
+  const { data } = useQuery(allNotesMetaQuery);
+  return data ?? [];
+}
+
+export const allNotesMetaLoader = (queryClient: QueryClient) => async () =>
+  queryClient.ensureQueryData(allNotesMetaQuery);
 
 const ALL_NOTES = gql`
   ${NOTE_FRAGMENT}
@@ -101,18 +142,10 @@ const allNotesQuery = {
   refetchIntervalInBackground: false,
 };
 
-export function useNotes(): readonly Note[] {
-  const { data } = useQuery(allNotesQuery);
-  return data ?? [];
-}
-
-export const allNotesLoader = (queryClient: QueryClient) => async () =>
-  queryClient.ensureQueryData(allNotesQuery);
-
 // TODO: Query that only fetches the note with the given uuid.
 export function useNote(uuid: string): Note | undefined {
-  const notes = useNotes();
-  return notes.find((n) => n.uuid === uuid);
+  const { data } = useQuery(allNotesQuery);
+  return (data ?? []).find((n) => n.uuid === uuid);
 }
 
 export const noteLoader =

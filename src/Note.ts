@@ -1,10 +1,14 @@
-export interface Note {
+export interface NoteMeta {
   uuid: string;
   title: string;
-  text: string;
+  creationDate: string;
   lastChanged: string;
 }
 
-export function noteTitle(note: Note): string {
+export interface Note extends NoteMeta {
+  text: string;
+}
+
+export function noteTitle(note: NoteMeta): string {
   return note.title.trim() || "<untitled>";
 }

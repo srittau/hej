@@ -1,4 +1,5 @@
-import { ScrollArea, Stack, Text } from "@mantine/core";
+import { Button, ScrollArea, Stack, Text } from "@mantine/core";
+import { Link } from "react-router-dom";
 
 import AddNote from "./AddNote";
 import NotesLinks from "./NotesLinks";
@@ -16,6 +17,9 @@ export default function NavBar({ onClose }: NavBarProps) {
           Latest notes
         </Text>
         <NotesLinks onNoteClick={() => onClose?.()} />
+        <Link to="/notes" onClick={() => onClose?.()}>
+          <Button variant="subtle">All notes</Button>
+        </Link>
       </ScrollArea>
     </Stack>
   );

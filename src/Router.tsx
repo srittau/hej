@@ -8,9 +8,10 @@ import AppPage from "./AppPage";
 import ErrorPage from "./ErrorPage";
 import NoNote from "./NoNote";
 import NoteEditor from "./NoteEditor";
+import NoteListView from "./NoteListView";
 import NoteView from "./NoteView";
 import {
-  allNotesLoader,
+  allNotesMetaLoader,
   createNote,
   deleteNote,
   noteLoader,
@@ -25,10 +26,12 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <NoNote />,
-        loader: allNotesLoader(queryClient),
+        loader: allNotesMetaLoader(queryClient),
       },
       {
         path: "/notes",
+        element: <NoteListView />,
+        loader: allNotesMetaLoader(queryClient),
         async action() {
           const note = await createNote();
           return redirect(`/notes/${note.uuid}/editor`);

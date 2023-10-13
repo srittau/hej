@@ -5,14 +5,14 @@ import { Link, useParams } from "react-router-dom";
 
 import { noteTitle } from "./Note";
 import classes from "./NotesLinks.module.css";
-import { useNotes } from "./gql";
+import { useNotesMeta } from "./gql";
 
 interface NotesListProps {
   onNoteClick?: (uuid: string) => void;
 }
 
 export default function NotesLinks({ onNoteClick }: NotesListProps) {
-  const notes = useNotes();
+  const notes = useNotesMeta();
   const { uuid } = useParams<string>();
   return (
     <div className={classes.section}>
