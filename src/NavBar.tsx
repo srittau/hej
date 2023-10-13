@@ -1,4 +1,4 @@
-import { Stack } from "@mantine/core";
+import { ScrollArea, Stack, Text } from "@mantine/core";
 
 import AddNote from "./AddNote";
 import Logout from "./Logout";
@@ -10,10 +10,15 @@ interface NavBarProps {
 
 export default function NavBar({ onClose }: NavBarProps) {
   return (
-    <Stack p="md">
+    <Stack p="md" style={{ overflowY: "hidden" }}>
       <AddNote onClick={onClose}>Add note</AddNote>
-      <NotesLinks onNoteClick={() => onClose?.()} />
-      <Logout />
+      <ScrollArea type="auto">
+        <Text size="xs" c="dimmed">
+          Latest notes
+        </Text>
+        <NotesLinks onNoteClick={() => onClose?.()} />
+        <Logout />
+      </ScrollArea>
     </Stack>
   );
 }
