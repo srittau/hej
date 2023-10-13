@@ -118,6 +118,15 @@ export function useNotesMeta(): readonly NoteMeta[] {
   return data ?? [];
 }
 
+// TODO: Query that only fetches the latest notes.
+export function useLatestNotes(count: number): readonly NoteMeta[] {
+  const { data } = useQuery(allNotesMetaQuery);
+  const sortedNotes = [...(data ?? [])].sort((n1, n2) =>
+    n2.lastChanged.localeCompare(n1.lastChanged),
+  );
+  return sortedNotes.slice(0, count);
+}
+
 export const allNotesMetaLoader = (queryClient: QueryClient) => async () =>
   queryClient.ensureQueryData(allNotesMetaQuery);
 
@@ -141,6 +150,11 @@ const allNotesQuery = {
   refetchInterval: REFETCH_MS,
   refetchIntervalInBackground: false,
 };
+
+// TODO: Query that only fetches the note with the given uuid.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const lastestNotesLoader = (queryClient: QueryClient, count: number) =>
+  allNotesMetaLoader(queryClient);
 
 // TODO: Query that only fetches the note with the given uuid.
 export function useNote(uuid: string): Note | undefined {
@@ -215,12 +229,7 @@ export function useUpdateNoteInCache(): (
       client.setQueriesData<Note>(["notes", "details", uuid], (oldNote) =>
         oldNote ? updateNote(oldNote, title, text) : undefined,
       );
-      client.setQueriesData<Note[]>(["notes", "list"], (oldData) => {
-        if (!oldData) return oldData;
-        return oldData.map((note: Note) =>
-          note.uuid === uuid ? updateNote(note, title, text) : note,
-        );
-      });
+      void client.invalidateQueries(["notes", "list"]);
     },
     [client],
   );

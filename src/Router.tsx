@@ -14,6 +14,7 @@ import {
   allNotesMetaLoader,
   createNote,
   deleteNote,
+  lastestNotesLoader,
   noteLoader,
   queryClient,
 } from "./gql";
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
   {
     element: <AppPage />,
     errorElement: <ErrorPage />,
+    loader: lastestNotesLoader(queryClient, 3),
     children: [
       {
         path: "/",

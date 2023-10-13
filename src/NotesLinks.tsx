@@ -3,16 +3,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink } from "@mantine/core";
 import { Link, useParams } from "react-router-dom";
 
-import { noteTitle } from "./Note";
+import { NoteMeta, noteTitle } from "./Note";
 import classes from "./NotesLinks.module.css";
-import { useNotesMeta } from "./gql";
 
 interface NotesListProps {
+  notes: readonly NoteMeta[];
   onNoteClick?: (uuid: string) => void;
 }
 
-export default function NotesLinks({ onNoteClick }: NotesListProps) {
-  const notes = useNotesMeta();
+export default function NotesLinks({ notes, onNoteClick }: NotesListProps) {
   const { uuid } = useParams<string>();
   return (
     <div className={classes.section}>
