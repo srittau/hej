@@ -1,6 +1,7 @@
 import { Burger, Group, Image, Title } from "@mantine/core";
 
 import classes from "./Header.module.css";
+import Logout from "./Logout";
 
 interface HeaderProps {
   opened: boolean;
@@ -13,6 +14,7 @@ export default function Header({ opened, toggle }: HeaderProps) {
       <Burger opened={opened} hiddenFrom="sm" onClick={toggle} />
       <Image src="/hej.png" className={classes.logo} />
       <Title size="h2">Hej</Title>
+      <Logout ml="auto" />
     </Group>
   );
 }

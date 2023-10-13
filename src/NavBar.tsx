@@ -1,7 +1,6 @@
 import { ScrollArea, Stack, Text } from "@mantine/core";
 
 import AddNote from "./AddNote";
-import Logout from "./Logout";
 import NotesLinks from "./NotesLinks";
 
 interface NavBarProps {
@@ -17,7 +16,6 @@ export default function NavBar({ onClose }: NavBarProps) {
           Latest notes
         </Text>
         <NotesLinks onNoteClick={() => onClose?.()} />
-        <Logout />
       </ScrollArea>
     </Stack>
   );
