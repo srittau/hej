@@ -80,7 +80,7 @@ def _sql_value(v: object) -> Any:
 
 
 @pytest.fixture
-async def db_o() -> AsyncGenerator[Database, None]:  # type: ignore[misc]
+async def db_o() -> AsyncGenerator[Database, None]:
     async with aiofiles.open(SCHEMA_PATH) as f:
         schema = await f.read()
     async with open_db(":memory:") as db:
@@ -89,7 +89,7 @@ async def db_o() -> AsyncGenerator[Database, None]:  # type: ignore[misc]
 
 
 @pytest.fixture
-async def db() -> AsyncGenerator[DatabaseFixture, None]:  # type: ignore[misc]
+async def db() -> AsyncGenerator[DatabaseFixture, None]:
     async with aiofiles.open(SCHEMA_PATH) as f:
         schema = await f.read()
     async with open_db(":memory:") as db:
