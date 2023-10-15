@@ -144,6 +144,23 @@ async def resolve_update_note(
             return None
 
 
+@mutation.field("markNoteAsFavorite")
+@require_auth
+async def resolve_mark_note_as_favorite(
+    _: None, __: GraphQLResolveInfo, *, uuid: str, favorite: bool
+) -> Note | None:
+    try:
+        uuid_o = UUID(uuid)
+    except ValueError:
+        return None
+
+    async with open_transaction(db_url()) as db:
+        try:
+            return await update_note(db, uuid_o, favorite=favorite)
+        except UnknownItemError:
+            return None
+
+
 @mutation.field("deleteNote")
 @require_auth
 async def resolve_delete_note(

@@ -8,5 +8,6 @@ class Note:
     uuid: UUID
     title: str
     text: str
+    favorite: bool
     creation_date: datetime.datetime
     last_changed: datetime.datetime

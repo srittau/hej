@@ -191,17 +191,14 @@ def initialize_db(db_path: Path) -> UpgradeResult:
     return db_upgrade("hej", db_url, str(db_schema_path()), version)
 
 
-_NOTES_FIELDS = "uuid, title, text, creation_date, last_changed"
-
-
 async def select_all_notes(db: _ConnectionBase) -> list[Note]:
-    rows = db.execute_fetchall(f"SELECT {_NOTES_FIELDS} FROM notes")
+    rows = db.execute_fetchall("SELECT * FROM notes")
     return [_note_from_db(row) async for row in rows]
 
 
 async def select_note(db: _ConnectionBase, uuid: UUID) -> Note:
     row = await db.execute_fetchone(
-        f"SELECT {_NOTES_FIELDS} FROM notes " "WHERE uuid = ?",
+        "SELECT * FROM notes WHERE uuid = ?",
         [str(uuid)],
     )
     if row is None:
@@ -217,7 +214,7 @@ async def insert_note(db: _ConnectionBase, title: str, text: str) -> Note:
         "VALUES(?, ?, ?, ?, ?)",
         [str(uuid), title, text, db_datetime(dt), db_datetime_old(dt)],
     )
-    return Note(uuid, title, text, dt, dt)
+    return Note(uuid, title, text, False, dt, dt)
 
 
 async def update_note(
@@ -225,23 +222,28 @@ async def update_note(
     uuid: UUID,
     title: str | None = None,
     text: str | None = None,
+    *,
+    favorite: bool | None = None,
 ) -> Note:
     old_note = await select_note(db, uuid)
-    if title is None and text is None:
+    if title is None and text is None and favorite is None:
         return old_note
 
     if title is None:
         title = old_note.title
     if text is None:
         text = old_note.text
+    if favorite is None:
+        favorite = old_note.favorite
+
     now = datetime.datetime.utcnow()
 
     await db.execute(
-        "UPDATE notes SET title = ?, text = ?, last_changed = ? "
+        "UPDATE notes SET title = ?, text = ?, favorite = ?, last_changed = ? "
         "WHERE uuid = ?",
-        [title, text, db_datetime_old(now), str(uuid)],
+        [title, text, favorite, db_datetime_old(now), str(uuid)],
     )
-    return Note(uuid, title, text, old_note.creation_date, now)
+    return await select_note(db, uuid)
 
 
 async def delete_note(db: _ConnectionBase, uuid: UUID) -> None:
@@ -253,11 +255,11 @@ async def delete_note(db: _ConnectionBase, uuid: UUID) -> None:
 
 
 def _note_from_db(row: Row) -> Note:
-    uuid_s, title, text, created, last_changed_str = row
     return Note(
-        UUID(uuid_s),
-        title,
-        text,
-        datetime_from_db(created),
-        datetime_from_db(last_changed_str),
+        UUID(row["uuid"]),
+        row["title"],
+        row["text"],
+        bool(row["favorite"]),
+        datetime_from_db(row["creation_date"]),
+        datetime_from_db(row["last_changed"]),
     )

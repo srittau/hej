@@ -16,6 +16,10 @@ type Note {
   """
   text: String!
   """
+  `true` if the note is marked as favorite, `false` otherwise.
+  """
+  favorite: Boolean!
+  """
   Date the note was created.
   """
   creationDate: DateTime!
@@ -64,6 +68,14 @@ type Mutation {
   unknown.
   """
   updateNote(uuid: ID!, title: String, text: String): Note
+
+  """
+  Mark or unmark a note as favorite.
+
+  Return the changed note or `null` if the given UUID was invalid or
+  unknown.
+  """
+  markNoteAsFavorite(uuid: ID!, favorite: Boolean!): Note
 
   """
   Delete an note.

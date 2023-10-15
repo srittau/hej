@@ -11,6 +11,10 @@ from .db import Database
 from .testutil_db import DatabaseFixture, db_o  # noqa: F401
 from .testutil_gql import GQLFixture, gql_schema  # noqa: F401
 
+# Some test UUIDs.
+UUID1 = UUID("4b6b1145-933d-47bd-ba7e-279751bb8f7b")
+UUID2 = UUID("b77f6851-058c-4847-90ad-a63ebb935b43")
+
 
 class IntegrationFixture(GQLFixture, DatabaseFixture):
     def __init__(
@@ -84,7 +88,9 @@ class TestNotes:
             uuid=UUID("4b6b1145-933d-47bd-ba7e-279751bb8f7b"), title="Note #1"
         )
         await fix.insert_note(
-            uuid=UUID("b77f6851-058c-4847-90ad-a63ebb935b43"), title="Note #2"
+            uuid=UUID("b77f6851-058c-4847-90ad-a63ebb935b43"),
+            title="Note #2",
+            favorite=True,
         )
         await fix.insert_note(
             uuid=UUID("fb79a130-798e-4e59-8230-e64cbc49a0b5"), title="Note #3"
@@ -93,12 +99,25 @@ class TestNotes:
             """
                 query {
                     notes(uuid: "b77f6851-058c-4847-90ad-a63ebb935b43") {
+                        uuid
                         title
+                        favorite
                     }
                 }
             """
         )
-        assert_json_subset({"notes": [{"title": "Note #2"}]}, response)
+        assert_json_subset(
+            {
+                "notes": [
+                    {
+                        "uuid": "b77f6851-058c-4847-90ad-a63ebb935b43",
+                        "title": "Note #2",
+                        "favorite": True,
+                    }
+                ]
+            },
+            response,
+        )
 
     async def test_unknown_note(self, fix: IntegrationFixture) -> None:
         await fix.insert_note(
@@ -114,3 +133,50 @@ class TestNotes:
             """
         )
         assert_json_subset({"notes": []}, response)
+
+
+class TestMarkNoteAsFavorite:
+    async def test_mark(self, fix: IntegrationFixture) -> None:
+        await fix.insert_note(uuid=UUID1, favorite=False)
+        await fix.insert_note(uuid=UUID2, favorite=False)
+        response = await fix.gql(
+            f"""
+                mutation {{
+                    response: markNoteAsFavorite(
+                        uuid: "{UUID2}",
+                        favorite: true
+                    ) {{
+                        uuid
+                        favorite
+                    }}
+                }}
+            """
+        )
+        assert response == {
+            "response": {
+                "uuid": str(UUID2),
+                "favorite": True,
+            }
+        }
+        await fix.assert_one_row_equals(
+            "notes",
+            {
+                "uuid": UUID("b77f6851-058c-4847-90ad-a63ebb935b43"),
+                "favorite": True,
+            },
+        )
+
+    async def test_unknown_note(self, fix: IntegrationFixture) -> None:
+        response = await fix.gql(
+            """
+                mutation {
+                    response: markNoteAsFavorite(
+                        uuid: "a7233ac1-03b3-47d9-9dfb-95d9b3659d74",
+                        favorite: true
+                    ) {
+                        __typename
+                    }
+                }
+            """
+        )
+        assert response == {"response": None}

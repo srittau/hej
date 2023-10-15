@@ -36,6 +36,7 @@ class DatabaseFixture:
         uuid: UUID,
         title: str = "",
         text: str = "",
+        favorite: bool = False,
         creation_date: datetime.datetime = datetime.datetime(
             2000, 1, 1, 12, 0, 0
         ),
@@ -49,6 +50,7 @@ class DatabaseFixture:
                 "uuid": str(uuid),
                 "title": title,
                 "text": text,
+                "favorite": favorite,
                 "creation_date": db_datetime(creation_date),
                 "last_changed": db_datetime_old(last_changed),
             },

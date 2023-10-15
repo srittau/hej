@@ -3,5 +3,6 @@ CREATE TABLE notes(
     title TEXT NOT NULL,
     text TEXT NOT NULL,
     creation_date TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,  -- YYYY-MM-DD HH:MM:SS
-    last_changed TEXT NOT NULL  -- YYYY-MM-DDTHH:MM:SSZ
+    last_changed TEXT NOT NULL,  -- YYYY-MM-DDTHH:MM:SSZ
+    favorite INTEGER NOT NULL DEFAULT FALSE
 );
