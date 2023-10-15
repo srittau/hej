@@ -4,6 +4,7 @@ import Markdown from "react-markdown";
 import { useParams } from "react-router-dom";
 
 import AppLinkAction from "./AppLinkAction";
+import classes from "./NoteView.module.css";
 import { useNote } from "./gql";
 
 export default function NoteView() {
@@ -12,7 +13,7 @@ export default function NoteView() {
   return (
     <>
       {note && (
-        <Paper shadow="xs" p="md">
+        <Paper shadow="xs" p="md" className={classes.noteText}>
           <Markdown>{`# ${note.title}\n\n${note.text}`}</Markdown>
         </Paper>
       )}
