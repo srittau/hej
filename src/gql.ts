@@ -75,6 +75,7 @@ const NOTE_META_FRAGMENT = gql`
   fragment NoteMetaFragment on Note {
     uuid
     title
+    favorite
     creationDate
     lastChanged
   }
@@ -84,10 +85,10 @@ const NOTE_FRAGMENT = gql`
   fragment NoteFragment on Note {
     uuid
     title
+    favorite
     creationDate
     lastChanged
     text
-    favorite
   }
 `;
 
@@ -122,14 +123,24 @@ export function useNotesMeta(): readonly NoteMeta[] {
 // TODO: Query that only fetches the latest notes.
 export function useLatestNotes(count: number): readonly NoteMeta[] {
   const { data } = useQuery(allNotesMetaQuery);
-  const sortedNotes = [...(data ?? [])].sort((n1, n2) =>
-    n2.lastChanged.localeCompare(n1.lastChanged),
-  );
+  // We filter favorite notes, as they are already shown in the favorites
+  // section.
+  const sortedNotes = (data ?? [])
+    .filter((n) => !n.favorite)
+    .sort((n1, n2) => n2.lastChanged.localeCompare(n1.lastChanged));
   return sortedNotes.slice(0, count);
 }
 
 export const allNotesMetaLoader = (queryClient: QueryClient) => async () =>
   queryClient.ensureQueryData(allNotesMetaQuery);
+
+// TODO: Query that only fetches favorite notes.
+export function useFavoriteNotes(): readonly NoteMeta[] {
+  const { data } = useQuery(allNotesMetaQuery);
+  return (data ?? [])
+    .filter((n) => n.favorite)
+    .sort((n1, n2) => n1.title.localeCompare(n2.title));
+}
 
 const ALL_NOTES = gql`
   ${NOTE_FRAGMENT}

@@ -8,7 +8,6 @@ export interface NoteMeta {
 
 export interface Note extends NoteMeta {
   text: string;
-  favorite: boolean;
 }
 
 export function noteTitle(note: NoteMeta): string {
