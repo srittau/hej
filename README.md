@@ -1,4 +1,4 @@
-# <img src="./hej-logo.svg" alt="Hej logo" height="35"/> hej
+# <img src="./hej-logo.svg" alt="" height="35"/> <img src="./hej-name.svg" alt="Hej" height="35"/>
 
 Simple browser-based personal wiki
 
