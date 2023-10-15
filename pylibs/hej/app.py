@@ -9,7 +9,7 @@ from starlette.staticfiles import StaticFiles
 from .db import migrate_db
 from .debug import debug
 from .exc import DBMigrationError
-from .gql import app as gql_app
+from .gql import create_app as gql_app
 
 
 def static_path() -> Path:
@@ -21,7 +21,7 @@ def static_path() -> Path:
 
 def create_app() -> Starlette:
     app = Starlette(debug=debug())
-    app.mount("/graphql", gql_app)
+    app.mount("/graphql", gql_app())
     app.mount(
         "/", StaticFiles(directory=static_path(), html=True), name="static"
     )

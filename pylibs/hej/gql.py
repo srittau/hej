@@ -17,7 +17,7 @@ from ariadne import (
 from ariadne.asgi import GraphQL
 from ariadne.objects import MutationType, ObjectType
 from ariadne.scalars import ScalarType
-from graphql import GraphQLResolveInfo
+from graphql import GraphQLResolveInfo, GraphQLSchema
 
 from hej.auth import authenticate, check_session_key
 from hej.exc import UnknownItemError
@@ -49,6 +49,7 @@ def schema_file() -> Path:
 def require_auth(f: _F) -> _F:
     @functools.wraps(f)
     async def check_auth(obj: Any, info: GraphQLResolveInfo, **kwargs: Any) -> Any:  # type: ignore
+        assert isinstance(info.context, dict)
         if not info.context.get("auth", False):
             await authenticate(info.context["request"])
             info.context["auth"] = True
@@ -162,13 +163,16 @@ async def resolve_delete_note(
             return True
 
 
-schema = make_executable_schema(
-    type_defs,
-    snake_case_fallback_resolvers,
-    datetime_scalar,
-    note,
-    query,
-    mutation,
-)
+def bind_schema() -> GraphQLSchema:
+    return make_executable_schema(
+        type_defs,
+        snake_case_fallback_resolvers,
+        datetime_scalar,
+        note,
+        query,
+        mutation,
+    )
 
-app = GraphQL(schema, debug=debug())
+
+def create_app() -> GraphQL:
+    return GraphQL(bind_schema(), debug=debug())
