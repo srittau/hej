@@ -1,5 +1,15 @@
-import { faClose } from "@fortawesome/free-solid-svg-icons";
-import { Box, Group, Loader, Stack, TextInput, Textarea } from "@mantine/core";
+import { faStar as farStar } from "@fortawesome/free-regular-svg-icons";
+import { faClose, faStar } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  Box,
+  Group,
+  Loader,
+  Stack,
+  TextInput,
+  Textarea,
+  UnstyledButton,
+} from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -7,7 +17,12 @@ import AppLinkAction from "./AppLinkAction";
 import DeleteNote from "./DeleteNote";
 import { Note } from "./Note";
 import classes from "./NoteEditor.module.css";
-import { useNote, useUpdateNote, useUpdateNoteInCache } from "./gql";
+import {
+  useMarkNoteAsFavorite,
+  useNote,
+  useUpdateNote,
+  useUpdateNoteInCache,
+} from "./gql";
 import { useDebouncedValue } from "./hooks";
 
 export default function NoteEditor() {
@@ -33,6 +48,7 @@ function NoteContent({ note }: NoteContentProps) {
   return (
     <Stack className={classes.noteView}>
       <Group>
+        <Favorite uuid={note.uuid} />
         <TextInput
           type="text"
           value={title}
@@ -58,6 +74,30 @@ function NoteContent({ note }: NoteContentProps) {
       />
       <DeleteNote className={classes.noteActions} />
     </Stack>
+  );
+}
+
+interface FavoriteProps {
+  uuid: string;
+}
+
+function Favorite({ uuid }: FavoriteProps) {
+  const note = useNote(uuid);
+  const [markAsFavorite] = useMarkNoteAsFavorite(uuid);
+
+  async function onClick() {
+    await markAsFavorite(!note?.favorite);
+  }
+
+  return (
+    <UnstyledButton
+      title={note?.favorite ? "Favorite" : "Not favorite"}
+      aria-label={note?.favorite ? "Favorite" : "Not favorite"}
+      className={classes.favorite}
+      onClick={() => void onClick()}
+    >
+      <FontAwesomeIcon icon={note?.favorite ? faStar : farStar} />
+    </UnstyledButton>
   );
 }
 

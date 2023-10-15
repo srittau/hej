@@ -5,7 +5,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 // eslint-disable-next-line import/no-unresolved
-import { GraphQLClient, Variables, gql } from "graphql-request";
+import { GraphQLClient, gql } from "graphql-request";
 import { useCallback, useEffect, useState } from "react";
 import { Params } from "react-router-dom";
 
@@ -23,9 +23,9 @@ const LOGIN = gql`
   }
 `;
 
-interface LoginVars extends Variables {
+type LoginVars = {
   password: string;
-}
+};
 
 interface LoginResponse {
   sessionKey: string | null;
@@ -87,6 +87,7 @@ const NOTE_FRAGMENT = gql`
     creationDate
     lastChanged
     text
+    favorite
   }
 `;
 
@@ -178,10 +179,10 @@ const CREATE_NOTE = gql`
   }
 `;
 
-interface CreateNoteVars extends Variables {
+type CreateNoteVars = {
   title: string;
   text: string;
-}
+};
 
 interface CreateNoteResponse {
   note: Note;
@@ -208,26 +209,27 @@ const UPDATE_NOTE = gql`
   }
 `;
 
-interface UpdateNoteResponse {
+interface NoteResponse {
   note: Note;
 }
 
-interface UpdateNoteVars extends Variables {
+type UpdateNoteVars = {
   uuid: string;
   title?: string;
   text?: string;
-}
+};
 
 export function useUpdateNoteInCache(): (
   uuid: string,
   title?: string,
   text?: string,
+  favorite?: boolean,
 ) => void {
   const client = useQueryClient();
   return useCallback(
-    (uuid: string, title?: string, text?: string) => {
+    (uuid: string, title?: string, text?: string, favorite?: boolean) => {
       client.setQueriesData<Note>(["notes", "details", uuid], (oldNote) =>
-        oldNote ? updateNote(oldNote, title, text) : undefined,
+        oldNote ? updateNote(oldNote, title, text, favorite) : undefined,
       );
       void client.invalidateQueries(["notes", "list"]);
     },
@@ -235,10 +237,16 @@ export function useUpdateNoteInCache(): (
   );
 }
 
-function updateNote(note: Note, title?: string, text?: string): Note {
+function updateNote(
+  note: Note,
+  title?: string,
+  text?: string,
+  favorite?: boolean,
+): Note {
   const newNote = { ...note };
   if (title !== undefined) newNote.title = title;
   if (text !== undefined) newNote.text = text;
+  if (favorite !== undefined) newNote.favorite = favorite;
   return newNote;
 }
 
@@ -251,7 +259,7 @@ export function useUpdateNote(
   const updateCache = useUpdateNoteInCache();
   const mutation = useMutation(
     ({ title, text }: { title?: string; text?: string }) =>
-      gqlClient.request<UpdateNoteResponse, UpdateNoteVars>(UPDATE_NOTE, {
+      gqlClient.request<NoteResponse, UpdateNoteVars>(UPDATE_NOTE, {
         uuid,
         title,
         text,
@@ -275,15 +283,55 @@ export function useUpdateNote(
   return [updateNote, mutation.isLoading];
 }
 
+const MARK_NOTE_AS_FAVORITE = gql`
+  ${NOTE_FRAGMENT}
+  mutation markNoteAsFavorite($uuid: ID!, $favorite: Boolean!) {
+    note: markNoteAsFavorite(uuid: $uuid, favorite: $favorite) {
+      ...NoteFragment
+    }
+  }
+`;
+
+type MarkNoteAsFavoriteVars = {
+  uuid: string;
+  favorite: boolean;
+};
+
+export function useMarkNoteAsFavorite(
+  uuid: string,
+): [updateNote: (favorite: boolean) => Promise<Note>, loading: boolean] {
+  const updateCache = useUpdateNoteInCache();
+  const mutation = useMutation(
+    (favorite: boolean) =>
+      gqlClient.request<NoteResponse, MarkNoteAsFavoriteVars>(
+        MARK_NOTE_AS_FAVORITE,
+        { uuid, favorite },
+      ),
+    {
+      onSuccess({ note }) {
+        updateCache(uuid, note.title, note.text);
+      },
+    },
+  );
+
+  return [
+    async (favorite: boolean) => {
+      const { note } = await mutation.mutateAsync(favorite);
+      return note;
+    },
+    mutation.isLoading,
+  ];
+}
+
 const DELETE_NOTE = gql`
   mutation deleteNote($uuid: ID!) {
     deleteNote(uuid: $uuid)
   }
 `;
 
-interface DeleteNoteVars extends Variables {
+type DeleteNoteVars = {
   uuid: string;
-}
+};
 
 export async function deleteNote(uuid: string): Promise<boolean> {
   const success = await gqlClient.request<boolean, DeleteNoteVars>(

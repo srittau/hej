@@ -3,6 +3,16 @@
     height: calc(100vh - 6rem);
 }
 
+.favorite {
+    color: var(--mantine-color-yellow-5);
+    width: 1.5rem;
+    height: 1.5rem;
+}
+.favorite svg {
+    width: 100%;
+    height: 100%;
+}
+
 .noteTitle {
     flex-grow: 1;
 }

@@ -1,3 +1,24 @@
-.noteText > h1:first-child {
+.noteContainer {
+    display: grid;
+}
+.noteContainer > * {
+    grid-area: 1 / 1;
+}
+
+.markdown > h1:first-child {
     margin-top: 0;
+}
+
+.markdown.hasFavorite > h1:first-child {
+    padding-left: 2rem;
+}
+
+.favoriteIcon {
+    color: var(--mantine-color-yellow-5);
+    fill: var(--mantine-color-yellow-5);
+    margin-top: 0.7rem;
+}
+.favoriteIcon svg {
+    width: 1.5rem;
+    height: 1.5rem;
 }
