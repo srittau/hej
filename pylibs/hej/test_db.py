@@ -9,7 +9,7 @@ import aiofiles
 import pytest
 import pytest_asyncio
 
-from hej.db import (
+from .db import (
     Database,
     db_datetime,
     db_datetime_old,
@@ -21,8 +21,8 @@ from hej.db import (
     select_note,
     update_note,
 )
-from hej.exc import UnknownItemError
-from hej.note import Note
+from .exc import UnknownItemError
+from .note import Note
 
 _UUID = UUID("7bb570bf-2e21-4baf-b963-23c454e052ab")
 _UUID2 = UUID("dd877ebd-a9cf-466d-99f2-1327e2068ff2")

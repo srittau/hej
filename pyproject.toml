@@ -37,8 +37,7 @@ profile = "black"
 combine_as_imports = true
 line_length = 79
 known_hej = "hej"
-known_hejtest = "test_hej"
-sections = "FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,HEJ,HEJTEST,LOCALFOLDER"
+sections = "FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,HEJ,LOCALFOLDER"
 
 [tool.pytest.ini_options]
 testpaths = ["pylibs"]

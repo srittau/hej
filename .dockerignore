@@ -6,3 +6,5 @@ build
 dist
 node_modules
 test-db
+
+pylibs/**/test_*.py
