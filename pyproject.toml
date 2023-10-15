@@ -39,7 +39,7 @@ sections = "FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,HEJ,LOCALFOLDER"
 
 [tool.pytest.ini_options]
 testpaths = ["pylibs"]
-asyncio_mode = "strict"
+asyncio_mode = "auto"
 
 [tool.mypy]
 disallow_any_decorated = true

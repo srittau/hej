@@ -7,7 +7,6 @@ from uuid import UUID
 
 import aiofiles
 import pytest
-import pytest_asyncio
 
 from .db import (
     Database,
@@ -28,7 +27,7 @@ _UUID = UUID("7bb570bf-2e21-4baf-b963-23c454e052ab")
 _UUID2 = UUID("dd877ebd-a9cf-466d-99f2-1327e2068ff2")
 
 
-@pytest_asyncio.fixture
+@pytest.fixture
 async def db() -> AsyncGenerator[Database, None]:  # type: ignore[misc]
     async with aiofiles.open(
         Path(__file__).parent.parent.parent / "db" / "schema.sql"
@@ -39,7 +38,6 @@ async def db() -> AsyncGenerator[Database, None]:  # type: ignore[misc]
         yield db
 
 
-@pytest.mark.asyncio
 async def test_open_transaction() -> None:
     async with open_transaction(":memory:") as t:
         async with t.db.execute("CREATE TABLE foo(bar)") as c:
@@ -69,7 +67,6 @@ async def _insert_note(
     )
 
 
-@pytest.mark.asyncio
 async def test_select_all_notes(db: Database) -> None:
     creation_date = datetime.datetime(2021, 5, 14, 13, 19, 4)
     last_changed = datetime.datetime(2021, 9, 19, 4, 34, 12)
@@ -88,7 +85,6 @@ async def test_select_all_notes(db: Database) -> None:
     )
 
 
-@pytest.mark.asyncio
 async def test_select_note(db: Database) -> None:
     creation_date = datetime.datetime(2021, 5, 14, 13, 19, 4)
     last_changed = datetime.datetime(2021, 9, 19, 4, 34, 12)
@@ -107,14 +103,12 @@ async def test_select_note(db: Database) -> None:
     )
 
 
-@pytest.mark.asyncio
 async def test_select_note__unknown(db: Database) -> None:
     await _insert_note(db, uuid=_UUID2)
     with pytest.raises(UnknownItemError):
         await select_note(db, _UUID)
 
 
-@pytest.mark.asyncio
 async def test_insert_note(db: Database) -> None:
     async with db.begin() as t:
         note = await insert_note(t, "New Note", "New text")
@@ -135,7 +129,6 @@ async def test_insert_note(db: Database) -> None:
     )
 
 
-@pytest.mark.asyncio
 async def test_update_note(db: Database) -> None:
     await _insert_note(
         db,
@@ -162,14 +155,12 @@ async def test_update_note(db: Database) -> None:
     )
 
 
-@pytest.mark.asyncio
 async def test_update_note__unknown(db: Database) -> None:
     with pytest.raises(UnknownItemError):
         async with db.begin() as t:
             await update_note(t, _UUID, "New Note", "New text")
 
 
-@pytest.mark.asyncio
 async def test_delete_note(db: Database) -> None:
     await _insert_note(db, uuid=_UUID)
     await _insert_note(db, uuid=_UUID2)
@@ -180,7 +171,6 @@ async def test_delete_note(db: Database) -> None:
     assert row[0] == str(_UUID2)
 
 
-@pytest.mark.asyncio
 async def test_delete_note__unknown(db: Database) -> None:
     with pytest.raises(UnknownItemError):
         async with db.begin() as t:
