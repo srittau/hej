@@ -100,13 +100,14 @@ class Database(_ConnectionBase):
 
     async def __aenter__(self) -> Database:
         self._db = await aiosqlite.connect(self.db_name)
+        self._db.row_factory = aiosqlite.Row
         return self
 
     async def __aexit__(
         self,
         type: type[BaseException] | None,
         exc: BaseException | None,
-        tb: TracebackType,
+        tb: TracebackType | None,
     ) -> None:
         if self._db:
             await self._db.close()
