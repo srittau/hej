@@ -1,5 +1,5 @@
 import { faClose } from "@fortawesome/free-solid-svg-icons";
-import { Loader, TextInput, Textarea } from "@mantine/core";
+import { Box, Group, Loader, Stack, TextInput, Textarea } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -31,22 +31,24 @@ function NoteContent({ note }: NoteContentProps) {
     useDebouncedUpdate(note);
 
   return (
-    <div className={classes.noteView}>
-      <TextInput
-        type="text"
-        value={title}
-        autoFocus // eslint-disable-line jsx-a11y/no-autofocus
-        aria-label="Note title"
-        className={classes.noteTitle}
-        onChange={(evt) => updateTitle(evt.target.value)}
-      />
-      <div
-        className={`${classes.noteSpinner} ${
-          updating ? classes.active : classes.inactive
-        }`}
-      >
-        <Loader type="dots" />{" "}
-      </div>
+    <Stack className={classes.noteView}>
+      <Group>
+        <TextInput
+          type="text"
+          value={title}
+          autoFocus // eslint-disable-line jsx-a11y/no-autofocus
+          aria-label="Note title"
+          className={classes.noteTitle}
+          onChange={(evt) => updateTitle(evt.target.value)}
+        />
+        <Box
+          className={`${classes.noteSpinner} ${
+            updating ? classes.active : classes.inactive
+          }`}
+        >
+          <Loader type="dots" />
+        </Box>
+      </Group>
       <Textarea
         multiline
         value={text}
@@ -55,7 +57,7 @@ function NoteContent({ note }: NoteContentProps) {
         onChange={(evt) => updateText(evt.target.value)}
       />
       <DeleteNote className={classes.noteActions} />
-    </div>
+    </Stack>
   );
 }
 
