@@ -12,7 +12,7 @@ export default function Header({ opened, toggle }: HeaderProps) {
   return (
     <Group p="xs" className={classes.header}>
       <Burger opened={opened} hiddenFrom="sm" onClick={toggle} />
-      <Image src="/hej.png" className={classes.logo} />
+      <Image src="/hej-logo.svg" className={classes.logo} />
       <Title size="h2">Hej</Title>
       <Logout ml="auto" />
     </Group>
