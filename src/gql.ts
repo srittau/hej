@@ -38,9 +38,10 @@ export function useLogin(): [
   login: (password: string) => void,
 ] {
   const [status, setStatus] = useState<LoginStatus>("not-logged-in");
-  const mutation = useMutation((password: string) =>
-    gqlClient.request<LoginResponse, LoginVars>(LOGIN, { password }),
-  );
+  const mutation = useMutation({
+    mutationFn: (password: string) =>
+      gqlClient.request<LoginResponse, LoginVars>(LOGIN, { password }),
+  });
 
   useEffect(() => {
     if (!mutation.data) return;
@@ -67,7 +68,9 @@ const LOGOUT = gql`
 `;
 
 export function useLogout(): () => void {
-  const mutation = useMutation(() => gqlClient.request<unknown>(LOGOUT));
+  const mutation = useMutation({
+    mutationFn: () => gqlClient.request<unknown>(LOGOUT),
+  });
   return () => mutation.mutate();
 }
 
@@ -207,7 +210,7 @@ export async function createNote() {
       text: "",
     },
   );
-  await queryClient.invalidateQueries(["notes", "list"]);
+  await queryClient.invalidateQueries({ queryKey: ["notes", "list"] });
   return note;
 }
 
@@ -239,10 +242,12 @@ export function useUpdateNoteInCache(): (
   const client = useQueryClient();
   return useCallback(
     (uuid: string, title?: string, text?: string, favorite?: boolean) => {
-      client.setQueriesData<Note>(["notes", "details", uuid], (oldNote) =>
-        oldNote ? updateNote(oldNote, title, text, favorite) : undefined,
+      client.setQueriesData<Note>(
+        { queryKey: ["notes", "details", uuid] },
+        (oldNote) =>
+          oldNote ? updateNote(oldNote, title, text, favorite) : undefined,
       );
-      void client.invalidateQueries(["notes", "list"]);
+      void client.invalidateQueries({ queryKey: ["notes", "list"] });
     },
     [client],
   );
@@ -268,19 +273,17 @@ export function useUpdateNote(
   loading: boolean,
 ] {
   const updateCache = useUpdateNoteInCache();
-  const mutation = useMutation(
-    ({ title, text }: { title?: string; text?: string }) =>
+  const mutation = useMutation({
+    mutationFn: ({ title, text }: { title?: string; text?: string }) =>
       gqlClient.request<NoteResponse, UpdateNoteVars>(UPDATE_NOTE, {
         uuid,
         title,
         text,
       }),
-    {
-      onSuccess({ note }) {
-        updateCache(uuid, note.title, note.text);
-      },
+    onSuccess({ note }) {
+      updateCache(uuid, note.title, note.text);
     },
-  );
+  });
 
   const mutateAsync = mutation.mutateAsync;
   const updateNote = useCallback(
@@ -291,7 +294,7 @@ export function useUpdateNote(
     [mutateAsync],
   );
 
-  return [updateNote, mutation.isLoading];
+  return [updateNote, mutation.isPending];
 }
 
 const MARK_NOTE_AS_FAVORITE = gql`
@@ -312,25 +315,23 @@ export function useMarkNoteAsFavorite(
   uuid: string,
 ): [updateNote: (favorite: boolean) => Promise<Note>, loading: boolean] {
   const updateCache = useUpdateNoteInCache();
-  const mutation = useMutation(
-    (favorite: boolean) =>
+  const mutation = useMutation({
+    mutationFn: (favorite: boolean) =>
       gqlClient.request<NoteResponse, MarkNoteAsFavoriteVars>(
         MARK_NOTE_AS_FAVORITE,
         { uuid, favorite },
       ),
-    {
-      onSuccess({ note }) {
-        updateCache(uuid, note.title, note.text);
-      },
+    onSuccess({ note }) {
+      updateCache(uuid, note.title, note.text);
     },
-  );
+  });
 
   return [
     async (favorite: boolean) => {
       const { note } = await mutation.mutateAsync(favorite);
       return note;
     },
-    mutation.isLoading,
+    mutation.isPending,
   ];
 }
 
@@ -351,6 +352,6 @@ export async function deleteNote(uuid: string): Promise<boolean> {
       uuid,
     },
   );
-  await queryClient.invalidateQueries(["notes", "list"]);
+  await queryClient.invalidateQueries({ queryKey: ["notes", "list"] });
   return success;
 }
