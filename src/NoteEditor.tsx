@@ -66,7 +66,6 @@ function NoteContent({ note }: NoteContentProps) {
         </Box>
       </Group>
       <Textarea
-        multiline
         value={text}
         aria-label="Note text"
         className={classes.noteText}
