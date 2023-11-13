@@ -75,8 +75,8 @@ function Th({ direction, w, children, onSort }: ThProps) {
     direction === "desc"
       ? faCaretDown
       : direction === "asc"
-      ? faCaretUp
-      : faSort;
+        ? faCaretUp
+        : faSort;
   return (
     <Table.Th w={w}>
       <UnstyledButton className={classes.thButton} onClick={onSort}>
