@@ -48,13 +48,13 @@ trio = ["trio (>=0.22)"]
 
 [[package]]
 name = "ariadne"
-version = "0.21"
+version = "0.22"
 description = "Ariadne is a Python library for implementing GraphQL servers."
 optional = false
 python-versions = "*"
 files = [
-    {file = "ariadne-0.21-py2.py3-none-any.whl", hash = "sha256:dba401b9dfdeab3f913025c2d798e27dc45374bad8ff7d40786470b3ecd60633"},
-    {file = "ariadne-0.21.tar.gz", hash = "sha256:1d7f9fca17f5828a360417b7191310d4fe1506010f358470576450934ac0613b"},
+    {file = "ariadne-0.22-py2.py3-none-any.whl", hash = "sha256:22b0eaaa9a835610d1aa4b871489f3ea6a7b80c89aa0113adf72d1621ec17be8"},
+    {file = "ariadne-0.22.tar.gz", hash = "sha256:d7f003dd4f45bd9803ba3bb43e93de663e7e3c30f4d643916a1a2a95d0fc0649"},
 ]
 
 [package.dependencies]
@@ -775,20 +775,20 @@ test = ["pytest", "pytest-cov"]
 
 [[package]]
 name = "starlette"
-version = "0.36.1"
+version = "0.36.3"
 description = "The little ASGI library that shines."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "starlette-0.36.1-py3-none-any.whl", hash = "sha256:d5b43a72f475fd1b9707f661aa66da42d59ae16c9b2a5845b4edee4309c425ee"},
-    {file = "starlette-0.36.1.tar.gz", hash = "sha256:96df8541093dfd37624b5bf980802b99750db6718dd3ca341618fbbcdd6136fb"},
+    {file = "starlette-0.36.3-py3-none-any.whl", hash = "sha256:13d429aa93a61dc40bf503e8c801db1f1bca3dc706b10ef2434a36123568f044"},
+    {file = "starlette-0.36.3.tar.gz", hash = "sha256:90a671733cfb35771d8cc605e0b679d23b992f8dcfad48cc60b38cb29aeb7080"},
 ]
 
 [package.dependencies]
 anyio = ">=3.4.0,<5"
 
 [package.extras]
-full = ["httpx (>=0.22.0)", "itsdangerous", "jinja2", "python-multipart", "pyyaml"]
+full = ["httpx (>=0.22.0)", "itsdangerous", "jinja2", "python-multipart (>=0.0.7)", "pyyaml"]
 
 [[package]]
 name = "tomli"
@@ -1066,4 +1066,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "98be07f51e712e327646480026e7313a53380bc8a2fc9ef5b89f46f3c69119d5"
+content-hash = "e405f9269a316d0446deb0be1275d6588763705c77020bb2d0b9d5daecb02bd3"
