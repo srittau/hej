@@ -25,9 +25,9 @@ function getCookieValue(cookieName: string): string | undefined {
 }
 
 export function setAuthCookie(value: string): void {
-  document.cookie = `${COOKIE_NAME}=${encodeURIComponent(value)}`;
+  document.cookie = `${COOKIE_NAME}=${encodeURIComponent(value)};path=/`;
 }
 
 export function unsetAuthCookie(): void {
-  document.cookie = `${COOKIE_NAME}=;expires=Thu, 01 Jan 1970 00:00:01 GMT`;
+  document.cookie = `${COOKIE_NAME}=;path=/;expires=Thu, 01 Jan 1970 00:00:01 GMT`;
 }
