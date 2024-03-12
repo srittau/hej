@@ -13,8 +13,8 @@ ariadne = "~0.22"
 dbupgrade = "^2023.10.0"
 click = "^8.0.3"
 graphql-core = "^3.1.7"
-starlette = "~0.37.1"
-uvicorn = { version = "~0.27.1", extras = ["standard"] }
+starlette = "~0.37.2"
+uvicorn = { version = "~0.28.0", extras = ["standard"] }
 
 [tool.poetry.group.dev.dependencies]
 asserts = "^0.12.0"
