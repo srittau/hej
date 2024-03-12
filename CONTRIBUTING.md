@@ -10,14 +10,14 @@
 Create a Python virtual environment, activate it, and install dependencies:
 
 ```
-$ poetry install
-$ poetry shell
+poetry install
+poetry shell
 ```
 
 Prepare the JavaScript environment using yarn:
 
 ```
-$ yarn install --frozen-lockfile
+yarn install --frozen-lockfile
 ```
 
 ## Running the Tests
@@ -25,15 +25,15 @@ $ yarn install --frozen-lockfile
 Running the Python tests and linter, using the activated virtual environment:
 
 ```
-$ poe test
-$ poe lint
-$ poe typecheck
+poe test
+poe lint
+poe typecheck
 ```
 
 Running the JavaScript tests:
 
 ```
-$ yarn test
+yarn test
 ```
 
 ## Running the Test Server
@@ -41,13 +41,13 @@ $ yarn test
 In one terminal, run:
 
 ```
-$ poetry run poe start
+poetry run poe start
 ```
 
 In another terminal, run:
 
 ```
-$ yarn start
+yarn start
 ```
 
 The user interface can be accessed at http://localhost:5173/ in your browser.
