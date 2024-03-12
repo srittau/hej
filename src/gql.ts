@@ -6,11 +6,11 @@ import {
 } from "@tanstack/react-query";
 // eslint-disable-next-line import/no-unresolved
 import { GraphQLClient, gql } from "graphql-request";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { Params } from "react-router-dom";
 
 import { Note, NoteMeta } from "./Note";
-import { setAuthCookie } from "./auth";
+import { setAuthCookie, unsetAuthCookie } from "./auth";
 
 const REFETCH_MS = 60 * 1000;
 
@@ -41,17 +41,15 @@ export function useLogin(): [
   const mutation = useMutation({
     mutationFn: (password: string) =>
       gqlClient.request<LoginResponse, LoginVars>(LOGIN, { password }),
+    onSuccess(data) {
+      if (data.sessionKey === null) {
+        setStatus("wrong-password");
+      } else {
+        setAuthCookie(data.sessionKey);
+        setStatus("logged-in");
+      }
+    },
   });
-
-  useEffect(() => {
-    if (!mutation.data) return;
-    if (mutation.data.sessionKey === null) {
-      setStatus("wrong-password");
-    } else {
-      setAuthCookie(mutation.data.sessionKey);
-      setStatus("logged-in");
-    }
-  }, [mutation.data]);
 
   return [
     status,
@@ -68,8 +66,13 @@ const LOGOUT = gql`
 `;
 
 export function useLogout(): () => void {
+  const client = useQueryClient();
   const mutation = useMutation({
     mutationFn: () => gqlClient.request<unknown>(LOGOUT),
+    onSuccess() {
+      unsetAuthCookie();
+      client.clear();
+    },
   });
   return () => mutation.mutate();
 }
