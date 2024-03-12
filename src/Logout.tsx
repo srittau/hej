@@ -1,15 +1,14 @@
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ActionIcon } from "@mantine/core";
-
-import { useLogout } from "./gql";
+import { useSubmit } from "react-router-dom";
 
 interface LogoutProps {
   ml?: string;
 }
 
 export default function Logout({ ml }: LogoutProps) {
-  const sendLogout = useLogout();
+  const submit = useSubmit();
 
   return (
     <ActionIcon
@@ -18,7 +17,12 @@ export default function Logout({ ml }: LogoutProps) {
       aria-label="Logout"
       size="lg"
       ml={ml}
-      onClick={() => sendLogout()}
+      onClick={() =>
+        submit(null, {
+          method: "post",
+          action: "/logout",
+        })
+      }
     >
       <FontAwesomeIcon icon={faRightFromBracket} />
     </ActionIcon>

@@ -6,7 +6,7 @@ import {
 } from "@tanstack/react-query";
 // eslint-disable-next-line import/no-unresolved
 import { GraphQLClient, gql } from "graphql-request";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { Params } from "react-router-dom";
 
 import { Note, NoteMeta } from "./Note";
@@ -31,32 +31,16 @@ interface LoginResponse {
   sessionKey: string | null;
 }
 
-export type LoginStatus = "not-logged-in" | "logged-in" | "wrong-password";
-
-export function useLogin(): [
-  status: LoginStatus,
-  login: (password: string) => void,
-] {
-  const [status, setStatus] = useState<LoginStatus>("not-logged-in");
-  const mutation = useMutation({
-    mutationFn: (password: string) =>
-      gqlClient.request<LoginResponse, LoginVars>(LOGIN, { password }),
-    onSuccess(data) {
-      if (data.sessionKey === null) {
-        setStatus("wrong-password");
-      } else {
-        setAuthCookie(data.sessionKey);
-        setStatus("logged-in");
-      }
-    },
+export async function login(password: string): Promise<boolean> {
+  const response = await gqlClient.request<LoginResponse, LoginVars>(LOGIN, {
+    password,
   });
-
-  return [
-    status,
-    (password) => {
-      mutation.mutate(password);
-    },
-  ];
+  if (response.sessionKey === null) {
+    return false;
+  } else {
+    setAuthCookie(response.sessionKey);
+    return true;
+  }
 }
 
 const LOGOUT = gql`
@@ -65,16 +49,10 @@ const LOGOUT = gql`
   }
 `;
 
-export function useLogout(): () => void {
-  const client = useQueryClient();
-  const mutation = useMutation({
-    mutationFn: () => gqlClient.request<unknown>(LOGOUT),
-    onSuccess() {
-      unsetAuthCookie();
-      client.clear();
-    },
-  });
-  return () => mutation.mutate();
+export async function logout(): Promise<void> {
+  await gqlClient.request(LOGOUT);
+  unsetAuthCookie();
+  queryClient.clear();
 }
 
 const NOTE_META_FRAGMENT = gql`
@@ -180,6 +158,7 @@ export function useNote(uuid: string): Note | undefined {
   return (data ?? []).find((n) => n.uuid === uuid);
 }
 
+// TODO: Query that only fetches the note with the given uuid.
 export const noteLoader =
   (queryClient: QueryClient) =>
   async ({ params }: { params: Params<string> }): Promise<Note | undefined> => {

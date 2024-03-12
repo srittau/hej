@@ -1,20 +1,7 @@
-import { useEffect, useState } from "react";
-
 const COOKIE_NAME = "HejSessionKey";
 
-export function useAuthCookie(): string | undefined {
-  const [cookie, setCookie] = useState(getCookieValue(COOKIE_NAME));
-
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      setCookie(getCookieValue(COOKIE_NAME));
-    }, 100);
-    return () => {
-      window.clearInterval(timer);
-    };
-  }, []);
-
-  return cookie;
+export function isLoggedIn(): boolean {
+  return getCookieValue(COOKIE_NAME) !== undefined;
 }
 
 function getCookieValue(cookieName: string): string | undefined {

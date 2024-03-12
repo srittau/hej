@@ -5,7 +5,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import React from "react";
 import { createRoot } from "react-dom/client";
 
-import App from "./App";
+import Router from "./Router";
 import { queryClient } from "./gql";
 
 import "./index.css";
@@ -18,7 +18,7 @@ if (el) {
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
         <MantineProvider theme={theme}>
-          <App />
+          <Router />
         </MantineProvider>
         <ReactQueryDevtools
           initialIsOpen={false}
