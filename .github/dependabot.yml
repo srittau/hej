@@ -1,16 +1,6 @@
 ---
 version: 2
 updates:
-  - package-ecosystem: npm
-    directory: "/"
-    schedule:
-      interval: weekly
-      time: "04:00"
-    groups:
-      dependencies:
-        update-types:
-          - "minor"
-          - "patch"
   - package-ecosystem: pip
     directory: "/"
     schedule:
@@ -18,6 +8,34 @@ updates:
       time: "04:00"
     groups:
       dependencies:
+        exclude-patterns:
+          - "mypy"
+          - "types-*"
         update-types:
           - "minor"
           - "patch"
+      mypy:
+        patterns:
+          - "mypy"
+      types:
+        patterns:
+          - "types-*"
+
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      time: "04:00"
+    groups:
+      dependencies:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      time: '04:00'
