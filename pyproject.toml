@@ -17,12 +17,12 @@ starlette = "~0.37.2"
 uvicorn = { version = "~0.29.0", extras = ["standard"] }
 
 [tool.poetry.group.dev.dependencies]
-asserts = "^0.13.0"
+asserts = "^0.13.1"
 black = "^24.4.2"
 flake8 = "^7.0.0"
 isort = "^5.13.2"
 mypy = "~1.10.0"
-poethepoet = "^0.26.0"
+poethepoet = "^0.26.1"
 pytest = "*"
 pytest-asyncio = "^0.23.6"
 pytest-mock = "^3.14.0"
