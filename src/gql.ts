@@ -5,7 +5,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 // eslint-disable-next-line import/no-unresolved
-import { GraphQLClient, gql } from "graphql-request";
+import { AwesomeGraphQLClient, gql } from "awesome-graphql-client";
 import { useCallback } from "react";
 import { Params } from "react-router-dom";
 
@@ -15,7 +15,7 @@ import { setAuthCookie, unsetAuthCookie } from "./auth";
 const REFETCH_MS = 60 * 1000;
 
 export const queryClient = new QueryClient();
-const gqlClient = new GraphQLClient("/graphql/");
+const gqlClient = new AwesomeGraphQLClient({ endpoint: "/graphql/" });
 
 const LOGIN = gql`
   mutation login($password: String!) {
@@ -328,6 +328,7 @@ type DeleteNoteVars = {
 };
 
 export async function deleteNote(uuid: string): Promise<boolean> {
+  // @ts-expect-error Type 'boolean' does not satisfy the constraint 'Record<string, any>'
   const success = await gqlClient.request<boolean, DeleteNoteVars>(
     DELETE_NOTE,
     {
