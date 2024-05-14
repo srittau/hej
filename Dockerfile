@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM node:18-alpine AS build-js
+FROM node:22-alpine AS build-js
 RUN mkdir /build
 WORKDIR /build
 COPY package.json yarn.lock tsconfig.json index.html ./

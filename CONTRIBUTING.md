@@ -2,7 +2,7 @@
 
 - Python 3.12+
 - Poetry
-- Node.js 18+
+- Node.js 22+
 - yarn
 
 ## Preparing the Development Environment
