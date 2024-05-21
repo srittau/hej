@@ -5,8 +5,8 @@ import logging
 import os
 import shutil
 import time
-from collections.abc import AsyncGenerator, AsyncIterable, Iterable
-from contextlib import asynccontextmanager
+from collections.abc import AsyncGenerator, AsyncIterable, Generator, Iterable
+from contextlib import asynccontextmanager, contextmanager
 from pathlib import Path
 from sqlite3.dbapi2 import Row
 from types import TracebackType
@@ -162,27 +162,45 @@ async def open_transaction(db_name: str) -> AsyncGenerator[Transaction, None]:
             yield t
 
 
+MIGRATE_LOCK = Path("/tmp/hej.migrate.lock")
+
+
+@contextmanager
+def migrate_lock() -> Generator[None, None, None]:
+    while True:
+        try:
+            with MIGRATE_LOCK.open("x"):
+                pass
+            break
+        except FileExistsError:
+            time.sleep(0.1)
+    try:
+        yield
+    finally:
+        MIGRATE_LOCK.unlink()
+
+
 def migrate_db() -> None:
-    path = db_path()
-    path.touch()
-    t = int(time.time())
-    new_path = path.parent / f"{path.name}.{t}"
-    shutil.copy(path, new_path)
-    result = initialize_db(path)
-    if not result.success:
-        LOGGER.error(
-            f"Database migration failed, old database kept as {new_path}"
-        )
-        raise DBMigrationError("database migration failed")
-    if result.old_version.version != result.new_version.version:
-        LOGGER.info(
-            f"Migrated database from #{result.old_version.version} to "
-            f"#{result.new_version.version}"
-        )
-        LOGGER.info(f"Database backup kept as {new_path}")
-    else:
-        LOGGER.info("Database is up to date")
-        os.remove(new_path)
+    with migrate_lock():
+        path = db_path()
+        path.touch()
+        new_path = path.parent / f"{path.name}.{os.getpid()}"
+        shutil.copy(path, new_path)
+        result = initialize_db(path)
+        if not result.success:
+            LOGGER.error(
+                f"Database migration failed, old database kept as {new_path}"
+            )
+            raise DBMigrationError("database migration failed")
+        if result.old_version.version != result.new_version.version:
+            LOGGER.info(
+                f"Migrated database from #{result.old_version.version} to "
+                f"#{result.new_version.version}"
+            )
+            LOGGER.info(f"Database backup kept as {new_path}")
+        else:
+            LOGGER.info("Database is up to date")
+            os.remove(new_path)
 
 
 def initialize_db(db_path: Path) -> UpgradeResult:
