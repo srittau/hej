@@ -33,7 +33,7 @@ line-length = 79
 include = ["pyproject.toml", "pylibs/**/*.py"]
 
 [tool.ruff.lint]
-select = ["E", "F", "W", "I001", "RUF100"]
+select = ["E", "F", "I", "N", "UP", "W", "RUF"]
 per-file-ignores= {"test_**.py" = ["F401", "F811"]}
 
 [tool.ruff.lint.isort]

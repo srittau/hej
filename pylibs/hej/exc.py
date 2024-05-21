@@ -1,9 +1,12 @@
+from typing import ClassVar
+
+
 class HejError(Exception):
     pass
 
 
 class AuthorizationError(HejError):
-    extensions = {"code": "UNAUTHENTICATED"}
+    extensions: ClassVar = {"code": "UNAUTHENTICATED"}
 
 
 class CookieUnsetError(AuthorizationError):
