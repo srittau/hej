@@ -1,8 +1,8 @@
-class HejException(Exception):
+class HejError(Exception):
     pass
 
 
-class AuthorizationError(HejException):
+class AuthorizationError(HejError):
     extensions = {"code": "UNAUTHENTICATED"}
 
 
@@ -16,12 +16,12 @@ class AuthenticationError(AuthorizationError):
     pass
 
 
-class UnknownItemError(HejException):
+class UnknownItemError(HejError):
     def __init__(self, table: str, id: object) -> None:
         super().__init__(f"unknown item '{id}' in table '{table}'")
         self.table = table
         self.id = id
 
 
-class DBMigrationError(HejException):
+class DBMigrationError(HejError):
     pass
