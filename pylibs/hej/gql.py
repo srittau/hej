@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import datetime
 import functools
+import logging
 import os
 from collections.abc import Awaitable, Callable
 from pathlib import Path
@@ -36,6 +37,8 @@ from .note import Note
 
 _F = TypeVar("_F", bound=Callable[..., Awaitable[Any]])
 
+LOGGER = logging.getLogger(__name__)
+
 
 def schema_file() -> Path:
     path_s = os.getenv("HEJ_GQL_SCHEMA_PATH")
@@ -67,6 +70,10 @@ datetime_scalar = ScalarType("DateTime")
 
 @datetime_scalar.serializer
 def serialize_datetime(dt: datetime.datetime) -> str:
+    if dt.tzinfo is None:
+        LOGGER.warning("datetime %s has no timezone", dt)
+    elif dt.tzinfo != datetime.UTC:
+        raise ValueError(f"datetime {dt} has non-UTC timezone")
     return dt.isoformat()[:19] + "Z"
 
 

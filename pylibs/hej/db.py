@@ -208,7 +208,7 @@ async def select_note(db: _ConnectionBase, uuid: UUID) -> Note:
 
 async def insert_note(db: _ConnectionBase, title: str, text: str) -> Note:
     uuid = uuid4()
-    dt = datetime.datetime.utcnow()
+    dt = datetime.datetime.now(datetime.UTC)
     await db.execute(
         "INSERT INTO notes(uuid, title, text, creation_date, last_changed) "
         "VALUES(?, ?, ?, ?, ?)",
@@ -236,7 +236,7 @@ async def update_note(
     if favorite is None:
         favorite = old_note.favorite
 
-    now = datetime.datetime.utcnow()
+    now = datetime.datetime.now(datetime.UTC)
 
     await db.execute(
         "UPDATE notes SET title = ?, text = ?, favorite = ?, last_changed = ? "
