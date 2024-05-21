@@ -5,12 +5,12 @@ import logging
 import os
 import shutil
 import time
-from collections.abc import Iterable
+from collections.abc import AsyncGenerator, AsyncIterable, Iterable
 from contextlib import asynccontextmanager
 from pathlib import Path
 from sqlite3.dbapi2 import Row
 from types import TracebackType
-from typing import Any, AsyncGenerator, AsyncIterable
+from typing import Any
 from uuid import UUID, uuid4
 
 import aiosqlite

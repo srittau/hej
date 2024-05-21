@@ -1,8 +1,8 @@
 import datetime
-from collections.abc import Mapping, Sequence
+from collections.abc import AsyncGenerator, Mapping, Sequence
 from pathlib import Path
 from sqlite3 import Row
-from typing import Any, AsyncGenerator, LiteralString
+from typing import Any, LiteralString
 from uuid import UUID
 
 import aiofiles
