@@ -46,6 +46,10 @@ section-order = ["future", "standard-library", "third-party", "first-party", "he
 [tool.pytest.ini_options]
 testpaths = ["pylibs"]
 asyncio_mode = "auto"
+filterwarnings = [
+    # "https://github.com/graphql-python/graphql-core/issues/211"
+    "ignore:.*'typing.ByteString' is deprecated.*:DeprecationWarning",
+]
 
 [tool.mypy]
 disallow_any_decorated = true
