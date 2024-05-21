@@ -17,7 +17,7 @@ from .db import (
 )
 from .exc import UnknownItemError
 from .note import Note
-from .testutil_db import DatabaseFixture, db  # noqa: F401
+from .testutil_db import DatabaseFixture, db
 
 _UUID = UUID("7bb570bf-2e21-4baf-b963-23c454e052ab")
 _UUID2 = UUID("dd877ebd-a9cf-466d-99f2-1327e2068ff2")
@@ -30,7 +30,7 @@ async def test_open_transaction() -> None:
             assert res is None
 
 
-async def test_select_all_notes(db: DatabaseFixture) -> None:  # noqa: F811
+async def test_select_all_notes(db: DatabaseFixture) -> None:
     creation_date = datetime.datetime(2021, 5, 14, 13, 19, 4)
     last_changed = datetime.datetime(2021, 9, 19, 4, 34, 12)
     await db.insert_note(
@@ -47,7 +47,7 @@ async def test_select_all_notes(db: DatabaseFixture) -> None:  # noqa: F811
     )
 
 
-async def test_select_note(db: DatabaseFixture) -> None:  # noqa: F811
+async def test_select_note(db: DatabaseFixture) -> None:
     creation_date = datetime.datetime(2021, 5, 14, 13, 19, 4)
     last_changed = datetime.datetime(2021, 9, 19, 4, 34, 12)
     await db.insert_note(
@@ -64,13 +64,13 @@ async def test_select_note(db: DatabaseFixture) -> None:  # noqa: F811
     )
 
 
-async def test_select_note__unknown(db: DatabaseFixture) -> None:  # noqa: F811
+async def test_select_note__unknown(db: DatabaseFixture) -> None:
     await db.insert_note(uuid=_UUID2)
     with pytest.raises(UnknownItemError):
         await select_note(db.db, _UUID)
 
 
-async def test_insert_note(db: DatabaseFixture) -> None:  # noqa: F811
+async def test_insert_note(db: DatabaseFixture) -> None:
     async with db.begin() as t:
         note = await insert_note(t, "New Note", "New text")
     assert isinstance(note.uuid, UUID)
@@ -89,7 +89,7 @@ async def test_insert_note(db: DatabaseFixture) -> None:  # noqa: F811
     )
 
 
-async def test_update_note(db: DatabaseFixture) -> None:  # noqa: F811
+async def test_update_note(db: DatabaseFixture) -> None:
     await db.insert_note(
         uuid=_UUID,
         title="Old Title",
@@ -113,13 +113,13 @@ async def test_update_note(db: DatabaseFixture) -> None:  # noqa: F811
     )
 
 
-async def test_update_note__unknown(db: DatabaseFixture) -> None:  # noqa: F811
+async def test_update_note__unknown(db: DatabaseFixture) -> None:
     with pytest.raises(UnknownItemError):
         async with db.begin() as t:
             await update_note(t, _UUID, "New Note", "New text")
 
 
-async def test_delete_note(db: DatabaseFixture) -> None:  # noqa: F811
+async def test_delete_note(db: DatabaseFixture) -> None:
     await db.insert_note(uuid=_UUID)
     await db.insert_note(uuid=_UUID2)
     async with db.begin() as t:
@@ -127,7 +127,7 @@ async def test_delete_note(db: DatabaseFixture) -> None:  # noqa: F811
     await db.assert_only_row_equals("notes", {"uuid": _UUID2})
 
 
-async def test_delete_note__unknown(db: DatabaseFixture) -> None:  # noqa: F811
+async def test_delete_note__unknown(db: DatabaseFixture) -> None:
     with pytest.raises(UnknownItemError):
         async with db.begin() as t:
             await delete_note(t, _UUID)

@@ -14,7 +14,7 @@ SCHEMA_PATH = Path(__file__).parent.parent.parent / "db" / "schema.sql"
 
 
 class DatabaseFixture:
-    def __init__(self, db: Database) -> None:  # noqa: F811
+    def __init__(self, db: Database) -> None:
         self.db = db
 
     def begin(self) -> Transaction:

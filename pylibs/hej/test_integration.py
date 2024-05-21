@@ -5,11 +5,11 @@ from uuid import UUID
 import pytest
 from asserts import assert_json_subset
 from graphql import GraphQLSchema
-from pytest_mock import MockerFixture, mocker  # noqa: F401
+from pytest_mock import MockerFixture, mocker
 
 from .db import Database
-from .testutil_db import DatabaseFixture, db_o  # noqa: F401
-from .testutil_gql import GQLFixture, gql_schema  # noqa: F401
+from .testutil_db import DatabaseFixture, db_o
+from .testutil_gql import GQLFixture, gql_schema
 
 # Some test UUIDs.
 UUID1 = UUID("4b6b1145-933d-47bd-ba7e-279751bb8f7b")
@@ -20,7 +20,7 @@ class IntegrationFixture(GQLFixture, DatabaseFixture):
     def __init__(
         self,
         schema: GraphQLSchema,
-        db: Database,  # noqa: F811
+        db: Database,
     ) -> None:
         GQLFixture.__init__(self, schema)
         DatabaseFixture.__init__(self, db)
@@ -28,9 +28,9 @@ class IntegrationFixture(GQLFixture, DatabaseFixture):
 
 @pytest.fixture
 def fix(
-    gql_schema: GraphQLSchema,  # noqa: F811
-    db_o: Database,  # noqa: F811
-    mocker: MockerFixture,  # noqa: F811
+    gql_schema: GraphQLSchema,
+    db_o: Database,
+    mocker: MockerFixture,
 ) -> IntegrationFixture:
     @asynccontextmanager
     async def open_db(_: object) -> AsyncGenerator[Database, None]:

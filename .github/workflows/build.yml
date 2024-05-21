@@ -33,7 +33,7 @@ jobs:
         run: poetry install
       - name: Type check with mypy
         run: poetry run poe typecheck --no-incremental
-      - name: Lint with flake8
+      - name: Lint with ruff
         run: poetry run poe lint
       - name: Run tests with pytest
         run: poetry run poe test

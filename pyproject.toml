@@ -19,7 +19,6 @@ uvicorn = { version = "~0.29.0", extras = ["standard"] }
 
 [tool.poetry.group.dev.dependencies]
 asserts = "^0.13.1"
-flake8 = "^7.0.0"
 mypy = "~1.10.0"
 poethepoet = "^0.26.1"
 pytest = "*"
@@ -31,9 +30,11 @@ types-aiofiles = "^23.2.0.20240403"
 [tool.ruff]
 target-version = "py312"
 line-length = 79
+include = ["pyproject.toml", "pylibs/**/*.py"]
 
 [tool.ruff.lint]
-select = ["I001"]
+select = ["E", "F", "W", "I001", "RUF100"]
+per-file-ignores= {"test_**.py" = ["F401", "F811"]}
 
 [tool.ruff.lint.isort]
 combine-as-imports = true
@@ -66,7 +67,7 @@ warn_unused_ignores = true
 
 [tool.poe.tasks]
 test = "pytest"
-lint = "flake8 pylibs"
+lint = "ruff check pylibs"
 typecheck = "mypy pylibs"
 
 [tool.poe.tasks.start]
