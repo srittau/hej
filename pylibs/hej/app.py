@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 
 from starlette.applications import Starlette
+from starlette.routing import Mount
 from starlette.staticfiles import StaticFiles
 
 from .db import migrate_db
@@ -20,10 +21,16 @@ def static_path() -> Path:
 
 
 def create_app() -> Starlette:
-    app = Starlette(debug=debug())
-    app.mount("/graphql", gql_app())
-    app.mount(
-        "/", StaticFiles(directory=static_path(), html=True), name="static"
+    app = Starlette(
+        routes=[
+            Mount("/graphql", gql_app()),
+            Mount(
+                "/",
+                StaticFiles(directory=static_path(), html=True),
+                name="static",
+            ),
+        ],
+        debug=debug(),
     )
     return app
 
