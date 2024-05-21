@@ -15,6 +15,8 @@ from .debug import debug
 from .exc import DBMigrationError
 from .gql import create_app as gql_app
 
+LOGGER = logging.getLogger(__name__)
+
 
 def static_path() -> Path:
     path = os.getenv("HEJ_STATIC_PATH")
@@ -55,6 +57,7 @@ def create_app() -> Starlette:
 
 
 logging.basicConfig(level=logging.INFO)
+LOGGER.info(f"Starting app with PID {os.getpid()}")
 try:
     migrate_db()
 except DBMigrationError:

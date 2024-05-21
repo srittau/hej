@@ -25,6 +25,8 @@ COPY --from=build-py requirements.txt /app/requirements.txt
 RUN /app/virtualenv/bin/pip install -U pip && /app/virtualenv/bin/pip install -r /app/requirements.txt
 COPY ./pylibs/hej/ /app/hej/
 
+COPY ./logging.yml /app/logging.yml
+
 ENV HEJ_GQL_SCHEMA_PATH=/app/schema.graphql \
     HEJ_DB_SCHEMA_PATH=/app/db-versions \
     HEJ_DB_PATH=/app/data/hej.sqlite \
