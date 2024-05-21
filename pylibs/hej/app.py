@@ -1,7 +1,8 @@
+import contextlib
 import logging
 import os
 import sys
-from collections.abc import Callable
+from collections.abc import AsyncGenerator, Callable
 from pathlib import Path
 
 from starlette.applications import Starlette
@@ -34,6 +35,17 @@ def file_app(
     return file_app
 
 
+@contextlib.asynccontextmanager
+async def lifespan(app: Starlette) -> AsyncGenerator[None, None]:
+    logging.basicConfig(level=logging.INFO)
+    LOGGER.info(f"Starting app with PID {os.getpid()}")
+    try:
+        migrate_db()
+    except DBMigrationError:
+        sys.exit(1)
+    yield
+
+
 def create_app() -> Starlette:
     app = Starlette(
         routes=[
@@ -51,15 +63,10 @@ def create_app() -> Starlette:
             Route("/robots.txt", file_app("robots.txt")),
             Route("/{p:path}", file_app("index.html")),
         ],
+        lifespan=lifespan,
         debug=debug(),
     )
     return app
 
 
-logging.basicConfig(level=logging.INFO)
-LOGGER.info(f"Starting app with PID {os.getpid()}")
-try:
-    migrate_db()
-except DBMigrationError:
-    sys.exit(1)
 app = create_app()
