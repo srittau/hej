@@ -48,7 +48,9 @@ def schema_file() -> Path:
 
 def require_auth(f: _F) -> _F:
     @functools.wraps(f)
-    async def check_auth(obj: Any, info: GraphQLResolveInfo, **kwargs: Any) -> Any:  # type: ignore
+    async def check_auth(  # type: ignore[misc]
+        obj: Any, info: GraphQLResolveInfo, **kwargs: Any
+    ) -> Any:
         assert isinstance(info.context, dict)
         if not info.context.get("auth", False):
             await authenticate(info.context["request"])

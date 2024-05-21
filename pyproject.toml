@@ -19,26 +19,28 @@ uvicorn = { version = "~0.29.0", extras = ["standard"] }
 
 [tool.poetry.group.dev.dependencies]
 asserts = "^0.13.1"
-black = "^24.4.2"
 flake8 = "^7.0.0"
-isort = "^5.13.2"
 mypy = "~1.10.0"
 poethepoet = "^0.26.1"
 pytest = "*"
 pytest-asyncio = "^0.23.7"
 pytest-mock = "^3.14.0"
+ruff = "^0.4.4"
 types-aiofiles = "^23.2.0.20240403"
 
-[tool.black]
+[tool.ruff]
+target-version = "py312"
 line-length = 79
-target-version = ["py311"]
 
-[tool.isort]
-profile = "black"
-combine_as_imports = true
-line_length = 79
-known_hej = "hej"
-sections = "FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,HEJ,LOCALFOLDER"
+[tool.ruff.lint]
+select = ["I001"]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+section-order = ["future", "standard-library", "third-party", "first-party", "hej", "local-folder"]
+
+[tool.ruff.lint.isort.sections]
+"hej" = ["hej"]
 
 [tool.pytest.ini_options]
 testpaths = ["pylibs"]

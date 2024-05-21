@@ -18,7 +18,9 @@ UUID2 = UUID("b77f6851-058c-4847-90ad-a63ebb935b43")
 
 class IntegrationFixture(GQLFixture, DatabaseFixture):
     def __init__(
-        self, schema: GraphQLSchema, db: Database  # noqa: F811
+        self,
+        schema: GraphQLSchema,
+        db: Database,  # noqa: F811
     ) -> None:
         GQLFixture.__init__(self, schema)
         DatabaseFixture.__init__(self, db)
