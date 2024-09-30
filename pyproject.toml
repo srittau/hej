@@ -14,17 +14,17 @@ ariadne = "~0.23"
 dbupgrade = "^2023.10.0"
 click = "^8.0.3"
 graphql-core = "^3.2.4"
-starlette = "~0.38.6"
-uvicorn = { version = "~0.30.6", extras = ["standard"] }
+starlette = "~0.39.2"
+uvicorn = { version = "~0.31.0", extras = ["standard"] }
 
 [tool.poetry.group.dev.dependencies]
 asserts = "^0.13.1"
 mypy = "~1.11.2"
-poethepoet = "^0.28.0"
+poethepoet = "^0.29.0"
 pytest = "*"
 pytest-asyncio = "^0.24.0"
 pytest-mock = "^3.14.0"
-ruff = "^0.6.7"
+ruff = "^0.6.8"
 types-aiofiles = "^24.1.0.20240626"
 
 [tool.ruff]
