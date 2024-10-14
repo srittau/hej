@@ -13,9 +13,9 @@ aiosqlite = "~0.20.0"
 ariadne = "~0.23"
 dbupgrade = "^2023.10.0"
 click = "^8.0.3"
-graphql-core = "^3.2.4"
+graphql-core = "^3.2.5"
 starlette = "~0.39.2"
-uvicorn = { version = "~0.31.0", extras = ["standard"] }
+uvicorn = { version = "~0.31.1", extras = ["standard"] }
 
 [tool.poetry.group.dev.dependencies]
 asserts = "^0.13.1"
