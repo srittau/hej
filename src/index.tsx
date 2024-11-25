@@ -1,5 +1,5 @@
 import { MantineProvider, createTheme } from "@mantine/core";
-import "@mantine/core/styles.css"; // eslint-disable-line import/no-unresolved
+import "@mantine/core/styles.css";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import React from "react";

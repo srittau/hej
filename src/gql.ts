@@ -4,7 +4,6 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-// eslint-disable-next-line import/no-unresolved
 import { AwesomeGraphQLClient, gql } from "awesome-graphql-client";
 import { useCallback } from "react";
 import { Params } from "react-router";
