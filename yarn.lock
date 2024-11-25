@@ -404,10 +404,10 @@
   dependencies:
     "@floating-ui/dom" "^1.0.0"
 
-"@floating-ui/react@^0.26.27":
-  version "0.26.27"
-  resolved "https://registry.yarnpkg.com/@floating-ui/react/-/react-0.26.27.tgz#402f7b4b2702650662705fe9cbe0f1d5607846a1"
-  integrity sha512-jLP72x0Kr2CgY6eTYi/ra3VA9LOkTo4C+DUTrbFgFOExKy3omYVmwMjNKqxAHdsnyLS96BIDLcO2SlnsNf8KUQ==
+"@floating-ui/react@^0.26.28":
+  version "0.26.28"
+  resolved "https://registry.yarnpkg.com/@floating-ui/react/-/react-0.26.28.tgz#93f44ebaeb02409312e9df9507e83aab4a8c0dc7"
+  integrity sha512-yORQuuAtVpiRjpMhdc0wJj06b9JFjrYF4qp96j++v2NBpbi6SEGF7donUJ3TMieerQ6qVkAv1tgr7L4r5roTqw==
   dependencies:
     "@floating-ui/react-dom" "^2.1.2"
     "@floating-ui/utils" "^0.2.8"
@@ -423,31 +423,31 @@
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.2.8.tgz#21a907684723bbbaa5f0974cf7730bd797eb8e62"
   integrity sha512-kym7SodPp8/wloecOpcmSnWJsK7M0E5Wg8UcFA+uO4B9s5d0ywXOEro/8HM9x0rW+TljRzul/14UYz3TleT3ig==
 
-"@fortawesome/fontawesome-common-types@6.6.0":
-  version "6.6.0"
-  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-6.6.0.tgz#31ab07ca6a06358c5de4d295d4711b675006163f"
-  integrity sha512-xyX0X9mc0kyz9plIyryrRbl7ngsA9jz77mCZJsUkLl+ZKs0KWObgaEBoSgQiYWAsSmjz/yjl0F++Got0Mdp4Rw==
+"@fortawesome/fontawesome-common-types@6.7.1":
+  version "6.7.1"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-6.7.1.tgz#6201640f39fdcf8e41cd9d1a92b2da3a96817fa4"
+  integrity sha512-gbDz3TwRrIPT3i0cDfujhshnXO9z03IT1UKRIVi/VEjpNHtSBIP2o5XSm+e816FzzCFEzAxPw09Z13n20PaQJQ==
 
-"@fortawesome/fontawesome-svg-core@^6.6.0":
-  version "6.6.0"
-  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-6.6.0.tgz#2a24c32ef92136e98eae2ff334a27145188295ff"
-  integrity sha512-KHwPkCk6oRT4HADE7smhfsKudt9N/9lm6EJ5BVg0tD1yPA5hht837fB87F8pn15D8JfTqQOjhKTktwmLMiD7Kg==
+"@fortawesome/fontawesome-svg-core@^6.7.1":
+  version "6.7.1"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-6.7.1.tgz#1f8ebb6f35cf02f89c110198514e848de17ac99e"
+  integrity sha512-8dBIHbfsKlCk2jHQ9PoRBg2Z+4TwyE3vZICSnoDlnsHA6SiMlTwfmW6yX0lHsRmWJugkeb92sA0hZdkXJhuz+g==
   dependencies:
-    "@fortawesome/fontawesome-common-types" "6.6.0"
+    "@fortawesome/fontawesome-common-types" "6.7.1"
 
-"@fortawesome/free-regular-svg-icons@^6.6.0":
-  version "6.6.0"
-  resolved "https://registry.yarnpkg.com/@fortawesome/free-regular-svg-icons/-/free-regular-svg-icons-6.6.0.tgz#fc49a947ac8dfd20403c9ea5f37f0919425bdf04"
-  integrity sha512-Yv9hDzL4aI73BEwSEh20clrY8q/uLxawaQ98lekBx6t9dQKDHcDzzV1p2YtBGTtolYtNqcWdniOnhzB+JPnQEQ==
+"@fortawesome/free-regular-svg-icons@^6.7.1":
+  version "6.7.1"
+  resolved "https://registry.yarnpkg.com/@fortawesome/free-regular-svg-icons/-/free-regular-svg-icons-6.7.1.tgz#d7ec06f896ee91116a388a5a234cd26420ccdfe4"
+  integrity sha512-e13cp+bAx716RZOTQ59DhqikAgETA9u1qTBHO3e3jMQQ+4H/N1NC1ZVeFYt1V0m+Th68BrEL1/X6XplISutbXg==
   dependencies:
-    "@fortawesome/fontawesome-common-types" "6.6.0"
+    "@fortawesome/fontawesome-common-types" "6.7.1"
 
-"@fortawesome/free-solid-svg-icons@^6.6.0":
-  version "6.6.0"
-  resolved "https://registry.yarnpkg.com/@fortawesome/free-solid-svg-icons/-/free-solid-svg-icons-6.6.0.tgz#061751ca43be4c4d814f0adbda8f006164ec9f3b"
-  integrity sha512-IYv/2skhEDFc2WGUcqvFJkeK39Q+HyPf5GHUrT/l2pKbtgEIv1al1TKd6qStR5OIwQdN1GZP54ci3y4mroJWjA==
+"@fortawesome/free-solid-svg-icons@^6.7.1":
+  version "6.7.1"
+  resolved "https://registry.yarnpkg.com/@fortawesome/free-solid-svg-icons/-/free-solid-svg-icons-6.7.1.tgz#c1f9a6c25562a12c283e87e284f9d82a5b0dbcc0"
+  integrity sha512-BTKc0b0mgjWZ2UDKVgmwaE0qt0cZs6ITcDgjrti5f/ki7aF5zs+N91V6hitGo3TItCFtnKg6cUVGdTmBFICFRg==
   dependencies:
-    "@fortawesome/fontawesome-common-types" "6.6.0"
+    "@fortawesome/fontawesome-common-types" "6.7.1"
 
 "@fortawesome/react-fontawesome@^0.2.2":
   version "0.2.2"
@@ -512,30 +512,30 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@mantine/core@^7.14.1":
-  version "7.14.1"
-  resolved "https://registry.yarnpkg.com/@mantine/core/-/core-7.14.1.tgz#25070c62ff9d537a01c1f2258f72f5209b6f7b1f"
-  integrity sha512-oHqaOE1n4KJkvJgF628OCVXE2zUgkEotEsPUdVaC58qRfJ7SvZAI26JNbUG8+MoqHHEqHKtBaRkTyuEVMbomxw==
+"@mantine/core@^7.14.2":
+  version "7.14.2"
+  resolved "https://registry.yarnpkg.com/@mantine/core/-/core-7.14.2.tgz#e72b39d2ee87479f913a58d8a3fdd03cc23c5eb4"
+  integrity sha512-lq5l8T6TRkaCbs3HeaRDvUG80JbrwCxQPF5pwNP4yRrdln99hWpGtyNm0DSfcN5u1eOQRudOtAc+R8TfU+2GXw==
   dependencies:
-    "@floating-ui/react" "^0.26.27"
+    "@floating-ui/react" "^0.26.28"
     clsx "^2.1.1"
     react-number-format "^5.4.2"
     react-remove-scroll "^2.6.0"
-    react-textarea-autosize "8.5.4"
-    type-fest "^4.26.1"
+    react-textarea-autosize "8.5.5"
+    type-fest "^4.27.0"
 
-"@mantine/form@^7.14.1":
-  version "7.14.1"
-  resolved "https://registry.yarnpkg.com/@mantine/form/-/form-7.14.1.tgz#0b184784a6c902fb9245b48df37d88316faabcac"
-  integrity sha512-ziYsTsFhR1sEjGebwahKr7LRRFQQtH47o+rPLbvD0FGb6aYRVQgaebQo4jVgxFIgqiafxGNEpD6GkPBqmCmU4g==
+"@mantine/form@^7.14.2":
+  version "7.14.2"
+  resolved "https://registry.yarnpkg.com/@mantine/form/-/form-7.14.2.tgz#452cf9f44892b8fc9eb2e74e5d994e78802a1530"
+  integrity sha512-IXgvEjIivXBNU4+sRinXGCSziRpx+pVeazuZixU3BxiSBap36gLxCbcWiyG3PkI4NkfI70YTTWFFeX39C06lzg==
   dependencies:
     fast-deep-equal "^3.1.3"
     klona "^2.0.6"
 
-"@mantine/hooks@^7.14.1":
-  version "7.14.1"
-  resolved "https://registry.yarnpkg.com/@mantine/hooks/-/hooks-7.14.1.tgz#6f986294cb23a9117e13068423c0d92d06e81f74"
-  integrity sha512-VlgTyV/9WNFCwCshW1KHMYNzLt+M8aG68E1lWaqOXtyWSLJo+X5zQJGg0f8bwGbJvIMQCpQd0yTLfnjD6uAtrA==
+"@mantine/hooks@^7.14.2":
+  version "7.14.2"
+  resolved "https://registry.yarnpkg.com/@mantine/hooks/-/hooks-7.14.2.tgz#ee5b0f85e9a12d52555c4b7268ddde60789c643b"
+  integrity sha512-WN0bEJHw2Lh/2PLqik8rqITJRZAu6A1FK6f+H0SNTrQuWYBPSHdNTqM8hntDnhpM/2mZ52t3VWYgvNVGczLxIw==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -648,29 +648,29 @@
   resolved "https://registry.yarnpkg.com/@rtsao/scc/-/scc-1.1.0.tgz#927dd2fae9bc3361403ac2c7a00c32ddce9ad7e8"
   integrity sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g==
 
-"@tanstack/query-core@5.60.5":
-  version "5.60.5"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.60.5.tgz#37b7c5ab7e6894cea9ef341299a7a3febc2ea361"
-  integrity sha512-jiS1aC3XI3BJp83ZiTuDLerTmn9P3U95r6p+6/SNauLJaYxfIC4dMuWygwnBHIZxjn2zJqEpj3nysmPieoxfPQ==
+"@tanstack/query-core@5.60.6":
+  version "5.60.6"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.60.6.tgz#0dd33fe231b0d18bf66d0c615b29899738300658"
+  integrity sha512-tI+k0KyCo1EBJ54vxK1kY24LWj673ujTydCZmzEZKAew4NqZzTaVQJEuaG1qKj2M03kUHN46rchLRd+TxVq/zQ==
 
-"@tanstack/query-devtools@5.59.20":
-  version "5.59.20"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-devtools/-/query-devtools-5.59.20.tgz#a827ac682ec1268fc9c99e7b6eb739f35b5606aa"
-  integrity sha512-vxhuQ+8VV4YWQSFxQLsuM+dnEKRY7VeRzpNabFXdhEwsBYLrjXlF1pM38A8WyKNLqZy8JjyRO8oP4Wd/oKHwuQ==
+"@tanstack/query-devtools@5.61.3":
+  version "5.61.3"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-devtools/-/query-devtools-5.61.3.tgz#56d4fd00692323ad6977ad5874fad6f7b27d3928"
+  integrity sha512-AoRco+DMw7Xy9fFs+5BxBop82YPKs1/tWpTPoO1iYVwPLmAU+znnLfWyZ8Qr5OiEqoS0dCyEe6F5V11/JkCK/A==
 
-"@tanstack/react-query-devtools@^5.60.5":
-  version "5.60.5"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query-devtools/-/react-query-devtools-5.60.5.tgz#fe398b4896a292fbe835d3fd4799e929de94c25a"
-  integrity sha512-lzANl0ih3CNKBGUoXhhkAAHI1Y4Yqs9Jf3iuTUsGiPpmF0RWXTeYFaQxc+h1PhJz3VwYrIYCwmPoNts0mSjSuA==
+"@tanstack/react-query-devtools@^5.61.3":
+  version "5.61.3"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query-devtools/-/react-query-devtools-5.61.3.tgz#a748e2eae43441a44723b444dc9623ba58385a27"
+  integrity sha512-bR/TaiOSqTq0M5dmYY+pJeSnl5QAuCaRRmJg+Q5hEqt6uTHgKz5WO4jdi8BywRJiZhpXLirlUAIOXJsZ8ukqSA==
   dependencies:
-    "@tanstack/query-devtools" "5.59.20"
+    "@tanstack/query-devtools" "5.61.3"
 
-"@tanstack/react-query@^5.60.5":
-  version "5.60.5"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.60.5.tgz#3194c390f7eff20542b321c3042880dc3f1a81e2"
-  integrity sha512-M77bOsPwj1wYE56gk7iJvxGAr4IC12NWdIDhT+Eo8ldkWRHMvIR8I/rufIvT1OXoV/bl7EECwuRuMlxxWtvW2Q==
+"@tanstack/react-query@^5.61.3":
+  version "5.61.3"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.61.3.tgz#0187b73b87adaeaed09f3d9717e35b507175fe23"
+  integrity sha512-c3Oz9KaCBapGkRewu7AJLhxE9BVqpMcHsd3KtFxSd7FSCu2qGwqfIN37zbSGoyk6Ix9LGZBNHQDPI6GpWABnmA==
   dependencies:
-    "@tanstack/query-core" "5.60.5"
+    "@tanstack/query-core" "5.60.6"
 
 "@testing-library/dom@^10.0.0":
   version "10.1.0"
@@ -794,10 +794,10 @@
   resolved "https://registry.yarnpkg.com/@types/ms/-/ms-0.7.34.tgz#10964ba0dee6ac4cd462e2795b6bebd407303433"
   integrity sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==
 
-"@types/node@^22.9.0":
-  version "22.9.0"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.9.0.tgz#b7f16e5c3384788542c72dc3d561a7ceae2c0365"
-  integrity sha512-vuyHg81vvWA1Z1ELfvLko2c8f34gyA0zaic0+Rllc5lbCnbSyuvb2Oxpm6TAUAC/2xZN3QGqxBNggD1nNR2AfQ==
+"@types/node@^22.9.3":
+  version "22.9.3"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.9.3.tgz#08f3d64b3bc6d74b162d36f60213e8a6704ef2b4"
+  integrity sha512-F3u1fs/fce3FFk+DAxbxc78DF8x0cY09RRL8GnXLmkJ1jvx3TtPdWoTT5/NiYfI5ASqXBmfqJi9dZ3gxMx4lzw==
   dependencies:
     undici-types "~6.19.8"
 
@@ -3460,10 +3460,10 @@ react-style-singleton@^2.2.1:
     invariant "^2.2.4"
     tslib "^2.0.0"
 
-react-textarea-autosize@8.5.4:
-  version "8.5.4"
-  resolved "https://registry.yarnpkg.com/react-textarea-autosize/-/react-textarea-autosize-8.5.4.tgz#1c568ad838857b6ce86ee2a96e504179305e0bf4"
-  integrity sha512-eSSjVtRLcLfFwFcariT77t9hcbVJHQV76b51QjQGarQIHml2+gM2lms0n3XrhnDmgK5B+/Z7TmQk5OHNzqYm/A==
+react-textarea-autosize@8.5.5:
+  version "8.5.5"
+  resolved "https://registry.yarnpkg.com/react-textarea-autosize/-/react-textarea-autosize-8.5.5.tgz#987cc25ad7f8e51389a41f88239ff07d2e968761"
+  integrity sha512-CVA94zmfp8m4bSHtWwmANaBR8EPsKy2aZ7KwqhoS4Ftib87F9Kvi7XQhOixypPLMc6kVYgOXvKFuuzZDpHGRPg==
   dependencies:
     "@babel/runtime" "^7.20.13"
     use-composed-ref "^1.3.0"
@@ -3978,10 +3978,10 @@ type-fest@^0.20.2:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.20.2.tgz#1bf207f4b28f91583666cb5fbd327887301cd5f4"
   integrity sha512-Ne+eE4r0/iWnpAxD852z3A+N0Bt5RN//NjJwRd2VFHEmrywxf5vsZlh4R6lixl6B+wz/8d+maTSAkN1FIkI3LQ==
 
-type-fest@^4.26.1:
-  version "4.26.1"
-  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-4.26.1.tgz#a4a17fa314f976dd3e6d6675ef6c775c16d7955e"
-  integrity sha512-yOGpmOAL7CkKe/91I5O3gPICmJNLJ1G4zFYVAsRHg7M64biSnPtRj0WNQt++bRkjYOqjWXrhnUw1utzmVErAdg==
+type-fest@^4.27.0:
+  version "4.28.0"
+  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-4.28.0.tgz#ee4b007cbd1db07aed98b19faa0a2852a8006162"
+  integrity sha512-jXMwges/FVbFRe5lTMJZVEZCrO9kI9c8k0PA/z7nF3bo0JSCCLysvokFjNPIUK/itEMas10MQM+AiHoHt/T/XA==
 
 typed-array-buffer@^1.0.2:
   version "1.0.2"
@@ -4027,10 +4027,10 @@ typed-array-length@^1.0.6:
     is-typed-array "^1.1.13"
     possible-typed-array-names "^1.0.0"
 
-typescript@~5.6.3:
-  version "5.6.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.6.3.tgz#5f3449e31c9d94febb17de03cc081dd56d81db5b"
-  integrity sha512-hjcS1mhfuyi4WW8IWtjP7brDrG2cuDZukyrYrSauoXGNgx0S7zceP07adYkJycEr56BOUTNPzbInooiN3fn1qw==
+typescript@~5.7.2:
+  version "5.7.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.7.2.tgz#3169cf8c4c8a828cde53ba9ecb3d2b1d5dd67be6"
+  integrity sha512-i5t66RHxDvVN40HfDd1PsEThGNnlMCMT3jMUuoh9/0TaqWevNontacunWyN02LA9/fIbEWlcHZcgTKb9QoaLfg==
 
 unbox-primitive@^1.0.2:
   version "1.0.2"
@@ -4186,10 +4186,10 @@ vite-node@2.1.5:
     pathe "^1.1.2"
     vite "^5.0.0"
 
-vite-tsconfig-paths@^5.1.2:
-  version "5.1.2"
-  resolved "https://registry.yarnpkg.com/vite-tsconfig-paths/-/vite-tsconfig-paths-5.1.2.tgz#975810f12cdaebcda196ce3c2cb4ba19df277bb1"
-  integrity sha512-gEIbKfJzSEv0yR3XS2QEocKetONoWkbROj6hGx0FHM18qKUojhvcokQsxQx5nMkelZq2n37zbSGCJn+FSODSjA==
+vite-tsconfig-paths@^5.1.3:
+  version "5.1.3"
+  resolved "https://registry.yarnpkg.com/vite-tsconfig-paths/-/vite-tsconfig-paths-5.1.3.tgz#ffab28a9c2cb171e7685dd5cdcb93b132187cad5"
+  integrity sha512-0bz+PDlLpGfP2CigeSKL9NFTF1KtXkeHGZSSaGQSuPZH77GhoiQaA8IjYgOaynSuwlDTolSUEU0ErVvju3NURg==
   dependencies:
     debug "^4.1.1"
     globrex "^0.1.2"
