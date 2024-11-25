@@ -2,7 +2,7 @@ import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ActionIcon, Affix } from "@mantine/core";
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 import AppContext from "./AppContext";
 

@@ -7,7 +7,7 @@ import {
 // eslint-disable-next-line import/no-unresolved
 import { AwesomeGraphQLClient, gql } from "awesome-graphql-client";
 import { useCallback } from "react";
-import { Params } from "react-router-dom";
+import { Params } from "react-router";
 
 import { Note, NoteMeta } from "./Note";
 import { setAuthCookie, unsetAuthCookie } from "./auth";

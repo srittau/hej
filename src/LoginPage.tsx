@@ -1,12 +1,12 @@
 import { Button, Container, Paper, PasswordInput, Stack } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { Form, useActionData } from "react-router-dom";
+import { Form, useActionData } from "react-router";
 
 export default function LoginPage() {
   const form = useForm({
     initialValues: { password: "" },
   });
-  const status = useActionData();
+  const status = useActionData<unknown>();
 
   return (
     <Container size="420" my={40}>

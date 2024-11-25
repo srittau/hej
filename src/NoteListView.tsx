@@ -6,7 +6,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Group, Paper, Table, Text, UnstyledButton } from "@mantine/core";
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 import { NoteMeta } from "./Note";
 import classes from "./NoteListView.module.css";
@@ -49,7 +49,7 @@ export default function NoteListView() {
           {notes.map((note) => (
             <Table.Tr
               className={classes.row}
-              onClick={() => navigate(`/notes/${note.uuid}`)}
+              onClick={() => void navigate(`/notes/${note.uuid}`)}
               key={note.uuid}
             >
               <Table.Td>{note.title}</Table.Td>

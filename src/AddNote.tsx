@@ -1,5 +1,5 @@
 import { Button } from "@mantine/core";
-import { useSubmit } from "react-router-dom";
+import { useSubmit } from "react-router";
 
 interface AddNoteProps {
   onClick?: () => void;
@@ -13,7 +13,7 @@ export default function AddNote({ onClick, children }: AddNoteProps) {
       type="button"
       variant="filled"
       onClick={() => {
-        submit(null, { method: "post", action: "/notes" });
+        void submit(null, { method: "post", action: "/notes" });
         onClick?.();
       }}
     >

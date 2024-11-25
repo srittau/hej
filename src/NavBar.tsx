@@ -1,7 +1,7 @@
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Box, Button, ScrollArea, Stack, Text } from "@mantine/core";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 import AddNote from "./AddNote";
 import classes from "./NavBar.module.css";

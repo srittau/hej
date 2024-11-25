@@ -11,7 +11,7 @@ import {
   UnstyledButton,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 
 import AppLinkAction from "./AppLinkAction";
 import DeleteNote from "./DeleteNote";

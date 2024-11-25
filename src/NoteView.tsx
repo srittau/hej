@@ -2,7 +2,7 @@ import { faEdit, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Box, Paper } from "@mantine/core";
 import Markdown from "react-markdown";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 
 import AppLinkAction from "./AppLinkAction";
 import classes from "./NoteView.module.css";

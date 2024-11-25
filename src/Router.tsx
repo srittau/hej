@@ -3,7 +3,7 @@ import {
   RouterProvider,
   createBrowserRouter,
   redirect,
-} from "react-router-dom";
+} from "react-router";
 
 import AppPage from "./AppPage";
 import ErrorPage from "./ErrorPage";

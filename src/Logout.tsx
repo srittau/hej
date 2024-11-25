@@ -1,7 +1,7 @@
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ActionIcon } from "@mantine/core";
-import { useSubmit } from "react-router-dom";
+import { useSubmit } from "react-router";
 
 interface LogoutProps {
   ml?: string;
@@ -18,7 +18,7 @@ export default function Logout({ ml }: LogoutProps) {
       size="lg"
       ml={ml}
       onClick={() =>
-        submit(null, {
+        void submit(null, {
           method: "post",
           action: "/logout",
         })
