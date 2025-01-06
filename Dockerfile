@@ -10,7 +10,7 @@ COPY src/ src/
 RUN yarn build
 
 FROM python:3.12 AS build-py
-RUN pip install -U pip && pip install poetry
+RUN pip install -U pip && pip install poetry poetry-plugin-export
 COPY pyproject.toml ./pyproject.toml
 COPY poetry.lock ./poetry.lock
 RUN poetry export -o requirements.txt
