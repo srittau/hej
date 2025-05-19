@@ -736,14 +736,14 @@ full = ["httpx (>=0.27.0,<0.29.0)", "itsdangerous", "jinja2", "python-multipart 
 
 [[package]]
 name = "types-aiofiles"
-version = "24.1.0.20250326"
+version = "24.1.0.20250516"
 description = "Typing stubs for aiofiles"
 optional = false
 python-versions = ">=3.9"
 groups = ["dev"]
 files = [
-    {file = "types_aiofiles-24.1.0.20250326-py3-none-any.whl", hash = "sha256:dfb58c9aa18bd449e80fb5d7f49dc3dd20d31de920a46223a61798ee4a521a70"},
-    {file = "types_aiofiles-24.1.0.20250326.tar.gz", hash = "sha256:c4bbe432fd043911ba83fb635456f5cc54f6d05fda2aadf6bef12a84f07a6efe"},
+    {file = "types_aiofiles-24.1.0.20250516-py3-none-any.whl", hash = "sha256:ec265994629146804b656a971c46f393ce860305834b3cacb4b8b6fb7dba7e33"},
+    {file = "types_aiofiles-24.1.0.20250516.tar.gz", hash = "sha256:7fd2a7f793bbe180b7b22cd4f59300fe61fdc9940b3bbc9899ffe32849b95188"},
 ]
 
 [[package]]
@@ -1003,4 +1003,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.12"
-content-hash = "1d3edfdf0b88865475188ac1ad0608b5befe6f75567d5878361392d226228622"
+content-hash = "39f7225ff54c2b4cfffe3ca64594c43f43f14c5c9264e949d79180aba359371f"
