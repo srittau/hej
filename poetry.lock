@@ -121,14 +121,14 @@ markers = {main = "platform_system == \"Windows\" or sys_platform == \"win32\"",
 
 [[package]]
 name = "dbupgrade"
-version = "2023.10.0"
+version = "2025.5.0"
 description = "Database Migration Tool"
 optional = false
-python-versions = ">=3.9,<4.0"
+python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "dbupgrade-2023.10.0-py3-none-any.whl", hash = "sha256:2b07b5ac9af7d68c33a54d6d99d6d8f884273c6ff8ab80880b09f82f8250b094"},
-    {file = "dbupgrade-2023.10.0.tar.gz", hash = "sha256:0cb037a238f0aae6791b58173e4105bebfa160cf1ef2dc0a811fea0b66c8a53a"},
+    {file = "dbupgrade-2025.5.0-py3-none-any.whl", hash = "sha256:a227e071d792c003e9b8cab59965811e5d2fa4ce87cfedc7662a800399e72c8f"},
+    {file = "dbupgrade-2025.5.0.tar.gz", hash = "sha256:ad3971b1cc82cb3b19e6d163dfd0c513630b0d952ffba1e69052d40f50c1981c"},
 ]
 
 [package.dependencies]
@@ -1003,4 +1003,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.12"
-content-hash = "3dfb9de8a77396c480d1ed251252f70543fe19aa9de146bfa0a97bc2e992dfdb"
+content-hash = "1d3edfdf0b88865475188ac1ad0608b5befe6f75567d5878361392d226228622"
