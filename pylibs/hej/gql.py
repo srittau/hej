@@ -6,7 +6,7 @@ import logging
 import os
 from collections.abc import Awaitable, Callable
 from pathlib import Path
-from typing import Any, TypeVar
+from typing import Any
 from uuid import UUID
 
 from ariadne import (
@@ -35,8 +35,6 @@ from .db import (
 from .debug import debug
 from .note import Note
 
-_F = TypeVar("_F", bound=Callable[..., Awaitable[Any]])
-
 LOGGER = logging.getLogger(__name__)
 
 
@@ -49,7 +47,7 @@ def schema_file() -> Path:
     return path
 
 
-def require_auth(f: _F) -> _F:
+def require_auth[F: Callable[..., Awaitable[Any]]](f: F) -> F:
     @functools.wraps(f)
     async def check_auth(  # type: ignore[misc]
         obj: Any, info: GraphQLResolveInfo, **kwargs: Any
