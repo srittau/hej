@@ -5,9 +5,11 @@
 }
 
 .logo {
+    width: auto;
     height: 80%;
 }
 
 .name {
+    width: auto;
     height: 100%;
 }
