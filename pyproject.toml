@@ -26,7 +26,7 @@ poethepoet = "^0.36.0"
 pytest = "*"
 pytest-asyncio = "^1.0.0"
 pytest-mock = "^3.14.1"
-ruff = "~0.12.2"
+ruff = "~0.12.3"
 types-aiofiles = "^24.1.0.20250606"
 
 [tool.ruff]
