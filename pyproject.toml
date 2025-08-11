@@ -27,7 +27,7 @@ pytest = "*"
 pytest-asyncio = "^1.1.0"
 pytest-mock = "^3.14.1"
 ruff = "~0.12.5"
-types-aiofiles = "^24.1.0.20250708"
+types-aiofiles = "^24.1.0.20250809"
 
 [tool.ruff]
 target-version = "py312"
