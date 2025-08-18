@@ -22,11 +22,11 @@ package-mode = false
 [tool.poetry.group.dev.dependencies]
 asserts = "^0.13.1"
 mypy = "~1.17.0"
-poethepoet = "^0.36.0"
+poethepoet = "^0.37.0"
 pytest = "*"
 pytest-asyncio = "^1.1.0"
 pytest-mock = "^3.14.1"
-ruff = "~0.12.5"
+ruff = "~0.12.9"
 types-aiofiles = "^24.1.0.20250809"
 
 [tool.ruff]
