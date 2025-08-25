@@ -19,6 +19,14 @@ export default [
       react: {
         version: "detect",
       },
+      "import/resolver": {
+        typescript: {
+          project: "./tsconfig.json",
+        },
+        node: {
+          extensions: [".js", ".jsx", ".ts", ".tsx"],
+        },
+      },
     },
   },
   // Use manual configuration, until eslint-plugin-react-hooks provides
@@ -50,7 +58,6 @@ export default [
       "import/first": "error",
       "import/newline-after-import": "warn",
       "import/no-useless-path-segments": "error",
-
       "import/order": [
         "warn",
         {
