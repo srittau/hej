@@ -1357,10 +1357,10 @@ available-typed-arrays@^1.0.7:
   dependencies:
     possible-typed-array-names "^1.0.0"
 
-awesome-graphql-client@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/awesome-graphql-client/-/awesome-graphql-client-2.1.0.tgz#8b992ba991350f2122e8e099859598a0bd743b5b"
-  integrity sha512-EMcrGXPpmEH/k9tF+BA6jX3wfWNC3hjlAd/+REAAiGIvTyLmSMYf+Jzc5JLKa16Wev9SZVKCPDzbttzyhPEJ+Q==
+awesome-graphql-client@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/awesome-graphql-client/-/awesome-graphql-client-3.0.0.tgz#5d495570d66952ad1b61963aa33f051302e25a4e"
+  integrity sha512-xn37nQyAosl5atYfywEk80nvNhuAY1STYs/ZHGwSsHGTudeB5OErxPfg5+ss+kAAbmT+DD4FWc9fVmr+3CxJ5Q==
 
 axe-core@^4.10.0:
   version "4.10.3"
