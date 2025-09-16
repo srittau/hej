@@ -7,26 +7,26 @@ license = "MIT"
 requires-python = ">= 3.12, < 4"
 dependencies = [
     "aiofiles >= 23.2.1",
-    "aiosqlite ~= 0.21.0",
+    "aiosqlite >= 0.21.0, < 0.22",
     "ariadne >= 0.24, < 0.25",
     "dbupgrade ~= 2025.5.0",
     "click >= 8.2.1, < 9",
-    "graphql-core >= 3.2.6, < 4",
-    "starlette ~= 0.48.0",
-    "uvicorn[standard] ~= 0.35.0",
+    "graphql-core ~= 3.2.6",
+    "starlette >= 0.48.0, < 0.49",
+    "uvicorn[standard] >= 0.35.0, < 0.36",
 ]
 
 [tool.poetry]
 package-mode = false
 
 [tool.poetry.group.dev.dependencies]
-asserts = "^0.13.1"
-mypy = "~1.18.1"
-poethepoet = "^0.37.0"
+asserts = ">= 0.13.1, < 0.14"
+mypy = "~= 1.18.1"
+poethepoet = ">= 0.37.0"
 pytest = "*"
-pytest-asyncio = "^1.1.0"
-pytest-mock = "^3.15.0"
-ruff = "~0.13.0"
+pytest-asyncio = "~= 1.2.0"
+pytest-mock = "~= 3.15.0"
+ruff = ">= 0.13.0, < 0.14"
 types-aiofiles = "^24.1.0.20250822"
 
 [tool.ruff]
