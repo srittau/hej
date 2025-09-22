@@ -21,7 +21,7 @@ package-mode = false
 
 [tool.poetry.group.dev.dependencies]
 asserts = ">= 0.13.1, < 0.14"
-mypy = "~= 1.18.1"
+mypy = "~= 1.18.2"
 poethepoet = ">= 0.37.0"
 pytest = "*"
 pytest-asyncio = "~= 1.2.0"
