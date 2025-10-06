@@ -30,13 +30,7 @@ export default defineConfig([
       },
     },
   },
-  // Use manual configuration, until eslint-plugin-react-hooks provides
-  // a flat configuration.
-  // https://github.com/facebook/react/issues/28313
-  {
-    plugins: { "react-hooks": reactHooks },
-    rules: reactHooks.configs.recommended.rules,
-  },
+  reactHooks.configs.recommended,
   jsxA11y.flatConfigs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   {
