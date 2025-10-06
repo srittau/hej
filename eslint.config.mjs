@@ -1,4 +1,5 @@
 import js from "@eslint/js";
+import { defineConfig } from "eslint/config";
 import prettier from "eslint-config-prettier";
 import importPlugin from "eslint-plugin-import";
 import jsxA11y from "eslint-plugin-jsx-a11y";
@@ -7,7 +8,7 @@ import reactHooks from "eslint-plugin-react-hooks";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
-export default [
+export default defineConfig([
   js.configs.recommended,
   prettier,
   importPlugin.flatConfigs.recommended,
@@ -70,4 +71,4 @@ export default [
       ],
     },
   },
-];
+]);
