@@ -30,7 +30,7 @@ export default defineConfig([
       },
     },
   },
-  reactHooks.configs.recommended,
+  reactHooks.configs.flat.recommended,
   jsxA11y.flatConfigs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   {

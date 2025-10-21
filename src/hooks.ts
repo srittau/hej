@@ -10,6 +10,7 @@ export function useDebouncedValue<T>(
   const [bouncing, setBouncing] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setBouncing(true);
 
     const timeout = setTimeout(() => {
