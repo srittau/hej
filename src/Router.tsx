@@ -33,26 +33,37 @@ function privateLoader(loader: LoaderFunction): LoaderFunction {
   };
 }
 
+export type LoginError = "invalid" | "error";
+
 const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage />,
-    async action({ request }) {
+    async action({ request }): Promise<Response | LoginError> {
       const formData = await request.formData();
       const password = formData.get("password");
-      if (!(typeof password === "string")) return false;
-      if (await login(password)) {
-        const params = new URLSearchParams(window.location.search);
-        return redirect(params.get("next") ?? "/");
-      } else {
-        return false;
+      if (!(typeof password === "string")) return "invalid";
+      try {
+        if (await login(password)) {
+          const params = new URLSearchParams(window.location.search);
+          return redirect(params.get("next") ?? "/");
+        } else {
+          return "invalid";
+        }
+      } catch (e) {
+        console.error("Login error", e);
+        return "error";
       }
     },
   },
   {
     path: "/logout",
     async action() {
-      await logout();
+      try {
+        await logout();
+      } catch (e) {
+        console.error("Logout error", e);
+      }
       return redirect("/login");
     },
   },

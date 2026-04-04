@@ -1,12 +1,13 @@
 import { Button, Container, Paper, PasswordInput, Stack } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { Form, useActionData } from "react-router";
+import { LoginError } from "./Router";
 
 export default function LoginPage() {
   const form = useForm({
     initialValues: { password: "" },
   });
-  const status = useActionData<unknown>();
+  const status = useActionData<LoginError>();
 
   return (
     <Container size="420" my={40}>
@@ -19,7 +20,11 @@ export default function LoginPage() {
               required
               autoComplete="current-password"
               error={
-                (form.errors.password || status === false) && "Invalid password"
+                status === "error"
+                  ? "Internal error"
+                  : form.errors.password || status === "invalid"
+                    ? "Invalid password"
+                    : null
               }
             />
             <Button variant="filled" type="submit">
