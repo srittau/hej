@@ -1,7 +1,9 @@
 import js from "@eslint/js";
 import { defineConfig } from "eslint/config";
 import prettier from "eslint-config-prettier";
-import importPlugin from "eslint-plugin-import";
+// Disabled until eslint-plugin-import supports ESLint 10
+// https://github.com/import-js/eslint-plugin-import/issues/3227
+// import importPlugin from "eslint-plugin-import";
 import jsxA11y from "eslint-plugin-jsx-a11y";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
@@ -11,8 +13,8 @@ import tseslint from "typescript-eslint";
 export default defineConfig([
   js.configs.recommended,
   prettier,
-  importPlugin.flatConfigs.recommended,
-  importPlugin.flatConfigs.typescript,
+  // importPlugin.flatConfigs.recommended,
+  // importPlugin.flatConfigs.typescript,
   react.configs.flat.recommended,
   react.configs.flat["jsx-runtime"],
   {
@@ -50,19 +52,19 @@ export default defineConfig([
     files: ["src/**/*.{js,jsx,ts,tsx}"],
 
     rules: {
-      "import/first": "error",
-      "import/newline-after-import": "warn",
-      "import/no-useless-path-segments": "error",
-      "import/order": [
-        "warn",
-        {
-          alphabetize: {
-            order: "asc",
-          },
+    //   "import/first": "error",
+    //   "import/newline-after-import": "warn",
+    //   "import/no-useless-path-segments": "error",
+    //   "import/order": [
+    //     "warn",
+    //     {
+    //       alphabetize: {
+    //         order: "asc",
+    //       },
 
-          "newlines-between": "always",
-        },
-      ],
+    //       "newlines-between": "always",
+    //     },
+    //   ],
     },
   },
 ]);
