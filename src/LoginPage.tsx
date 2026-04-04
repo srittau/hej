@@ -1,4 +1,11 @@
-import { Button, Container, Paper, PasswordInput, Stack } from "@mantine/core";
+import {
+  Button,
+  Container,
+  Paper,
+  PasswordInput,
+  Stack,
+  TextInput,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { Form, useActionData } from "react-router";
 import { LoginError } from "./Router";
@@ -14,6 +21,12 @@ export default function LoginPage() {
       <Paper p="xl" withBorder className="login-page">
         <Form method="POST" action="/login">
           <Stack>
+            <TextInput
+              label="Username"
+              name="username"
+              required
+              autoComplete="username"
+            />
             <PasswordInput
               label="Password"
               name="password"
