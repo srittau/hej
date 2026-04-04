@@ -99,7 +99,7 @@ class Database(_ConnectionBase):
         return self._db
 
     async def __aenter__(self) -> Database:
-        self._db = await aiosqlite.connect(self.db_name)
+        self._db = await aiosqlite.connect(self.db_name, uri=True)
         self._db.row_factory = aiosqlite.Row
         return self
 
