@@ -59,7 +59,7 @@ def db_datetime_old(dt: datetime.datetime) -> str:
 def datetime_from_db(s: str) -> datetime.datetime:
     if not s.endswith("Z"):
         s += "Z"
-    return datetime.datetime.fromisoformat(s[:-1])
+    return datetime.datetime.fromisoformat(s[:-1]).replace(tzinfo=datetime.UTC)
 
 
 class _ConnectionBase:
