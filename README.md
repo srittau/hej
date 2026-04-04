@@ -4,7 +4,7 @@ Simple browser-based personal wiki
 
 ## Installation
 
-hej requires Python 3.12 or later and Node.js 24 or later.
+hej requires Python 3.14 or later and Node.js 24 or later.
 
 ## Development
 

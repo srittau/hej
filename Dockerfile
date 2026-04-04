@@ -9,7 +9,7 @@ COPY public/ public/
 COPY src/ src/
 RUN yarn build
 
-FROM srittau/uvicorn:3.12
+FROM srittau/uvicorn:3.14
 
 # Prepare directories
 WORKDIR /app

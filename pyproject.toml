@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Simple browser-based personal wiki"
 authors = [{ name = "Sebastian Rittau", email = "srittau@rittau.biz" }]
 license = "MIT"
-requires-python = ">= 3.12, < 4"
+requires-python = ">= 3.14"
 dependencies = [
     "aiofiles >= 23.2.1",
     "aiosqlite ~= 0.22.1",

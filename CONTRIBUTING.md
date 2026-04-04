@@ -1,6 +1,6 @@
 ## Prerequisites
 
-- Python 3.12+
+- Python 3.14+
 - uv
 - Node.js 24+
 - yarn
