@@ -2,7 +2,7 @@
 
 - Python 3.12+
 - uv
-- Node.js 22+
+- Node.js 24+
 - yarn
 
 ## Preparing the Development Environment
