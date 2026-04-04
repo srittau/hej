@@ -1,7 +1,7 @@
 ## Prerequisites
 
 - Python 3.12+
-- Poetry
+- uv
 - Node.js 22+
 - yarn
 
@@ -10,8 +10,8 @@
 Create a Python virtual environment, activate it, and install dependencies:
 
 ```
-poetry install
-poetry shell
+uv sync
+source .venv/bin/activate
 ```
 
 Prepare the JavaScript environment using yarn:
@@ -41,7 +41,7 @@ yarn test
 In one terminal, run:
 
 ```
-poetry run poe start
+uv run poe start
 ```
 
 In another terminal, run:

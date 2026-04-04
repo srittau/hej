@@ -9,20 +9,22 @@ COPY public/ public/
 COPY src/ src/
 RUN yarn build
 
-FROM python:3.12 AS build-py
-RUN pip install -U pip && pip install poetry poetry-plugin-export
-COPY pyproject.toml ./pyproject.toml
-COPY poetry.lock ./poetry.lock
-RUN poetry export -o requirements.txt
-
 FROM srittau/uvicorn:3.12
+
+# Prepare directories
 WORKDIR /app
 RUN mkdir /app/data
+ENV UV_PROJECT_ENVIRONMENT=/app/virtualenv
+
+# Install Python dependencies
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+COPY pyproject.toml uv.lock /app/
+RUN uv sync --locked --no-dev
+
+# Install app
 COPY --from=build-js /build/dist/ /app/www-data/
 COPY ./schema.graphql /app/
 COPY ./db/versions/ /app/db-versions/
-COPY --from=build-py requirements.txt /app/requirements.txt
-RUN /app/virtualenv/bin/pip install -U pip && /app/virtualenv/bin/pip install -r /app/requirements.txt
 COPY ./pylibs/hej/ /app/hej/
 
 COPY ./logging.yml /app/logging.yml
