@@ -12,7 +12,7 @@ class Note:
     creation_date: datetime.datetime
     last_changed: datetime.datetime
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.creation_date.tzinfo is None:
             raise ValueError(
                 f"creation_date {self.creation_date} has no timezone"
