@@ -9,12 +9,7 @@ from pathlib import Path
 from typing import Any
 from uuid import UUID
 
-from ariadne import (
-    QueryType,
-    load_schema_from_path,
-    make_executable_schema,
-    snake_case_fallback_resolvers,
-)
+from ariadne import QueryType, load_schema_from_path, make_executable_schema
 from ariadne.asgi import GraphQL
 from ariadne.objects import MutationType, ObjectType
 from ariadne.scalars import ScalarType
@@ -190,11 +185,11 @@ async def resolve_delete_note(
 def bind_schema() -> GraphQLSchema:
     return make_executable_schema(
         type_defs,
-        snake_case_fallback_resolvers,
         datetime_scalar,
         note,
         query,
         mutation,
+        convert_names_case=True,
     )
 
 
