@@ -8,7 +8,7 @@ requires-python = ">= 3.14"
 dependencies = [
     "aiofiles >= 23.2.1",
     "aiosqlite ~= 0.22.1",
-    "ariadne ~= 0.28.0",
+    "ariadne ~= 1.0.1",
     "dbupgrade ~= 2025.5.0",
     "click >= 8.2.1, < 9",
     "graphql-core ~= 3.2.6",
