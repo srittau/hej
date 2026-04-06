@@ -31,8 +31,12 @@ async def test_open_transaction() -> None:
 
 
 async def test_select_all_notes(db: DatabaseFixture) -> None:
-    creation_date = datetime.datetime(2021, 5, 14, 13, 19, 4)
-    last_changed = datetime.datetime(2021, 9, 19, 4, 34, 12)
+    creation_date = datetime.datetime(
+        2021, 5, 14, 13, 19, 4, tzinfo=datetime.UTC
+    )
+    last_changed = datetime.datetime(
+        2021, 9, 19, 4, 34, 12, tzinfo=datetime.UTC
+    )
     await db.insert_note(
         uuid=_UUID,
         title="Test Note",
@@ -48,8 +52,12 @@ async def test_select_all_notes(db: DatabaseFixture) -> None:
 
 
 async def test_select_note(db: DatabaseFixture) -> None:
-    creation_date = datetime.datetime(2021, 5, 14, 13, 19, 4)
-    last_changed = datetime.datetime(2021, 9, 19, 4, 34, 12)
+    creation_date = datetime.datetime(
+        2021, 5, 14, 13, 19, 4, tzinfo=datetime.UTC
+    )
+    last_changed = datetime.datetime(
+        2021, 9, 19, 4, 34, 12, tzinfo=datetime.UTC
+    )
     await db.insert_note(
         uuid=_UUID,
         title="Test Note",
