@@ -11,7 +11,7 @@ dependencies = [
     "ariadne >= 1.0.1, < 2",
     "dbupgrade ~= 2025.5.0",
     "click >= 8.2.1, < 9",
-    "graphql-core ~= 3.2.6",
+    "graphql-core ~= 3.2.8",
     "starlette >= 1.0.0, < 2",
     "uvicorn[standard] ~= 0.44.0",
 ]
