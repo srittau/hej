@@ -150,13 +150,13 @@ class Transaction(_ConnectionBase):
 
 
 @asynccontextmanager
-async def open_db(db_name: str) -> AsyncGenerator[Database, None]:
+async def open_db(db_name: str) -> AsyncGenerator[Database]:
     async with Database(db_name) as db:
         yield db
 
 
 @asynccontextmanager
-async def open_transaction(db_name: str) -> AsyncGenerator[Transaction, None]:
+async def open_transaction(db_name: str) -> AsyncGenerator[Transaction]:
     async with open_db(db_name) as db:
         async with db.begin() as t:
             yield t
@@ -166,7 +166,7 @@ MIGRATE_LOCK = Path("/tmp/hej.migrate.lock")
 
 
 @contextmanager
-def migrate_lock() -> Generator[None, None, None]:
+def migrate_lock() -> Generator[None]:
     while True:
         try:
             with MIGRATE_LOCK.open("x"):

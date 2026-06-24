@@ -36,7 +36,7 @@ def file_app(
 
 
 @contextlib.asynccontextmanager
-async def lifespan(app: Starlette) -> AsyncGenerator[None, None]:
+async def lifespan(app: Starlette) -> AsyncGenerator[None]:
     logging.basicConfig(level=logging.INFO)
     LOGGER.info(f"Starting app with PID {os.getpid()}")
     try:

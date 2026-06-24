@@ -34,7 +34,7 @@ def fix(
     mocker: MockerFixture,
 ) -> IntegrationFixture:
     @asynccontextmanager
-    async def open_db(_: object) -> AsyncGenerator[Database, None]:
+    async def open_db(_: object) -> AsyncGenerator[Database]:
         yield db_o
 
     mocker.patch("hej.db.open_db", open_db)

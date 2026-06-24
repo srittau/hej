@@ -30,7 +30,7 @@ list_ = list
 
 
 @asynccontextmanager
-async def transaction(db_path: Path) -> AsyncGenerator[Transaction, None]:
+async def transaction(db_path: Path) -> AsyncGenerator[Transaction]:
     initialize_db(db_path)
     db_url = f"file:{db_path}"
     async with open_transaction(db_url) as t:
