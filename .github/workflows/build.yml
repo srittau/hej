@@ -21,7 +21,7 @@ jobs:
     name: Test Python
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v7
         name: Install uv
         with:
@@ -39,7 +39,7 @@ jobs:
     name: Test JavaScript
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v6
         with:
           node-version: "24.x"
@@ -61,7 +61,7 @@ jobs:
       - test-python
       - test-javascript
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Build the Docker image
         run: |
           docker images
