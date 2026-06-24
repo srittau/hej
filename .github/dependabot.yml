@@ -6,6 +6,8 @@ updates:
     schedule:
       interval: weekly
       time: "04:00"
+    cooldown:
+      default-days: 5
     groups:
       dependencies:
         exclude-patterns:
@@ -26,6 +28,8 @@ updates:
     schedule:
       interval: weekly
       time: "04:00"
+    cooldown:
+      default-days: 5
     groups:
       dependencies:
         patterns:
@@ -36,6 +40,8 @@ updates:
 
   - package-ecosystem: github-actions
     directory: "/"
+    cooldown:
+      default-days: 5
     schedule:
       interval: weekly
       time: '04:00'
