@@ -3,7 +3,7 @@
 - Python 3.14+
 - uv
 - Node.js 24+
-- yarn
+- corepack/pnpm
 
 ## Preparing the Development Environment
 
@@ -14,10 +14,10 @@ uv sync
 source .venv/bin/activate
 ```
 
-Prepare the JavaScript environment using yarn:
+Prepare the JavaScript environment using pnpm:
 
 ```
-yarn install --frozen-lockfile
+pnpm install --frozen-lockfile
 ```
 
 ## Running the Tests
@@ -33,7 +33,7 @@ poe typecheck
 Running the JavaScript tests:
 
 ```
-yarn test
+pnpm run test
 ```
 
 ## Running the Test Server
@@ -47,7 +47,7 @@ uv run poe start
 In another terminal, run:
 
 ```
-yarn start
+pnpm run start
 ```
 
 The user interface can be accessed at http://localhost:5173/ in your browser.

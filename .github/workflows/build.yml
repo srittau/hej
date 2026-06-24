@@ -40,18 +40,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6.0.9
+        with:
+          cache: true
       - uses: actions/setup-node@v6
         with:
           node-version: "24.x"
-          cache: yarn
+          cache: "pnpm"
       - name: Install npm packages
-        run: yarn install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
       - name: Lint TypeScript
-        run: yarn run lint
+        run: pnpm run lint
       - name: Check formatting
-        run: yarn run prettier
+        run: pnpm run prettier
       - name: Run tests
-        run: yarn run test:ci
+        run: pnpm run test:ci
 
   build-docker:
     name: Build and Publish Docker image

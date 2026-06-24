@@ -1,13 +1,16 @@
 # syntax=docker/dockerfile:1
 
 FROM node:24-alpine AS build-js
+
 RUN mkdir /build
 WORKDIR /build
-COPY package.json yarn.lock tsconfig.json index.html ./
-RUN yarn install --frozen-lockfile
+
+RUN corepack enable
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml tsconfig.json index.html ./
+RUN pnpm install --frozen-lockfile
 COPY public/ public/
 COPY src/ src/
-RUN yarn build
+RUN pnpm build
 
 FROM srittau/uvicorn:3.14
 
