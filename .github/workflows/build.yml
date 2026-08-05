@@ -53,6 +53,8 @@ jobs:
         run: pnpm run lint
       - name: Check formatting
         run: pnpm run prettier
+      - name: Install Playwright Browsers
+        run: pnpm dlx playwright install --with-deps chromium
       - name: Run tests
         run: pnpm run test:ci
 
