@@ -130,15 +130,15 @@ wheels = [
 
 [[package]]
 name = "dbupgrade"
-version = "2025.5.0"
+version = "2026.8.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "sqlalchemy" },
     { name = "sqlparse" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/93/a6/6833bb8f9cd33d06bb47089d9487a2494ed56f4d1706dddb97cd9b3bb5a7/dbupgrade-2025.5.0.tar.gz", hash = "sha256:ad3971b1cc82cb3b19e6d163dfd0c513630b0d952ffba1e69052d40f50c1981c", size = 11248, upload-time = "2025-05-13T13:39:06.417Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/75/e7/8407a4d7c2610d2b87cc4c0a0a0ee99c30f87c7263525672f63438c8eb86/dbupgrade-2026.8.0.tar.gz", hash = "sha256:2ea8bfa27bfb69c67e256dd6f0b52f868a78f93a27de98e3647dfc17427d37c8", size = 10301, upload-time = "2026-08-18T11:54:03.097Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ec/fa/ac16ff7bde98978c1e643d1147c40c89572ad55896f73764889760515763/dbupgrade-2025.5.0-py3-none-any.whl", hash = "sha256:a227e071d792c003e9b8cab59965811e5d2fa4ce87cfedc7662a800399e72c8f", size = 13029, upload-time = "2025-05-13T13:39:04.817Z" },
+    { url = "https://files.pythonhosted.org/packages/aa/7f/d2953dfb2d2579b8df0aa0c3593c2b2aa8f0df3eb337339ed2847a2f26fa/dbupgrade-2026.8.0-py3-none-any.whl", hash = "sha256:418a882d627966650274869a04608e22b83f9180f9fbd14f594f9d2c056d2499", size = 13635, upload-time = "2026-08-18T11:54:01.887Z" },
 ]
 
 [[package]]
@@ -231,7 +231,7 @@ requires-dist = [
     { name = "aiosqlite", specifier = "~=0.22.1" },
     { name = "ariadne", specifier = ">=1.1.0,<2" },
     { name = "click", specifier = ">=8.4.2,<9" },
-    { name = "dbupgrade", specifier = "~=2025.5.0" },
+    { name = "dbupgrade", specifier = "~=2026.8.0" },
     { name = "graphql-core", specifier = "~=3.2.11" },
     { name = "starlette", specifier = ">=1.6.0,<2" },
     { name = "uvicorn", extras = ["standard"], specifier = "~=0.52.4" },
@@ -551,11 +551,11 @@ wheels = [
 
 [[package]]
 name = "sqlparse"
-version = "0.5.5"
+version = "0.6.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/90/76/437d71068094df0726366574cf3432a4ed754217b436eb7429415cf2d480/sqlparse-0.5.5.tar.gz", hash = "sha256:e20d4a9b0b8585fdf63b10d30066c7c94c5d7a7ec47c889a2d83a3caa93ff28e", size = 120815, upload-time = "2025-12-19T07:17:45.073Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/5f/d3/3f06a1006f2261d1342aefb3c71eed02f5d4ca5bdbecd86ebc12ad38306e/sqlparse-0.6.0.tar.gz", hash = "sha256:113c35c75365ab9cc9c7231d68c6428fb11c085fc8e9eb1ad659b7ddbf6cd2b9", size = 178477, upload-time = "2026-08-13T19:16:06.396Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/49/4b/359f28a903c13438ef59ebeee215fb25da53066db67b305c125f1c6d2a25/sqlparse-0.5.5-py3-none-any.whl", hash = "sha256:12a08b3bf3eec877c519589833aed092e2444e68240a3577e8e26148acc7b1ba", size = 46138, upload-time = "2025-12-19T07:17:46.573Z" },
+    { url = "https://files.pythonhosted.org/packages/d9/50/f00935da0ec7cbf325f8dc4f772ae46fbc7b672dd62876e73f0a94adda57/sqlparse-0.6.0-py3-none-any.whl", hash = "sha256:b861c0288ce2fa56209a9a6412d2e066ac664b3873b89c26c9d8415e8e32996f", size = 50070, upload-time = "2026-08-13T19:16:04.062Z" },
 ]
 
 [[package]]
