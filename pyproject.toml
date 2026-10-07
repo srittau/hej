@@ -11,6 +11,8 @@ dependencies = [
     "ariadne>=1.1.0,<2",
     "dbupgrade~=2026.8.0",
     "click>=8.5.0,<9",
+    # graphql-core 3.3.0 is incompatible with ariadne 1.1.0
+    # https://github.com/mirumee/ariadne/issues/1336
     "graphql-core~=3.2.12",
     "starlette>=1.7.0,<2",
     "uvicorn[standard]~=0.54.0",
