@@ -10,7 +10,7 @@ import { useNavigate } from "react-router";
 
 import { sortLabels } from "./Label";
 import { LabelChip } from "./LabelChip";
-import { NoteMeta } from "./Note";
+import { NoteMeta, noteTitle } from "./Note";
 import classes from "./NoteListView.module.css";
 import { useNotesMeta } from "./gql";
 import { formatDate, formatDateTime } from "./time";
@@ -63,7 +63,7 @@ export default function NoteListView() {
               <Table.Td>{note.favorite && <FavoriteIcon starred />}</Table.Td>
               <Table.Td>
                 <Group gap="xs">
-                  {note.title}
+                  {noteTitle(note)}
                   {sortLabels(note.labels).map((label) => (
                     <LabelChip label={label} link key={label.uuid} />
                   ))}
