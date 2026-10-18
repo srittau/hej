@@ -80,6 +80,8 @@ warn_unused_ignores = true
 test = "pytest"
 lint = "ruff check pylibs"
 typecheck = "mypy pylibs"
+format = "ruff format pylibs"
+format-check = "ruff format --check pylibs"
 
 [tool.poe.tasks.start]
 cmd = "uvicorn --reload hej.app:app"

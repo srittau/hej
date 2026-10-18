@@ -32,6 +32,8 @@ jobs:
         run: uv run poe typecheck --no-incremental
       - name: Lint with ruff
         run: uv run poe lint
+      - name: Check formatting with ruff
+        run: uv run poe format-check
       - name: Run tests with pytest
         run: uv run poe test
 
@@ -52,7 +54,7 @@ jobs:
       - name: Lint TypeScript
         run: pnpm run lint
       - name: Check formatting
-        run: pnpm run prettier
+        run: pnpm run format:check
       - name: Install Playwright Browsers
         run: pnpm dlx playwright install --with-deps chromium
       - name: Run tests

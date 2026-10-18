@@ -28,13 +28,19 @@ Running the Python tests and linter, using the activated virtual environment:
 poe test
 poe lint
 poe typecheck
+poe format-check
 ```
 
-Running the JavaScript tests:
+Running the JavaScript tests, linter, and formatting check:
 
 ```
 pnpm run test
+pnpm run lint
+pnpm run format:check
 ```
+
+Code can be formatted automatically using `poe format` and
+`pnpm run format`.
 
 ## Running the Test Server
 
