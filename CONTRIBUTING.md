@@ -18,6 +18,7 @@ Prepare the JavaScript environment using pnpm:
 
 ```
 pnpm install --frozen-lockfile
+pnpm exec playwright install chromium
 ```
 
 ## Running the Tests
