@@ -1,6 +1,8 @@
-import { Alert, Stack, Title } from "@mantine/core";
-import { useNavigate, useParams, useSearchParams } from "react-router";
+import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
+import { Anchor, Stack, Title } from "@mantine/core";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router";
 
+import EmptyState from "./EmptyState";
 import LabelForm from "./LabelForm";
 import { useLabel } from "./gql";
 
@@ -26,7 +28,12 @@ export default function EditLabel() {
           key={label.uuid}
         />
       ) : (
-        <Alert w="fit-content">Unknown label.</Alert>
+        <EmptyState icon={faCircleQuestion} message="Unknown label">
+          It may have been renamed or deleted.{" "}
+          <Anchor component={Link} to="/labels" inherit>
+            Show all labels
+          </Anchor>
+        </EmptyState>
       )}
     </Stack>
   );

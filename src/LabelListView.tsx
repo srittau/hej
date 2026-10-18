@@ -1,8 +1,7 @@
-import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faTags, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   ActionIcon,
-  Alert,
   Button,
   Group,
   Modal,
@@ -15,6 +14,7 @@ import {
 import { useMemo, useState } from "react";
 import { Link, useSubmit } from "react-router";
 
+import EmptyState from "./EmptyState";
 import { Label, sortLabels } from "./Label";
 import { useAllLabels } from "./gql";
 import FavoriteIcon from "./FavoriteIcon";
@@ -54,7 +54,11 @@ function ActualListView() {
   const [labelToDelete, setLabelToDelete] = useState<Label | null>(null);
 
   if (labels.length === 0) {
-    return <Alert w="fit-content">No labels defined.</Alert>;
+    return (
+      <EmptyState icon={faTags} message="No labels yet">
+        Use “Add label” to create your first label.
+      </EmptyState>
+    );
   }
 
   return (
