@@ -354,6 +354,42 @@ export function useNotesMeta(): readonly NoteMeta[] {
   return data ?? [];
 }
 
+const GQL_LABEL_NOTES = gql`
+  ${GQL_NOTE_META_FRAGMENT}
+  query LabelNotes($slug: String!) {
+    labels(slug: $slug) {
+      notes {
+        ...NoteMetaFragment
+      }
+    }
+  }
+`;
+
+interface LabelNotesResponse {
+  labels: { notes: NoteMeta[] }[];
+}
+
+const labelNotesQuery = (slug: string) => ({
+  queryKey: ["notes", "list", "label", slug],
+  queryFn: () =>
+    gqlClient
+      .request<LabelNotesResponse, LabelBySlugVars>(GQL_LABEL_NOTES, { slug })
+      .then(({ labels }) => labels[0]?.notes ?? []),
+  refetchInterval: REFETCH_MS,
+  refetchIntervalInBackground: false,
+});
+
+/** Return all notes with the given label. */
+export function useLabelNotes(slug: string): readonly NoteMeta[] {
+  const { data } = useQuery(labelNotesQuery(slug));
+  return data ?? [];
+}
+
+export const labelNotesLoader =
+  (queryClient: QueryClient) =>
+  async ({ params }: { params: Params<string> }): Promise<NoteMeta[]> =>
+    queryClient.ensureQueryData(labelNotesQuery(params.slug ?? ""));
+
 // TODO: Query that only fetches the latest notes.
 export function useLatestNotes(count: number): readonly NoteMeta[] {
   const { data } = useQuery(allNotesMetaQuery);
@@ -630,6 +666,8 @@ export function useNoteLabels(
         // The note or label is gone. Refresh our stale data.
         await client.invalidateQueries({ queryKey: ["notes"] });
       }
+      // Notes may have been added to or removed from a label's note list.
+      await client.invalidateQueries({ queryKey: ["notes", "list", "label"] });
       await client.invalidateQueries({ queryKey: ["labels"] });
     },
   });

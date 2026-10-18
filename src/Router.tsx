@@ -23,6 +23,7 @@ import {
   deleteLabel,
   deleteNote,
   labelLoader,
+  labelNotesLoader,
   lastestNotesLoader,
   login,
   logout,
@@ -120,7 +121,13 @@ const router = createBrowserRouter([
       {
         path: "/labels/:slug",
         element: <LabelView />,
-        loader: privateLoader(labelLoader(queryClient)),
+        loader: privateLoader(async (args) => {
+          const [label] = await Promise.all([
+            labelLoader(queryClient)(args),
+            labelNotesLoader(queryClient)(args),
+          ]);
+          return label;
+        }),
       },
       {
         path: "/labels/:slug/editor",
