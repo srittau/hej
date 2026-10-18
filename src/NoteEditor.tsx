@@ -1,6 +1,4 @@
-import { faStar as farStar } from "@fortawesome/free-regular-svg-icons";
-import { faClose, faStar } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClose } from "@fortawesome/free-solid-svg-icons";
 import {
   Box,
   Group,
@@ -24,6 +22,7 @@ import {
   useUpdateNoteInCache,
 } from "./gql";
 import { useDebouncedValue } from "./hooks";
+import FavoriteIcon from "./FavoriteIcon";
 
 export default function NoteEditor() {
   const { uuid } = useParams<string>();
@@ -92,10 +91,10 @@ function Favorite({ uuid }: FavoriteProps) {
     <UnstyledButton
       title={note?.favorite ? "Favorite" : "Not favorite"}
       aria-label={note?.favorite ? "Favorite" : "Not favorite"}
-      className={classes.favorite}
+      className={classes.favoriteButton}
       onClick={() => void onClick()}
     >
-      <FontAwesomeIcon icon={note?.favorite ? faStar : farStar} />
+      <FavoriteIcon starred={note?.favorite} />
     </UnstyledButton>
   );
 }

@@ -1,0 +1,5 @@
+.favoriteIcon {
+    color: var(--mantine-color-yellow-5);
+    width: var(--favorite-item-size, 1em);
+    height: var(--favorite-item-size, 1em);
+}

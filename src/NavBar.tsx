@@ -1,12 +1,10 @@
-import { faStar } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Box, Button, ScrollArea, Stack, Text } from "@mantine/core";
 import { Link } from "react-router";
 
 import AddNote from "./AddNote";
-import classes from "./NavBar.module.css";
 import NotesLinks from "./NotesLinks";
 import { useFavoriteNotes, useLatestNotes } from "./gql";
+import FavoriteIcon from "./FavoriteIcon";
 
 interface NavBarProps {
   onClose?: () => void;
@@ -45,8 +43,7 @@ function Favorites({ onClose }: FavoritesProps) {
   return (
     <Box>
       <Text size="xs" c="dimmed">
-        <FontAwesomeIcon icon={faStar} className={classes.favoriteIcon} />{" "}
-        Favorites
+        <FavoriteIcon starred /> Favorites
       </Text>
       <NotesLinks notes={notes} onNoteClick={() => onClose?.()} />
     </Box>

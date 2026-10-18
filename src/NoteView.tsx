@@ -1,5 +1,4 @@
-import { faEdit, faStar } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { Box, Paper } from "@mantine/core";
 import Markdown from "react-markdown";
 import { useParams } from "react-router";
@@ -7,6 +6,7 @@ import { useParams } from "react-router";
 import AppLinkAction from "./AppLinkAction";
 import classes from "./NoteView.module.css";
 import { useNote } from "./gql";
+import FavoriteIcon from "./FavoriteIcon";
 
 export default function NoteView() {
   const { uuid } = useParams<string>();
@@ -27,7 +27,7 @@ export default function NoteView() {
                 area-label="Favorite note"
                 className={classes.favoriteIcon}
               >
-                <FontAwesomeIcon icon={faStar} />
+                <FavoriteIcon starred />
               </Box>
             )}
             <Box className={cls.join(" ")}>
