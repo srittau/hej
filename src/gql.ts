@@ -693,14 +693,15 @@ type DeleteNoteVars = {
   uuid: string;
 };
 
+interface DeleteNoteResponse {
+  deleteNote: boolean;
+}
+
 export async function deleteNote(uuid: string): Promise<boolean> {
-  // @ts-expect-error Type 'boolean' does not satisfy the constraint 'Record<string, any>'
-  const success = await gqlClient.request<boolean, DeleteNoteVars>(
-    DELETE_NOTE,
-    {
-      uuid,
-    },
-  );
+  const { deleteNote } = await gqlClient.request<
+    DeleteNoteResponse,
+    DeleteNoteVars
+  >(DELETE_NOTE, { uuid });
   await queryClient.invalidateQueries({ queryKey: ["notes", "list"] });
-  return success;
+  return deleteNote;
 }
