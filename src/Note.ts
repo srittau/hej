@@ -1,3 +1,5 @@
+import { Label } from "./Label";
+
 export interface NoteMeta {
   uuid: string;
   title: string;
@@ -8,6 +10,7 @@ export interface NoteMeta {
 
 export interface Note extends NoteMeta {
   text: string;
+  labels: readonly Label[];
 }
 
 export function noteTitle(note: NoteMeta): string {

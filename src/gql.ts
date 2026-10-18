@@ -315,7 +315,11 @@ const GQL_NOTE_FRAGMENT = gql`
     creationDate
     lastChanged
     text
+    labels {
+      ...LabelFragment
+    }
   }
+  ${GQL_LABEL_FRAGMENT}
 `;
 
 const GQL_ALL_NOTES_META = gql`
@@ -554,6 +558,82 @@ export function useMarkNoteAsFavorite(
     async (favorite: boolean) => {
       const { note } = await mutation.mutateAsync(favorite);
       return note;
+    },
+    mutation.isPending,
+  ];
+}
+
+const GQL_ATTACH_NOTE_LABEL = gql`
+  ${GQL_NOTE_FRAGMENT}
+  mutation AttachNoteLabel($noteUUID: ID!, $labelUUID: ID!) {
+    note: attachNoteLabel(noteUUID: $noteUUID, labelUUID: $labelUUID) {
+      __typename
+      ...NoteFragment
+    }
+  }
+`;
+
+const GQL_DETACH_NOTE_LABEL = gql`
+  ${GQL_NOTE_FRAGMENT}
+  mutation DetachNoteLabel($noteUUID: ID!, $labelUUID: ID!) {
+    note: detachNoteLabel(noteUUID: $noteUUID, labelUUID: $labelUUID) {
+      __typename
+      ...NoteFragment
+    }
+  }
+`;
+
+type NoteLabelVars = {
+  noteUUID: string;
+  labelUUID: string;
+};
+
+interface NoteResultResponse {
+  note: ({ __typename: "Note" } & Note) | { __typename: "UnknownItemError" };
+}
+
+/** Attach labels to or detach labels from a note. */
+export function useNoteLabels(
+  noteUUID: string,
+): [
+  attach: (labelUUID: string) => Promise<void>,
+  detach: (labelUUID: string) => Promise<void>,
+  loading: boolean,
+] {
+  const client = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: ({
+      labelUUID,
+      attach,
+    }: {
+      labelUUID: string;
+      attach: boolean;
+    }) =>
+      gqlClient.request<NoteResultResponse, NoteLabelVars>(
+        attach ? GQL_ATTACH_NOTE_LABEL : GQL_DETACH_NOTE_LABEL,
+        { noteUUID, labelUUID },
+      ),
+    async onSuccess({ note }) {
+      if (note.__typename === "Note") {
+        client.setQueryData<readonly Note[]>(allNotesQuery.queryKey, (notes) =>
+          notes?.map((n) =>
+            n.uuid === noteUUID ? { ...n, labels: note.labels } : n,
+          ),
+        );
+      } else {
+        // The note or label is gone. Refresh our stale data.
+        await client.invalidateQueries({ queryKey: ["notes"] });
+      }
+      await client.invalidateQueries({ queryKey: ["labels"] });
+    },
+  });
+
+  return [
+    async (labelUUID: string) => {
+      await mutation.mutateAsync({ labelUUID, attach: true });
+    },
+    async (labelUUID: string) => {
+      await mutation.mutateAsync({ labelUUID, attach: false });
     },
     mutation.isPending,
   ];

@@ -1,9 +1,11 @@
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
-import { Box, Paper } from "@mantine/core";
+import { Box, Group, Paper } from "@mantine/core";
+import { useMemo } from "react";
 import Markdown from "react-markdown";
 import { useParams } from "react-router";
 
 import AppLinkAction from "./AppLinkAction";
+import { LabelChip } from "./LabelChip";
 import classes from "./NoteView.module.css";
 import { useNote } from "./gql";
 import FavoriteIcon from "./FavoriteIcon";
@@ -11,7 +13,14 @@ import FavoriteIcon from "./FavoriteIcon";
 export default function NoteView() {
   const { uuid } = useParams<string>();
   const note = useNote(uuid ?? "");
-  const md = useNoteMarkdown(uuid);
+  const [titleMd, textMd] = useNoteMarkdown(uuid);
+  const labels = useMemo(
+    () =>
+      [...(note?.labels ?? [])].sort((l1, l2) =>
+        l1.name.localeCompare(l2.name),
+      ),
+    [note?.labels],
+  );
 
   const cls = [classes.markdown];
   if (note?.favorite) cls.push(classes.hasFavorite);
@@ -31,7 +40,15 @@ export default function NoteView() {
               </Box>
             )}
             <Box className={cls.join(" ")}>
-              <Markdown>{md}</Markdown>
+              <Markdown>{titleMd}</Markdown>
+              {labels.length > 0 && (
+                <Group gap="xs" className={classes.labels}>
+                  {labels.map((label) => (
+                    <LabelChip label={label} link key={label.uuid} />
+                  ))}
+                </Group>
+              )}
+              <Markdown>{textMd}</Markdown>
             </Box>
           </Box>
         </Paper>
@@ -41,13 +58,13 @@ export default function NoteView() {
   );
 }
 
-function useNoteMarkdown(uuid?: string): string {
+function useNoteMarkdown(uuid?: string): [title: string, text: string] {
   const note = useNote(uuid ?? "");
-  if (!note) return "# Unknown note selected";
+  if (!note) return ["# Unknown note selected", ""];
   let header = "# ";
   //   if (note.favorite) {
   //     header += `![Favorite note](/favorite.svg) `;
   //   }
   header += note.title;
-  return `${header}\n\n${note.text}`;
+  return [header, note.text];
 }

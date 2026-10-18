@@ -14,6 +14,7 @@ import { useParams } from "react-router";
 import AppLinkAction from "./AppLinkAction";
 import DeleteNote from "./DeleteNote";
 import { Note } from "./Note";
+import NoteLabels from "./NoteLabels";
 import classes from "./NoteEditor.module.css";
 import {
   useMarkNoteAsFavorite,
@@ -64,6 +65,7 @@ function NoteContent({ note }: NoteContentProps) {
           <Loader type="dots" />
         </Box>
       </Group>
+      <NoteLabels note={note} />
       <Textarea
         value={text}
         aria-label="Note text"

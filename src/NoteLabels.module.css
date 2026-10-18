@@ -1,0 +1,9 @@
+.chipButton {
+    display: flex;
+    border-radius: var(--mantine-radius-xl);
+    transition: filter 100ms ease;
+}
+
+.chipButton:hover {
+    filter: brightness(1.25);
+}

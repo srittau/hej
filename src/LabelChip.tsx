@@ -1,4 +1,4 @@
-import { Badge } from "@mantine/core";
+import { Badge, CloseButton } from "@mantine/core";
 import { Link } from "react-router";
 
 import classes from "./LabelChip.module.css";
@@ -6,10 +6,25 @@ import classes from "./LabelChip.module.css";
 interface LabelChipProps {
   label: { name: string; slug: string; color: string };
   link?: boolean;
+  /** If given, show a remove button that calls this function. */
+  onRemove?: () => void;
 }
 
-export function LabelChip({ label, link }: LabelChipProps) {
-  const props = { color: label.color, variant: "light", tt: "none" } as const;
+export function LabelChip({ label, link, onRemove }: LabelChipProps) {
+  const props = {
+    color: label.color,
+    variant: "light",
+    tt: "none",
+    rightSection: onRemove && (
+      <CloseButton
+        size="xs"
+        variant="transparent"
+        c="inherit"
+        aria-label={`Remove label ${label.name}`}
+        onClick={onRemove}
+      />
+    ),
+  } as const;
   if (link) {
     return (
       <Badge
