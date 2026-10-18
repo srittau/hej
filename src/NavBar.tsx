@@ -1,10 +1,12 @@
-import { Box, Button, ScrollArea, Stack, Text } from "@mantine/core";
-import { Link } from "react-router";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { Box, NavLink, ScrollArea, Stack, Text } from "@mantine/core";
+import { Link, useMatch } from "react-router";
 
 import AddNote from "./AddNote";
 import NotesLinks from "./NotesLinks";
 import { useFavoriteNotes, useLatestNotes } from "./gql";
 import FavoriteIcon from "./FavoriteIcon";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface NavBarProps {
   onClose?: () => void;
@@ -12,6 +14,8 @@ interface NavBarProps {
 
 export default function NavBar({ onClose }: NavBarProps) {
   const notes = useLatestNotes(3);
+  const isNotesPage = useMatch("/notes") !== null;
+
   return (
     <Stack p="md" style={{ overflowY: "hidden" }}>
       <AddNote onClick={onClose}>Add note</AddNote>
@@ -24,9 +28,21 @@ export default function NavBar({ onClose }: NavBarProps) {
             </Text>
             <NotesLinks notes={notes} onNoteClick={() => onClose?.()} />
           </Box>
-          <Link to="/notes" onClick={() => onClose?.()}>
-            <Button variant="subtle">All notes</Button>
-          </Link>
+          <Box>
+            <Text size="xs" c="dimmed">
+              Other
+            </Text>
+            <NavLink
+              component={Link}
+              label="All notes"
+              rightSection={
+                isNotesPage && <FontAwesomeIcon icon={faChevronRight} />
+              }
+              to="/notes"
+              active={isNotesPage}
+              variant="subtle"
+            />
+          </Box>
         </Stack>
       </ScrollArea>
     </Stack>

@@ -4,7 +4,6 @@ import { NavLink } from "@mantine/core";
 import { Link, useParams } from "react-router";
 
 import { NoteMeta, noteTitle } from "./Note";
-import classes from "./NotesLinks.module.css";
 
 interface NotesListProps {
   notes: readonly NoteMeta[];
@@ -14,7 +13,7 @@ interface NotesListProps {
 export default function NotesLinks({ notes, onNoteClick }: NotesListProps) {
   const { uuid } = useParams<string>();
   return (
-    <div className={classes.section}>
+    <div>
       {notes.map((note) => (
         <NavLink
           component={Link}
@@ -25,7 +24,6 @@ export default function NotesLinks({ notes, onNoteClick }: NotesListProps) {
           to={`/notes/${note.uuid}`}
           active={note.uuid === uuid}
           variant="subtle"
-          className={classes.link}
           onClick={() => onNoteClick?.(note.uuid)}
           key={note.uuid}
         />
