@@ -23,6 +23,7 @@ export default function EditLabel() {
           onCancel={() =>
             void navigate(
               returnTo === "list" ? "/labels" : `/labels/${label.slug}`,
+              { replace: true },
             )
           }
           key={label.uuid}

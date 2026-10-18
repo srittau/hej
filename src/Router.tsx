@@ -3,6 +3,7 @@ import {
   RouterProvider,
   createBrowserRouter,
   redirect,
+  replace,
 } from "react-router";
 
 import AppPage from "./AppPage";
@@ -149,7 +150,9 @@ const router = createBrowserRouter([
           const result = await updateLabel(uuid, { name, color, favorite });
           if (typeof result === "string") return { error: result };
           // The slug may have changed, so use the slug of the updated label.
-          return redirect(
+          // The editor replaces the page it was opened from in the history,
+          // so replace the editor with the page we return to.
+          return replace(
             formData.get("returnTo") === "list"
               ? "/labels"
               : `/labels/${result.slug}`,

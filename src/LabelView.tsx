@@ -50,6 +50,7 @@ export default function LabelView() {
             <Button
               component={Link}
               to={`/labels/${label.slug}/editor`}
+              replace
               variant="light"
               leftSection={<FontAwesomeIcon icon={faEdit} />}
             >

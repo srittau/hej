@@ -89,6 +89,7 @@ function ActualListView() {
                   <ActionIcon
                     component={Link}
                     to={`/labels/${label.slug}/editor?from=list`}
+                    replace
                     variant="subtle"
                     title="Edit label"
                     aria-label={`Edit label ${label.name}`}
