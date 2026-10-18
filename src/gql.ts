@@ -99,6 +99,30 @@ export function useAllLabels(): [
 export const allLabelsLoader = (queryClient: QueryClient) => async () =>
   queryClient.ensureQueryData(allLabelsQuery);
 
+const GQL_FAVORITE_LABELS = gql`
+  query FavoriteLabels {
+    labels(favorites: true) {
+      ...LabelFragment
+    }
+  }
+  ${GQL_LABEL_FRAGMENT}
+`;
+
+const favoriteLabelsQuery = {
+  queryKey: ["labels", "list", "favorites"],
+  queryFn: () =>
+    gqlClient
+      .request<AllLabelsResponse>(GQL_FAVORITE_LABELS)
+      .then(({ labels }) => labels),
+  refetchInterval: REFETCH_MS,
+  refetchIntervalInBackground: false,
+};
+
+export function useFavoriteLabels(): readonly Label[] {
+  const { data } = useQuery(favoriteLabelsQuery);
+  return [...(data ?? [])].sort((l1, l2) => l1.name.localeCompare(l2.name));
+}
+
 const GQL_LABEL_BY_SLUG = gql`
   query LabelBySlug($slug: String!) {
     labels(slug: $slug) {

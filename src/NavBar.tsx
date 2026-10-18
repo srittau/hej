@@ -3,8 +3,9 @@ import { Box, NavLink, ScrollArea, Stack, Text } from "@mantine/core";
 import { Link, useMatch } from "react-router";
 
 import AddNote from "./AddNote";
+import LabelsLinks from "./LabelsLinks";
 import NotesLinks from "./NotesLinks";
-import { useFavoriteNotes, useLatestNotes } from "./gql";
+import { useFavoriteLabels, useFavoriteNotes, useLatestNotes } from "./gql";
 import FavoriteIcon from "./FavoriteIcon";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -65,13 +66,15 @@ interface FavoritesProps {
 }
 
 function Favorites({ onClose }: FavoritesProps) {
+  const labels = useFavoriteLabels();
   const notes = useFavoriteNotes();
-  if (notes.length === 0) return null;
+  if (labels.length === 0 && notes.length === 0) return null;
   return (
     <Box>
       <Text size="xs" c="dimmed">
         <FavoriteIcon starred /> Favorites
       </Text>
+      <LabelsLinks labels={labels} onLabelClick={() => onClose?.()} />
       <NotesLinks notes={notes} onNoteClick={() => onClose?.()} />
     </Box>
   );
