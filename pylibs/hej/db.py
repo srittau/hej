@@ -101,6 +101,7 @@ class Database(_ConnectionBase):
     async def __aenter__(self) -> Database:
         self._db = await aiosqlite.connect(self.db_name, uri=True)
         self._db.row_factory = aiosqlite.Row
+        await self._db.execute("PRAGMA foreign_keys = ON")
         return self
 
     async def __aexit__(
