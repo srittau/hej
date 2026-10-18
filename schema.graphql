@@ -1,31 +1,21 @@
-scalar DateTime # YYYY-MM-DDTHH:MM:SSZ
+"An UTC date andtime in ISO 8601 format (YYYY-MM-DDTHH:MM:SSZ)."
+scalar DateTime
+
 """
 A note.
 """
 type Note {
-  """
-  Unique UUID for this note.
-  """
+  "Unique UUID for this note."
   uuid: ID!
-  """
-  Note title.
-  """
+  "Note title."
   title: String!
-  """
-  Note text in Markdown format.
-  """
+  "Note text in Markdown format."
   text: String!
-  """
-  `true` if the note is marked as favorite, `false` otherwise.
-  """
+  "`true` if the note is marked as favorite, `false` otherwise."
   favorite: Boolean!
-  """
-  Date the note was created.
-  """
+  "Date the note was created."
   creationDate: DateTime!
-  """
-  Date the note was last changed.
-  """
+  "Date the note was last changed."
   lastChanged: DateTime!
 }
 
