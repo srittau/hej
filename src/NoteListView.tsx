@@ -12,6 +12,7 @@ import { NoteMeta } from "./Note";
 import classes from "./NoteListView.module.css";
 import { useNotesMeta } from "./gql";
 import { formatDate, formatDateTime } from "./time";
+import FavoriteIcon from "./FavoriteIcon";
 
 type SortField = "title" | "created" | "modified";
 type SortDirection = "asc" | "desc";
@@ -24,6 +25,9 @@ export default function NoteListView() {
     <Paper shadow="xs">
       <Table striped withRowBorders={false} highlightOnHover>
         <Table.Thead>
+          <Table.Th w="1.5em">
+            <FavoriteIcon />
+          </Table.Th>
           <Th
             direction={sortField === "title" && direction}
             onSort={() => sort("title")}
@@ -52,6 +56,7 @@ export default function NoteListView() {
               onClick={() => void navigate(`/notes/${note.uuid}`)}
               key={note.uuid}
             >
+              <Table.Td>{note.favorite && <FavoriteIcon starred />}</Table.Td>
               <Table.Td>{note.title}</Table.Td>
               <Table.Td>{formatDate(note.creationDate)}</Table.Td>
               <Table.Td>{formatDateTime(note.lastChanged)}</Table.Td>
