@@ -6,7 +6,7 @@ import logging
 import os
 from collections.abc import Awaitable, Callable
 from pathlib import Path
-from typing import Any
+from typing import Any, Required, TypedDict
 from uuid import UUID
 
 from ariadne import QueryType, load_schema_from_path, make_executable_schema
@@ -14,6 +14,7 @@ from ariadne.asgi import GraphQL
 from ariadne.objects import MutationType, ObjectType
 from ariadne.scalars import ScalarType
 from graphql import GraphQLResolveInfo, GraphQLSchema
+from starlette.requests import Request
 
 from hej.auth import authenticate, check_session_key
 from hej.exc import UnknownItemError
@@ -33,6 +34,11 @@ from .note import Note
 LOGGER = logging.getLogger(__name__)
 
 
+class GQLContext(TypedDict, total=False):
+    request: Required[Request]
+    auth: bool
+
+
 def schema_file() -> Path:
     path_s = os.getenv("HEJ_GQL_SCHEMA_PATH")
     if path_s is None:
@@ -45,7 +51,7 @@ def schema_file() -> Path:
 def require_auth[F: Callable[..., Awaitable[Any]]](f: F) -> F:
     @functools.wraps(f)
     async def check_auth(  # type: ignore[misc]
-        obj: Any, info: GraphQLResolveInfo, **kwargs: Any
+        obj: Any, info: GraphQLResolveInfo[GQLContext], **kwargs: Any
     ) -> Any:
         assert isinstance(info.context, dict)
         if not info.context.get("auth", False):
@@ -78,7 +84,7 @@ query = QueryType()
 @query.field("notes")
 @require_auth
 async def resolve_notes(
-    _: None, __: GraphQLResolveInfo, *, uuid: str | None = None
+    _: None, __: GraphQLResolveInfo[GQLContext], *, uuid: str | None = None
 ) -> list[Note]:
     if uuid is None:
         async with open_transaction(db_url()) as db:
@@ -102,7 +108,7 @@ mutation = MutationType()
 
 @mutation.field("login")
 async def resolve_login(
-    _: None, __: GraphQLResolveInfo, *, password: str
+    _: None, __: GraphQLResolveInfo[GQLContext], *, password: str
 ) -> str | None:
     if not check_session_key(password):
         return None
@@ -111,14 +117,18 @@ async def resolve_login(
 
 @mutation.field("logout")
 @require_auth
-async def resolve_logout(_: None, __: GraphQLResolveInfo) -> bool:
+async def resolve_logout(_: None, __: GraphQLResolveInfo[GQLContext]) -> bool:
     return True  # no op
 
 
 @mutation.field("createNote")
 @require_auth
 async def resolve_create_note(
-    _: None, __: GraphQLResolveInfo, *, title: str, text: str | None = None
+    _: None,
+    __: GraphQLResolveInfo[GQLContext],
+    *,
+    title: str,
+    text: str | None = None,
 ) -> Note:
     async with open_transaction(db_url()) as db:
         return await insert_note(db, title, text or "")
@@ -128,7 +138,7 @@ async def resolve_create_note(
 @require_auth
 async def resolve_update_note(
     _: None,
-    __: GraphQLResolveInfo,
+    __: GraphQLResolveInfo[GQLContext],
     *,
     uuid: str,
     title: str | None = None,
@@ -149,7 +159,7 @@ async def resolve_update_note(
 @mutation.field("markNoteAsFavorite")
 @require_auth
 async def resolve_mark_note_as_favorite(
-    _: None, __: GraphQLResolveInfo, *, uuid: str, favorite: bool
+    _: None, __: GraphQLResolveInfo[GQLContext], *, uuid: str, favorite: bool
 ) -> Note | None:
     try:
         uuid_o = UUID(uuid)
@@ -166,7 +176,7 @@ async def resolve_mark_note_as_favorite(
 @mutation.field("deleteNote")
 @require_auth
 async def resolve_delete_note(
-    _: None, __: GraphQLResolveInfo, *, uuid: str
+    _: None, __: GraphQLResolveInfo[GQLContext], *, uuid: str
 ) -> bool:
     try:
         uuid_o = UUID(uuid)
