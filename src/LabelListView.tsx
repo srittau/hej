@@ -65,42 +65,46 @@ function ActualListView() {
       />
       <Table striped withRowBorders={false} highlightOnHover>
         <Table.Thead>
-          <Table.Th w="1.5em">
-            <FavoriteIcon />
-          </Table.Th>
-          <Table.Th>Name</Table.Th>
-          <Table.Th />
-        </Table.Thead>
-        {labels.map((label) => (
-          <Table.Tr key={label.uuid}>
-            <Table.Td>{label.favorite && <FavoriteIcon starred />}</Table.Td>
-            <Table.Td>
-              <LabelChip label={label} link />
-            </Table.Td>
-            <Table.Td>
-              <Group gap="xs" justify="end" wrap="nowrap">
-                <ActionIcon
-                  component={Link}
-                  to={`/labels/${label.slug}/editor?from=list`}
-                  variant="subtle"
-                  title="Edit label"
-                  aria-label={`Edit label ${label.name}`}
-                >
-                  <FontAwesomeIcon icon={faPen} />
-                </ActionIcon>
-                <ActionIcon
-                  variant="subtle"
-                  color="red"
-                  title="Delete label"
-                  aria-label={`Delete label ${label.name}`}
-                  onClick={() => setLabelToDelete(label)}
-                >
-                  <FontAwesomeIcon icon={faTrash} />
-                </ActionIcon>
-              </Group>
-            </Table.Td>
+          <Table.Tr>
+            <Table.Th w="1.5em">
+              <FavoriteIcon />
+            </Table.Th>
+            <Table.Th>Name</Table.Th>
+            <Table.Th />
           </Table.Tr>
-        ))}
+        </Table.Thead>
+        <Table.Tbody>
+          {labels.map((label) => (
+            <Table.Tr key={label.uuid}>
+              <Table.Td>{label.favorite && <FavoriteIcon starred />}</Table.Td>
+              <Table.Td>
+                <LabelChip label={label} link />
+              </Table.Td>
+              <Table.Td>
+                <Group gap="xs" justify="end" wrap="nowrap">
+                  <ActionIcon
+                    component={Link}
+                    to={`/labels/${label.slug}/editor?from=list`}
+                    variant="subtle"
+                    title="Edit label"
+                    aria-label={`Edit label ${label.name}`}
+                  >
+                    <FontAwesomeIcon icon={faPen} />
+                  </ActionIcon>
+                  <ActionIcon
+                    variant="subtle"
+                    color="red"
+                    title="Delete label"
+                    aria-label={`Delete label ${label.name}`}
+                    onClick={() => setLabelToDelete(label)}
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </ActionIcon>
+                </Group>
+              </Table.Td>
+            </Table.Tr>
+          ))}
+        </Table.Tbody>
       </Table>
     </Paper>
   );

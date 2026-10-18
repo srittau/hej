@@ -27,29 +27,31 @@ export default function NoteListView() {
     <Paper shadow="xs">
       <Table striped withRowBorders={false} highlightOnHover>
         <Table.Thead>
-          <Table.Th w="1.5em">
-            <FavoriteIcon />
-          </Table.Th>
-          <Th
-            direction={sortField === "title" && direction}
-            onSort={() => sort("title")}
-          >
-            Title
-          </Th>
-          <Th
-            direction={sortField === "created" && direction}
-            w="8rem"
-            onSort={() => sort("created")}
-          >
-            Created
-          </Th>
-          <Th
-            direction={sortField === "modified" && direction}
-            w="10rem"
-            onSort={() => sort("modified")}
-          >
-            Modified
-          </Th>
+          <Table.Tr>
+            <Table.Th w="1.5em">
+              <FavoriteIcon />
+            </Table.Th>
+            <Th
+              direction={sortField === "title" && direction}
+              onSort={() => sort("title")}
+            >
+              Title
+            </Th>
+            <Th
+              direction={sortField === "created" && direction}
+              w="8rem"
+              onSort={() => sort("created")}
+            >
+              Created
+            </Th>
+            <Th
+              direction={sortField === "modified" && direction}
+              w="10rem"
+              onSort={() => sort("modified")}
+            >
+              Modified
+            </Th>
+          </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
           {notes.map((note) => (
