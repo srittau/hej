@@ -191,7 +191,4 @@ which keeps a backup copy of the database whenever it migrates.
 - JavaScript dependencies are managed with pnpm (`package.json`,
   `pnpm-lock.yaml`).
 - Both uv and pnpm are configured to ignore releases newer than 5 days.
-- `graphql-core` is pinned to `~=3.2` because 3.3 is incompatible with
-  Ariadne 1.1 (see the comment in `pyproject.toml`). Don't upgrade it
-  until that issue is resolved.
 - Dependabot opens most dependency update PRs.

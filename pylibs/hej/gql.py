@@ -20,7 +20,17 @@ from ariadne import (
 from ariadne.asgi import GraphQL
 from ariadne.objects import MutationType, ObjectType
 from ariadne.scalars import ScalarType
-from graphql import GraphQLError, GraphQLResolveInfo, GraphQLSchema
+from graphql import (
+    Executor,
+    GraphQLError,
+    GraphQLObjectType,
+    GraphQLResolveInfo,
+    GraphQLSchema,
+)
+from graphql.execution.collect_fields import (
+    CollectedFields,
+    FieldDetailsList,
+)
 from starlette.requests import Request
 
 from hej.auth import authenticate, check_session_key
@@ -512,5 +522,31 @@ def bind_schema() -> GraphQLSchema:
     )
 
 
+class HejExecutor(Executor[Any]):
+    """Executor that keeps field details alive during execution.
+
+    graphql-core 3.3 caches collected subfields by the ids of the field
+    details, but doesn't keep them alive. When they are freed, other field
+    details can reuse their ids and get the wrong subfields. Work around
+    this by keeping references to all field details until the operation
+    ends. See https://github.com/graphql-python/graphql-core/issues/284.
+    """
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        # Sub-executors are shallow copies, so they share this list.
+        self._kept_field_details: list[FieldDetailsList] = []
+
+    def collect_subfields(
+        self,
+        return_type: GraphQLObjectType,
+        field_details_list: FieldDetailsList,
+    ) -> CollectedFields:
+        self._kept_field_details.append(field_details_list)
+        return super().collect_subfields(return_type, field_details_list)
+
+
 def create_app() -> GraphQL:
-    return GraphQL(bind_schema(), debug=debug())
+    return GraphQL(
+        bind_schema(), debug=debug(), execution_context_class=HejExecutor
+    )

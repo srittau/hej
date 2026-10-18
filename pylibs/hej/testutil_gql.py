@@ -6,7 +6,7 @@ from graphql import GraphQLSchema
 from starlette.requests import Request
 from starlette.types import Scope
 
-from .gql import bind_schema
+from .gql import HejExecutor, bind_schema
 
 
 class GQLFixture:
@@ -40,7 +40,10 @@ class GQLFixture:
         if variables is not None:
             body["variables"] = variables
         return await graphql(
-            self.schema, body, context_value={"request": request, "auth": True}
+            self.schema,
+            body,
+            context_value={"request": request, "auth": True},
+            execution_context_class=HejExecutor,
         )
 
 
