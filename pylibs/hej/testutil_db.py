@@ -57,6 +57,35 @@ class DatabaseFixture:
         )
         return uuid
 
+    async def insert_label(
+        self,
+        *,
+        uuid: UUID,
+        name: str = "Label",
+        slug: str | None = None,
+        color: str = "#000000",
+        favorite: bool = False,
+    ) -> UUID:
+        await self.insert(
+            "labels",
+            {
+                "uuid": str(uuid),
+                "name": name,
+                "slug": slug if slug is not None else name.lower(),
+                "color": color,
+                "favorite": favorite,
+            },
+        )
+        return uuid
+
+    async def insert_note_label(
+        self, *, note_uuid: UUID, label_uuid: UUID
+    ) -> None:
+        await self.insert(
+            "note_labels",
+            {"note_uuid": str(note_uuid), "label_uuid": str(label_uuid)},
+        )
+
     async def select_all_rows(self, table_name: LiteralString) -> list[Row]:
         rows_iter = self.db.execute_fetchall(f"SELECT * FROM {table_name}")
         return [row async for row in rows_iter]

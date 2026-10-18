@@ -148,6 +148,7 @@ touched: `typecheck`, `lint`, `format-check`, and `test` for Python;
   For straightforward logic, prefer integration tests over extra unit
   tests, especially ones relying on mocks or spies. Older code has
   separate `test_db.py` tests; don't take that as the pattern to follow.
+
 - Frontend tests are `src/*.test.ts(x)` run by vitest in browser mode.
   `src/setupTests.ts` and `src/graphql-request.mock.ts` hold shared setup.
 

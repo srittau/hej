@@ -16,18 +16,32 @@ class GQLFixture:
     async def gql(
         self, query: str, variables: dict[str, Any] | None = None
     ) -> dict[str, Any]:
-        request = Request(_scope())
-        body: dict[str, Any] = {"query": query}
-        if variables is not None:
-            body["variables"] = variables
-        success, response = await graphql(
-            self.schema, body, context_value={"request": request, "auth": True}
-        )
+        success, response = await self._execute(query, variables)
         assert success, "GraphQL query failed"
         errors = response.get("errors", [])
         assert len(errors) == 0, f"Unexpected error: {errors[0]['message']}"
         assert "data" in response
         return cast(dict[str, Any], response["data"])
+
+    async def gql_errors(
+        self, query: str, variables: dict[str, Any] | None = None
+    ) -> list[dict[str, Any]]:
+        """Execute a query that is expected to fail and return the errors."""
+        _, response = await self._execute(query, variables)
+        errors = cast(list[dict[str, Any]], response.get("errors", []))
+        assert len(errors) > 0, "Expected GraphQL errors, but got none"
+        return errors
+
+    async def _execute(
+        self, query: str, variables: dict[str, Any] | None
+    ) -> tuple[bool, dict[str, Any]]:
+        request = Request(_scope())
+        body: dict[str, Any] = {"query": query}
+        if variables is not None:
+            body["variables"] = variables
+        return await graphql(
+            self.schema, body, context_value={"request": request, "auth": True}
+        )
 
 
 def _scope() -> Scope:

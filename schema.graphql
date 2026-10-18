@@ -1,5 +1,61 @@
 "An UTC date andtime in ISO 8601 format (YYYY-MM-DDTHH:MM:SSZ)."
 scalar DateTime
+"A color in RGB hex format (#rrggbb)."
+scalar Color
+
+"""
+A user error.
+"""
+interface UserError {
+  "Error message."
+  message: String!
+}
+
+"""
+An input value was invalid.
+"""
+type ValueError implements UserError {
+  "Error message."
+  message: String!
+}
+
+"""
+An item with a given UUID does not exist.
+"""
+type UnknownItemError implements UserError {
+  "Error message."
+  message: String!
+  "Missing type name."
+  missingType: String!
+}
+
+"""
+An item with that name already exists.
+"""
+type DuplicateItemError implements UserError {
+  "Error message."
+  message: String!
+}
+
+"""
+A note label.
+"""
+type Label {
+  "Unique UUID for this label."
+  uuid: ID!
+  "Label display name."
+  name: String!
+  "URL slug."
+  slug: String!
+  "Label color in #rrggbb format."
+  color: Color!
+  "`true` if the label is marked as favorite, `false` otherwise."
+  favorite: Boolean!
+  "Number of notes with this label."
+  noteCount: Int!
+  "All notes with this label."
+  notes: [Note!]!
+}
 
 """
 A note.
@@ -17,18 +73,41 @@ type Note {
   creationDate: DateTime!
   "Date the note was last changed."
   lastChanged: DateTime!
+  "Labels attached to this note."
+  labels: [Label!]!
 }
 
 type Query {
   """
+  List labels.
+
+  - Without arguments, return a list of all labels.
+  - If `slug` is specified, but the slug is invalid or unknown, return an
+    empty list, otherwise return a list with the requested label.
+  - If `favorites` is `true`, return a list of all labels marked as "favorite".
+
+  All arguments are mutually exclusive.
+  """
+  labels(slug: String, favorites: Boolean): [Label!]!
+
+  """
   List notes.
 
-  If `uuid` is not specified, return a list of all notes. If `uuid` is
-  specified, but the UUID is invalid or unknown, return an empty list,
-  otherwise return a list with the requested note.
+  - Without arguments, return a list of all notes.
+  - If `uuid` is specified, but the UUID is invalid or unknown, return an
+    empty list, otherwise return a list with the requested note.
   """
   notes(uuid: ID): [Note!]!
 }
+
+union CreateLabelResult = Label | DuplicateItemError | ValueError
+union UpdateLabelResult =
+  | Label
+  | UnknownItemError
+  | DuplicateItemError
+  | ValueError
+
+union NoteResult = Note | UnknownItemError
 
 type Mutation {
   """
@@ -47,6 +126,42 @@ type Mutation {
   logout: Boolean!
 
   """
+  Create a new label.
+
+  Return `DuplicateItemError` if a label with the same name already exists
+  and `ValueError` if the name was invalid (e.g. empty).
+  """
+  createLabel(
+    name: String!
+    color: Color!
+    favorite: Boolean = false
+  ): CreateLabelResult!
+
+  """
+  Update the name, color, or favorite status of a label.
+
+  Return `UnknownItemError` if the UUID is invalid or unknown. Return
+  `DuplicateItemError` if another label with the same name already exists and
+  `ValueError` if the name was invalid (e.g. empty).
+  """
+  updateLabel(
+    uuid: ID!
+    name: String
+    color: Color
+    favorite: Boolean
+  ): UpdateLabelResult!
+
+  """
+  Delete a label.
+
+  This will also remove the label from all notes.
+
+  Return `true` if the label was removed, `false` if the UUID is invalid or
+  unknown.
+  """
+  deleteLabel(uuid: ID!): Boolean!
+
+  """
   Create a new note with a given title and (optionally) text.
   """
   createNote(title: String!, text: String): Note!
@@ -58,6 +173,24 @@ type Mutation {
   unknown.
   """
   updateNote(uuid: ID!, title: String, text: String): Note
+
+  """
+  Attach a label to a note.
+
+  If either the note or the label does not exist, return an
+  `UnknownItemError`. If the given label is already attached to the given
+  note, do nothing.
+  """
+  attachNoteLabel(noteUUID: ID!, labelUUID: ID!): NoteResult!
+
+  """
+  Detach a label from a note.
+
+  If either the note or the label does not exist, return an
+  `UnknownItemError`. If the given label was not attached to the given
+  note, do nothing.
+  """
+  detachNoteLabel(noteUUID: ID!, labelUUID: ID!): NoteResult!
 
   """
   Mark or unmark a note as favorite.

@@ -26,5 +26,12 @@ class UnknownItemError(HejError):
         self.id = id
 
 
+class DuplicateItemError(HejError):
+    def __init__(self, table: str, name: str) -> None:
+        super().__init__(f"item '{name}' already exists in table '{table}'")
+        self.table = table
+        self.name = name
+
+
 class DBMigrationError(HejError):
     pass
