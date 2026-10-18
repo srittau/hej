@@ -76,9 +76,9 @@ class DatabaseFixture:
         row = await self.select_only_row(table_name)
         for k, v in expected_row.items():
             dv = _sql_value(v)
-            assert (
-                row[k] == dv
-            ), f"Row {k} does not match: {dv!r} != {row[k]!r}"
+            assert row[k] == dv, (
+                f"Row {k} does not match: {dv!r} != {row[k]!r}"
+            )
 
     async def assert_rows_equal(
         self,
@@ -86,9 +86,9 @@ class DatabaseFixture:
         expected_rows: Sequence[Mapping[str, Any]],
     ) -> None:
         rows = [*await self.select_all_rows(table_name)]
-        assert len(rows) == len(
-            expected_rows
-        ), f"Row count does not match: {len(expected_rows)} != {len(rows)}"
+        assert len(rows) == len(expected_rows), (
+            f"Row count does not match: {len(expected_rows)} != {len(rows)}"
+        )
         for expected_row in expected_rows:
             for row in rows:
                 if row_matches(row, expected_row):
