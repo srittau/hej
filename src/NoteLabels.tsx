@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ActionIcon, Group, Popover, UnstyledButton } from "@mantine/core";
 import { useMemo, useState } from "react";
 
-import { Label } from "./Label";
+import { Label, sortLabels } from "./Label";
 import { LabelChip } from "./LabelChip";
 import { Note } from "./Note";
 import classes from "./NoteLabels.module.css";
@@ -77,8 +77,4 @@ function useAvailableLabels(attached: readonly Label[]): readonly Label[] {
     const attachedUUIDs = new Set(attached.map((l) => l.uuid));
     return sortLabels(labels.filter((l) => !attachedUUIDs.has(l.uuid)));
   }, [labels, attached]);
-}
-
-function sortLabels(labels: readonly Label[]): readonly Label[] {
-  return [...labels].sort((l1, l2) => l1.name.localeCompare(l2.name));
 }

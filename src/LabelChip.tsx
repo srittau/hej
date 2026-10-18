@@ -31,6 +31,7 @@ export function LabelChip({ label, link, onRemove }: LabelChipProps) {
         component={Link}
         to={`/labels/${label.slug}`}
         className={classes.link}
+        onClick={(evt: React.MouseEvent) => evt.stopPropagation()}
         {...props}
       >
         {label.name}

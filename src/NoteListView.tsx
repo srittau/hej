@@ -8,6 +8,8 @@ import { Group, Paper, Table, Text, UnstyledButton } from "@mantine/core";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 
+import { sortLabels } from "./Label";
+import { LabelChip } from "./LabelChip";
 import { NoteMeta } from "./Note";
 import classes from "./NoteListView.module.css";
 import { useNotesMeta } from "./gql";
@@ -57,7 +59,14 @@ export default function NoteListView() {
               key={note.uuid}
             >
               <Table.Td>{note.favorite && <FavoriteIcon starred />}</Table.Td>
-              <Table.Td>{note.title}</Table.Td>
+              <Table.Td>
+                <Group gap="xs">
+                  {note.title}
+                  {sortLabels(note.labels).map((label) => (
+                    <LabelChip label={label} link key={label.uuid} />
+                  ))}
+                </Group>
+              </Table.Td>
               <Table.Td>{formatDate(note.creationDate)}</Table.Td>
               <Table.Td>{formatDateTime(note.lastChanged)}</Table.Td>
             </Table.Tr>

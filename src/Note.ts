@@ -6,11 +6,11 @@ export interface NoteMeta {
   favorite: boolean;
   creationDate: string;
   lastChanged: string;
+  labels: readonly Label[];
 }
 
 export interface Note extends NoteMeta {
   text: string;
-  labels: readonly Label[];
 }
 
 export function noteTitle(note: NoteMeta): string {

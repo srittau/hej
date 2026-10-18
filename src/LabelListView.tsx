@@ -15,7 +15,7 @@ import {
 import { useMemo, useState } from "react";
 import { Link, useSubmit } from "react-router";
 
-import { Label } from "./Label";
+import { Label, sortLabels } from "./Label";
 import { useAllLabels } from "./gql";
 import FavoriteIcon from "./FavoriteIcon";
 import { LabelChip } from "./LabelChip";
@@ -149,8 +149,5 @@ function DeleteLabelModal({ label, onClose }: DeleteLabelModalProps) {
 
 function useSortedLabels(): readonly Label[] {
   const [, labels] = useAllLabels();
-  return useMemo(
-    () => [...labels].sort((l1, l2) => l1.name.localeCompare(l2.name)),
-    [labels],
-  );
+  return useMemo(() => sortLabels(labels), [labels]);
 }

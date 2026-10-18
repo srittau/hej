@@ -304,7 +304,11 @@ const GQL_NOTE_META_FRAGMENT = gql`
     favorite
     creationDate
     lastChanged
+    labels {
+      ...LabelFragment
+    }
   }
+  ${GQL_LABEL_FRAGMENT}
 `;
 
 const GQL_NOTE_FRAGMENT = gql`
@@ -615,10 +619,12 @@ export function useNoteLabels(
       ),
     async onSuccess({ note }) {
       if (note.__typename === "Note") {
-        client.setQueryData<readonly Note[]>(allNotesQuery.queryKey, (notes) =>
-          notes?.map((n) =>
-            n.uuid === noteUUID ? { ...n, labels: note.labels } : n,
-          ),
+        client.setQueriesData<readonly NoteMeta[]>(
+          { queryKey: ["notes", "list"] },
+          (notes) =>
+            notes?.map((n) =>
+              n.uuid === noteUUID ? { ...n, labels: note.labels } : n,
+            ),
         );
       } else {
         // The note or label is gone. Refresh our stale data.

@@ -5,6 +5,7 @@ import Markdown from "react-markdown";
 import { useParams } from "react-router";
 
 import AppLinkAction from "./AppLinkAction";
+import { sortLabels } from "./Label";
 import { LabelChip } from "./LabelChip";
 import classes from "./NoteView.module.css";
 import { useNote } from "./gql";
@@ -14,13 +15,7 @@ export default function NoteView() {
   const { uuid } = useParams<string>();
   const note = useNote(uuid ?? "");
   const [titleMd, textMd] = useNoteMarkdown(uuid);
-  const labels = useMemo(
-    () =>
-      [...(note?.labels ?? [])].sort((l1, l2) =>
-        l1.name.localeCompare(l2.name),
-      ),
-    [note?.labels],
-  );
+  const labels = useMemo(() => sortLabels(note?.labels ?? []), [note?.labels]);
 
   const cls = [classes.markdown];
   if (note?.favorite) cls.push(classes.hasFavorite);
