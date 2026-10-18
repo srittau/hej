@@ -16,6 +16,7 @@ import DeleteNote from "./DeleteNote";
 import { Note } from "./Note";
 import NoteLabels from "./NoteLabels";
 import classes from "./NoteEditor.module.css";
+import UnknownNote from "./UnknownNote";
 import {
   useMarkNoteAsFavorite,
   useNote,
@@ -28,7 +29,7 @@ import FavoriteIcon from "./FavoriteIcon";
 export default function NoteEditor() {
   const { uuid } = useParams<string>();
   const note = useNote(uuid ?? "");
-  if (!note) return;
+  if (!note) return <UnknownNote />;
   return (
     <>
       <NoteContent note={note} key={uuid} />

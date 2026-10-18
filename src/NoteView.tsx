@@ -8,58 +8,47 @@ import AppLinkAction from "./AppLinkAction";
 import { sortLabels } from "./Label";
 import { LabelChip } from "./LabelChip";
 import classes from "./NoteView.module.css";
+import UnknownNote from "./UnknownNote";
 import { useNote } from "./gql";
 import FavoriteIcon from "./FavoriteIcon";
 
 export default function NoteView() {
   const { uuid } = useParams<string>();
   const note = useNote(uuid ?? "");
-  const [titleMd, textMd] = useNoteMarkdown(uuid);
   const labels = useMemo(() => sortLabels(note?.labels ?? []), [note?.labels]);
 
+  if (!note) return <UnknownNote />;
+
   const cls = [classes.markdown];
-  if (note?.favorite) cls.push(classes.hasFavorite);
+  if (note.favorite) cls.push(classes.hasFavorite);
 
   return (
     <>
-      {note && (
-        <Paper shadow="xs" p="md" className={classes.noteView}>
-          <Box className={classes.noteContainer}>
-            {note.favorite && (
-              <Box
-                title="Favorite note"
-                area-label="Favorite note"
-                className={classes.favoriteIcon}
-              >
-                <FavoriteIcon starred />
-              </Box>
-            )}
-            <Box className={cls.join(" ")}>
-              <Markdown>{titleMd}</Markdown>
-              {labels.length > 0 && (
-                <Group gap="xs" className={classes.labels}>
-                  {labels.map((label) => (
-                    <LabelChip label={label} link key={label.uuid} />
-                  ))}
-                </Group>
-              )}
-              <Markdown>{textMd}</Markdown>
+      <Paper shadow="xs" p="md" className={classes.noteView}>
+        <Box className={classes.noteContainer}>
+          {note.favorite && (
+            <Box
+              title="Favorite note"
+              area-label="Favorite note"
+              className={classes.favoriteIcon}
+            >
+              <FavoriteIcon starred />
             </Box>
+          )}
+          <Box className={cls.join(" ")}>
+            <Markdown>{`# ${note.title}`}</Markdown>
+            {labels.length > 0 && (
+              <Group gap="xs" className={classes.labels}>
+                {labels.map((label) => (
+                  <LabelChip label={label} link key={label.uuid} />
+                ))}
+              </Group>
+            )}
+            <Markdown>{note.text}</Markdown>
           </Box>
-        </Paper>
-      )}
+        </Box>
+      </Paper>
       <AppLinkAction to={`/notes/${uuid}/editor`} replace icon={faEdit} />
     </>
   );
-}
-
-function useNoteMarkdown(uuid?: string): [title: string, text: string] {
-  const note = useNote(uuid ?? "");
-  if (!note) return ["# Unknown note selected", ""];
-  let header = "# ";
-  //   if (note.favorite) {
-  //     header += `![Favorite note](/favorite.svg) `;
-  //   }
-  header += note.title;
-  return [header, note.text];
 }
