@@ -10,6 +10,7 @@ import { Params } from "react-router";
 
 import { Note, NoteMeta } from "./Note";
 import { setAuthCookie, unsetAuthCookie } from "./auth";
+import { Label } from "./Label";
 
 const REFETCH_MS = 60 * 1000;
 
@@ -54,7 +55,225 @@ export async function logout(): Promise<void> {
   queryClient.clear();
 }
 
-const NOTE_META_FRAGMENT = gql`
+const GQL_LABEL_FRAGMENT = gql`
+  fragment LabelFragment on Label {
+    uuid
+    name
+    slug
+    color
+    favorite
+  }
+`;
+
+const GQL_ALL_LABELS = gql`
+  query AllLabels {
+    labels {
+      ...LabelFragment
+    }
+  }
+  ${GQL_LABEL_FRAGMENT}
+`;
+
+interface AllLabelsResponse {
+  labels: Label[];
+}
+
+const allLabelsQuery = {
+  queryKey: ["labels", "list", "all"],
+  queryFn: () =>
+    gqlClient
+      .request<AllLabelsResponse>(GQL_ALL_LABELS)
+      .then(({ labels }) => labels),
+  refetchInterval: REFETCH_MS,
+  refetchIntervalInBackground: false,
+};
+
+export function useAllLabels(): [
+  "error" | "success" | "pending",
+  readonly Label[],
+] {
+  const { status, data } = useQuery(allLabelsQuery);
+  return [status, data ?? []];
+}
+
+export const allLabelsLoader = (queryClient: QueryClient) => async () =>
+  queryClient.ensureQueryData(allLabelsQuery);
+
+const GQL_LABEL_BY_SLUG = gql`
+  query LabelBySlug($slug: String!) {
+    labels(slug: $slug) {
+      ...LabelFragment
+    }
+  }
+  ${GQL_LABEL_FRAGMENT}
+`;
+
+type LabelBySlugVars = {
+  slug: string;
+};
+
+const labelQuery = (slug: string) => ({
+  queryKey: ["labels", "detail", slug],
+  queryFn: () =>
+    gqlClient
+      .request<AllLabelsResponse, LabelBySlugVars>(GQL_LABEL_BY_SLUG, { slug })
+      .then(({ labels }) => labels[0] ?? null),
+});
+
+export function useLabel(slug: string): Label | null {
+  const { data } = useQuery(labelQuery(slug));
+  return data ?? null;
+}
+
+export const labelLoader =
+  (queryClient: QueryClient) =>
+  async ({ params }: { params: Params<string> }): Promise<Label | null> =>
+    queryClient.ensureQueryData({
+      ...labelQuery(params.slug ?? ""),
+      revalidateIfStale: true,
+    });
+
+const GQL_CREATE_LABEL = gql`
+  mutation CreateLabel($name: String!, $color: Color!, $favorite: Boolean) {
+    label: createLabel(name: $name, color: $color, favorite: $favorite) {
+      __typename
+      ...LabelFragment
+      ... on UserError {
+        message
+      }
+    }
+  }
+  ${GQL_LABEL_FRAGMENT}
+`;
+
+type CreateLabelVars = {
+  name: string;
+  color: string;
+  favorite?: boolean;
+};
+
+interface CreateLabelResponse {
+  label:
+    | ({ __typename: "Label" } & Label)
+    | { __typename: "DuplicateItemError" | "ValueError"; message: string };
+}
+
+export type CreateLabelError = "duplicate" | "invalid";
+
+export async function createLabel(
+  name: string,
+  color: string,
+  favorite = false,
+): Promise<Label | CreateLabelError> {
+  const { label } = await gqlClient.request<
+    CreateLabelResponse,
+    CreateLabelVars
+  >(GQL_CREATE_LABEL, { name, color, favorite });
+  switch (label.__typename) {
+    case "DuplicateItemError":
+      return "duplicate";
+    case "ValueError":
+      return "invalid";
+  }
+  await queryClient.invalidateQueries({ queryKey: ["labels", "list"] });
+  return label;
+}
+
+const GQL_UPDATE_LABEL = gql`
+  mutation UpdateLabel(
+    $uuid: ID!
+    $name: String
+    $color: Color
+    $favorite: Boolean
+  ) {
+    label: updateLabel(
+      uuid: $uuid
+      name: $name
+      color: $color
+      favorite: $favorite
+    ) {
+      __typename
+      ...LabelFragment
+      ... on UserError {
+        message
+      }
+    }
+  }
+  ${GQL_LABEL_FRAGMENT}
+`;
+
+type UpdateLabelVars = {
+  uuid: string;
+  name?: string;
+  color?: string;
+  favorite?: boolean;
+};
+
+interface UpdateLabelResponse {
+  label:
+    | ({ __typename: "Label" } & Label)
+    | {
+        __typename: "UnknownItemError" | "DuplicateItemError" | "ValueError";
+        message: string;
+      };
+}
+
+export type UpdateLabelError = CreateLabelError | "unknown";
+
+export async function updateLabel(
+  uuid: string,
+  values: { name?: string; color?: string; favorite?: boolean },
+): Promise<Label | UpdateLabelError> {
+  const { label } = await gqlClient.request<
+    UpdateLabelResponse,
+    UpdateLabelVars
+  >(GQL_UPDATE_LABEL, { uuid, ...values });
+  switch (label.__typename) {
+    case "UnknownItemError":
+      return "unknown";
+    case "DuplicateItemError":
+      return "duplicate";
+    case "ValueError":
+      return "invalid";
+  }
+  await queryClient.invalidateQueries({ queryKey: ["labels", "list"] });
+  // Don't refetch the label details right away: If the slug changed, the
+  // query for the old slug would return no label, causing the editor to
+  // unmount before the route action can redirect.
+  await queryClient.invalidateQueries({
+    queryKey: ["labels", "detail"],
+    refetchType: "none",
+  });
+  queryClient.setQueryData(labelQuery(label.slug).queryKey, label);
+  await queryClient.invalidateQueries({ queryKey: ["notes"] });
+  return label;
+}
+
+const GQL_DELETE_LABEL = gql`
+  mutation DeleteLabel($uuid: ID!) {
+    deleteLabel(uuid: $uuid)
+  }
+`;
+
+type DeleteLabelVars = {
+  uuid: string;
+};
+
+interface DeleteLabelResponse {
+  deleteLabel: boolean;
+}
+
+export async function deleteLabel(uuid: string): Promise<boolean> {
+  const { deleteLabel } = await gqlClient.request<
+    DeleteLabelResponse,
+    DeleteLabelVars
+  >(GQL_DELETE_LABEL, { uuid });
+  await queryClient.invalidateQueries({ queryKey: ["labels"] });
+  await queryClient.invalidateQueries({ queryKey: ["notes"] });
+  return deleteLabel;
+}
+
+const GQL_NOTE_META_FRAGMENT = gql`
   fragment NoteMetaFragment on Note {
     uuid
     title
@@ -64,7 +283,7 @@ const NOTE_META_FRAGMENT = gql`
   }
 `;
 
-const NOTE_FRAGMENT = gql`
+const GQL_NOTE_FRAGMENT = gql`
   fragment NoteFragment on Note {
     uuid
     title
@@ -75,8 +294,8 @@ const NOTE_FRAGMENT = gql`
   }
 `;
 
-const ALL_NOTES_META = gql`
-  ${NOTE_META_FRAGMENT}
+const GQL_ALL_NOTES_META = gql`
+  ${GQL_NOTE_META_FRAGMENT}
   query allNotesMeta {
     notes {
       ...NoteMetaFragment
@@ -92,7 +311,7 @@ const allNotesMetaQuery = {
   queryKey: ["notes", "list", "all-meta"],
   queryFn: () =>
     gqlClient
-      .request<AllNotesMetaResponse>(ALL_NOTES_META)
+      .request<AllNotesMetaResponse>(GQL_ALL_NOTES_META)
       .then(({ notes }) => notes),
   refetchInterval: REFETCH_MS,
   refetchIntervalInBackground: false,
@@ -126,7 +345,7 @@ export function useFavoriteNotes(): readonly NoteMeta[] {
 }
 
 const ALL_NOTES = gql`
-  ${NOTE_FRAGMENT}
+  ${GQL_NOTE_FRAGMENT}
   query allNotes {
     notes {
       ...NoteFragment
@@ -165,8 +384,8 @@ export const noteLoader =
     return notes.find((n) => n.uuid === params.uuid);
   };
 
-const CREATE_NOTE = gql`
-  ${NOTE_FRAGMENT}
+const GQL_CREATE_NOTE = gql`
+  ${GQL_NOTE_FRAGMENT}
   mutation createNote($title: String!, $text: String!) {
     note: createNote(title: $title, text: $text) {
       ...NoteFragment
@@ -185,7 +404,7 @@ interface CreateNoteResponse {
 
 export async function createNote() {
   const { note } = await gqlClient.request<CreateNoteResponse, CreateNoteVars>(
-    CREATE_NOTE,
+    GQL_CREATE_NOTE,
     {
       title: "",
       text: "",
@@ -196,7 +415,7 @@ export async function createNote() {
 }
 
 const UPDATE_NOTE = gql`
-  ${NOTE_FRAGMENT}
+  ${GQL_NOTE_FRAGMENT}
   mutation updateNote($uuid: ID!, $title: String, $text: String) {
     note: updateNote(uuid: $uuid, title: $title, text: $text) {
       ...NoteFragment
@@ -279,7 +498,7 @@ export function useUpdateNote(
 }
 
 const MARK_NOTE_AS_FAVORITE = gql`
-  ${NOTE_FRAGMENT}
+  ${GQL_NOTE_FRAGMENT}
   mutation markNoteAsFavorite($uuid: ID!, $favorite: Boolean!) {
     note: markNoteAsFavorite(uuid: $uuid, favorite: $favorite) {
       ...NoteFragment

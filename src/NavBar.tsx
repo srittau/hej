@@ -15,6 +15,7 @@ interface NavBarProps {
 export default function NavBar({ onClose }: NavBarProps) {
   const notes = useLatestNotes(3);
   const isNotesPage = useMatch("/notes") !== null;
+  const isLabelsPage = useMatch("/labels") !== null;
 
   return (
     <Stack p="md" style={{ overflowY: "hidden" }}>
@@ -32,6 +33,16 @@ export default function NavBar({ onClose }: NavBarProps) {
             <Text size="xs" c="dimmed">
               Other
             </Text>
+            <NavLink
+              component={Link}
+              label="All labels"
+              rightSection={
+                isLabelsPage && <FontAwesomeIcon icon={faChevronRight} />
+              }
+              to="/labels"
+              active={isLabelsPage}
+              variant="subtle"
+            />
             <NavLink
               component={Link}
               label="All notes"

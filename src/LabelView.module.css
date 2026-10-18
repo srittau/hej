@@ -1,0 +1,4 @@
+.favoriteIcon {
+    --favorite-item-size: 1.5rem;
+    display: flex;
+}
