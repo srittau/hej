@@ -21,11 +21,11 @@ dependencies = [
 dev = [
     "asserts ~= 0.14.0",
     "mypy~=2.4.0",
-    "poethepoet>=0.48.0",
+    "poethepoet>=0.49.0",
     "pytest>=9.1.1",
     "pytest-asyncio>=1.4.0",
     "pytest-mock>=3.16.0",
-    "ruff~=0.17.0",
+    "ruff~=0.17.1",
     "types-aiofiles>=25.1.0.20260518",
 ]
 
