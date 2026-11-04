@@ -11,9 +11,9 @@ dependencies = [
     "ariadne>=1.1.1,<2",
     "dbupgrade~=2026.8.0",
     "click>=8.5.0,<9",
-    "graphql-core>=3.3.0,<4",
+    "graphql-core>=3.3.1,<4",
     "python-slugify>=9.1.3,<10",
-    "starlette>=1.9.0,<2",
+    "starlette>=1.10.0,<2",
     "uvicorn[standard]~=0.54.0",
 ]
 
@@ -22,10 +22,10 @@ dev = [
     "asserts ~= 0.14.0",
     "mypy~=2.4.0",
     "poethepoet>=0.49.0",
-    "pytest>=9.1.1",
-    "pytest-asyncio>=1.4.0",
+    "pytest>=9.2.0",
+    "pytest-asyncio>=1.4.1",
     "pytest-mock>=3.17.0",
-    "ruff~=0.17.2",
+    "ruff~=0.17.3",
     "types-aiofiles>=25.1.0.20260518",
 ]
 
