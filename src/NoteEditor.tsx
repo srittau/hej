@@ -13,9 +13,10 @@ import { useParams } from "react-router";
 
 import AppLinkAction from "./AppLinkAction";
 import DeleteNote from "./DeleteNote";
+import FavoriteIcon from "./FavoriteIcon";
 import { Note } from "./Note";
-import NoteLabels from "./NoteLabels";
 import classes from "./NoteEditor.module.css";
+import NoteLabels from "./NoteLabels";
 import UnknownNote from "./UnknownNote";
 import {
   useMarkNoteAsFavorite,
@@ -24,7 +25,6 @@ import {
   useUpdateNoteInCache,
 } from "./gql";
 import { useDebouncedValue } from "./hooks";
-import FavoriteIcon from "./FavoriteIcon";
 
 export default function NoteEditor() {
   const { uuid } = useParams<string>();
@@ -53,7 +53,7 @@ function NoteContent({ note }: NoteContentProps) {
         <TextInput
           type="text"
           value={title}
-          autoFocus // eslint-disable-line jsx-a11y/no-autofocus
+          autoFocus
           aria-label="Note title"
           className={classes.noteTitle}
           onChange={(evt) => updateTitle(evt.target.value)}

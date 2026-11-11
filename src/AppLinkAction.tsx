@@ -1,7 +1,7 @@
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ActionIcon, Affix } from "@mantine/core";
-import { useContext } from "react";
+import { use } from "react";
 import { Link } from "react-router";
 
 import AppContext from "./AppContext";
@@ -17,7 +17,7 @@ export default function AppLinkAction({
   icon,
   replace,
 }: AppLinkActionProps) {
-  const { sidebarOpened } = useContext(AppContext);
+  const { sidebarOpened } = use(AppContext);
   return (
     <Affix bottom={20} right={20} hidden={sidebarOpened}>
       <Link to={to} replace={replace}>

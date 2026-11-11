@@ -8,12 +8,12 @@ import { Group, Paper, Table, Text, UnstyledButton } from "@mantine/core";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 
+import FavoriteIcon from "./FavoriteIcon";
 import { sortLabels } from "./Label";
 import { LabelChip } from "./LabelChip";
 import { NoteMeta, noteTitle } from "./Note";
 import classes from "./NoteList.module.css";
 import { formatDate, formatDateTime } from "./time";
-import FavoriteIcon from "./FavoriteIcon";
 
 type SortField = "title" | "created" | "modified";
 type SortDirection = "asc" | "desc";

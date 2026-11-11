@@ -1,70 +1,106 @@
-import js from "@eslint/js";
-import { defineConfig } from "eslint/config";
+import eslintJs from "@eslint/js";
+import eslintReact from "@eslint-react/eslint-plugin";
+import { defineConfig, globalIgnores } from "eslint/config";
 import prettier from "eslint-config-prettier";
-// Disabled until eslint-plugin-import supports ESLint 10
-// https://github.com/import-js/eslint-plugin-import/issues/3227
-// import importPlugin from "eslint-plugin-import";
-import jsxA11y from "eslint-plugin-jsx-a11y";
-import react from "eslint-plugin-react";
+import { createTypeScriptImportResolver } from "eslint-import-resolver-typescript";
+import { importX } from "eslint-plugin-import-x";
+import jsxA11yX from "eslint-plugin-jsx-a11y-x";
 import reactHooks from "eslint-plugin-react-hooks";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export default defineConfig([
-  js.configs.recommended,
-  prettier,
-  // importPlugin.flatConfigs.recommended,
-  // importPlugin.flatConfigs.typescript,
-  react.configs.flat.recommended,
-  react.configs.flat["jsx-runtime"],
-  {
-    settings: {
-      react: {
-        version: "19",
-      },
-      "import/resolver": {
-        typescript: {
-          project: "./tsconfig.json",
+    globalIgnores([".venv/", "dist/", "build/"]),
+    {
+        extends: [
+            eslintJs.configs.recommended,
+            importX.flatConfigs.recommended,
+            tseslint.configs.recommendedTypeChecked,
+            tseslint.configs.stylisticTypeChecked,
+            reactHooks.configs.flat.recommended,
+            eslintReact.configs["recommended-typescript"],
+            jsxA11yX.configs.recommended,
+            prettier,
+        ],
+
+        languageOptions: {
+            globals: globals.browser,
+            parserOptions: {
+                projectService: true,
+            },
         },
-        node: {
-          extensions: [".js", ".jsx", ".ts", ".tsx"],
+
+        settings: {
+            "import-x/resolver-next": [createTypeScriptImportResolver()],
         },
-      },
+
+        files: ["src/**/*.{js,jsx,ts,tsx}"],
+
+        rules: {
+            //
+            // Additional Warnings
+            //
+
+            // Enable import warnings.
+            "sort-imports": ["warn", { ignoreDeclarationSort: true }],
+            "import-x/extensions": ["warn", "never"],
+            "import-x/first": "warn",
+            "import-x/no-mutable-exports": "error",
+            "import-x/no-absolute-path": "error",
+            "import-x/no-self-import": "error",
+            "import-x/no-useless-path-segments": "warn",
+            "import-x/order": [
+                "warn",
+                {
+                    groups: ["external", "internal", "parent", "sibling"],
+            
+                    alphabetize: {
+                        order: "asc",
+                    },
+            
+                    "newlines-between": "always",
+                },
+            ],
+            // Disallow alert() and console.*().
+            "no-alert": "error",
+            "no-console": [
+                "error",
+                { allow: ["debug", "warn", "error", "trace"] },
+            ],
+            // Custom hook with exhaustive deps check.
+            "react-hooks/exhaustive-deps": [
+                "warn",
+                { additionalHooks: "useScripts" },
+            ],
+
+            // Configure Warnings
+            "jsx-a11y-x/label-has-associated-control": ["warn", {
+                "controlComponents": ["MoneyInput", "SignInput"],
+            }],
+
+            //
+            // Disable Warnings
+            //
+
+            // Sometimes it is necessary to override the type checker.
+            // This is itself a hint that things need to be improved.
+            "@typescript-eslint/ban-ts-comment": "off",
+            // We're sometimes using "type" instead of "interface" for
+            // consistency reason, even in cases where it's not strictly
+            // necessary.
+            "@typescript-eslint/consistent-type-definitions": "off",
+            // Extending an empty interface can be useful to define an alias.
+            "@typescript-eslint/no-empty-object-type": [
+                "warn",
+                { allowInterfaces: "with-single-extends" },
+            ],
+            // Allow passing async functions to React component callbacks.
+            "@typescript-eslint/no-misused-promises": [
+                "error",
+                { checksVoidReturn: { attributes: false, properties: false } },
+            ],
+            // Blanket ban is nonsense.
+            "jsx-a11y-x/no-autofocus": "off",
+        },
     },
-  },
-  reactHooks.configs.flat.recommended,
-  jsxA11y.flatConfigs.recommended,
-  ...tseslint.configs.recommendedTypeChecked,
-  {
-    languageOptions: {
-      globals: {
-        ...globals.browser,
-      },
-
-      ecmaVersion: 2024,
-      sourceType: "script",
-
-      parserOptions: {
-        project: "./tsconfig.json",
-      },
-    },
-
-    files: ["src/**/*.{js,jsx,ts,tsx}"],
-
-    rules: {
-    //   "import/first": "error",
-    //   "import/newline-after-import": "warn",
-    //   "import/no-useless-path-segments": "error",
-    //   "import/order": [
-    //     "warn",
-    //     {
-    //       alphabetize: {
-    //         order: "asc",
-    //       },
-
-    //       "newlines-between": "always",
-    //     },
-    //   ],
-    },
-  },
 ]);

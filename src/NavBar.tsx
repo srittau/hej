@@ -1,13 +1,13 @@
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Box, NavLink, ScrollArea, Stack, Text } from "@mantine/core";
 import { Link, useMatch } from "react-router";
 
 import AddNote from "./AddNote";
+import FavoriteIcon from "./FavoriteIcon";
 import LabelsLinks from "./LabelsLinks";
 import NotesLinks from "./NotesLinks";
 import { useFavoriteLabels, useFavoriteNotes, useLatestNotes } from "./gql";
-import FavoriteIcon from "./FavoriteIcon";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface NavBarProps {
   onClose?: () => void;

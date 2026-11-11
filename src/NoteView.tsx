@@ -5,12 +5,12 @@ import Markdown from "react-markdown";
 import { useParams } from "react-router";
 
 import AppLinkAction from "./AppLinkAction";
+import FavoriteIcon from "./FavoriteIcon";
 import { sortLabels } from "./Label";
 import { LabelChip } from "./LabelChip";
 import classes from "./NoteView.module.css";
 import UnknownNote from "./UnknownNote";
 import { useNote } from "./gql";
-import FavoriteIcon from "./FavoriteIcon";
 
 export default function NoteView() {
   const { uuid } = useParams<string>();

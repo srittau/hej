@@ -9,6 +9,9 @@ import {
 import AppPage from "./AppPage";
 import EditLabel from "./EditLabel";
 import ErrorPage from "./ErrorPage";
+import { Label } from "./Label";
+import LabelListView from "./LabelListView";
+import LabelView from "./LabelView";
 import LoginPage from "./LoginPage";
 import NoNote from "./NoNote";
 import NoteEditor from "./NoteEditor";
@@ -32,9 +35,6 @@ import {
   queryClient,
   updateLabel,
 } from "./gql";
-import { Label } from "./Label";
-import LabelListView from "./LabelListView";
-import LabelView from "./LabelView";
 
 function privateLoader(loader: LoaderFunction): LoaderFunction {
   return ({ request, ...args }) => {

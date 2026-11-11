@@ -8,9 +8,9 @@ import { AwesomeGraphQLClient, gql } from "awesome-graphql-client";
 import { useCallback } from "react";
 import { Params } from "react-router";
 
+import { Label } from "./Label";
 import { Note, NoteMeta } from "./Note";
 import { setAuthCookie, unsetAuthCookie } from "./auth";
-import { Label } from "./Label";
 
 const REFETCH_MS = 60 * 1000;
 

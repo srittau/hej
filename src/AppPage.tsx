@@ -10,7 +10,7 @@ export default function AppPage() {
   const [opened, { toggle, close }] = useDisclosure();
 
   return (
-    <AppContext.Provider value={{ sidebarOpened: opened }}>
+    <AppContext value={{ sidebarOpened: opened }}>
       <AppShell
         header={{ height: { base: "54" } }}
         navbar={{
@@ -30,6 +30,6 @@ export default function AppPage() {
           <Outlet />
         </AppShell.Main>
       </AppShell>
-    </AppContext.Provider>
+    </AppContext>
   );
 }

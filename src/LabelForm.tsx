@@ -82,7 +82,7 @@ export default function LabelForm({
           <TextInput
             label="Name"
             required
-            autoFocus // eslint-disable-line jsx-a11y/no-autofocus
+            autoFocus
             {...form.getInputProps("name")}
           />
           <ColorInput

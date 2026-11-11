@@ -15,11 +15,11 @@ import { useMemo, useState } from "react";
 import { Link, useSubmit } from "react-router";
 
 import EmptyState from "./EmptyState";
-import { Label, sortLabels } from "./Label";
-import { useAllLabels } from "./gql";
 import FavoriteIcon from "./FavoriteIcon";
+import { Label, sortLabels } from "./Label";
 import { LabelChip } from "./LabelChip";
 import LabelForm from "./LabelForm";
+import { useAllLabels } from "./gql";
 
 type View = "list" | "add-form";
 
