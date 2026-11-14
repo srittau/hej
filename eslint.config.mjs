@@ -1,5 +1,6 @@
 import eslintJs from "@eslint/js";
 import eslintReact from "@eslint-react/eslint-plugin";
+import vitest from "@vitest/eslint-plugin";
 import { defineConfig, globalIgnores } from "eslint/config";
 import prettier from "eslint-config-prettier";
 import { createTypeScriptImportResolver } from "eslint-import-resolver-typescript";
@@ -20,6 +21,7 @@ export default defineConfig([
             reactHooks.configs.flat.recommended,
             eslintReact.configs["recommended-typescript"],
             jsxA11yX.configs.recommended,
+	        vitest.configs.recommended,
             prettier,
         ],
 
@@ -67,15 +69,18 @@ export default defineConfig([
                 "error",
                 { allow: ["debug", "warn", "error", "trace"] },
             ],
-            // Custom hook with exhaustive deps check.
-            "react-hooks/exhaustive-deps": [
-                "warn",
-                { additionalHooks: "useScripts" },
-            ],
 
+	    //
             // Configure Warnings
+            //
+
+            // x || y is often used to have a default for empty strings
+            "@typescript-eslint/prefer-nullish-coalescing": ["error", {
+                "ignorePrimitives": { string: true }
+            }],
+
             "jsx-a11y-x/label-has-associated-control": ["warn", {
-                "controlComponents": ["MoneyInput", "SignInput"],
+                "controlComponents": [],
             }],
 
             //
