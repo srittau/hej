@@ -37,6 +37,7 @@ export default function NavBar({ onClose }: NavBarProps) {
               to="/labels"
               active={isLabelsPage}
               variant="subtle"
+              onClick={onClose}
             />
             <NavLink
               component={Link}
@@ -47,6 +48,7 @@ export default function NavBar({ onClose }: NavBarProps) {
               to="/notes"
               active={isNotesPage}
               variant="subtle"
+              onClick={onClose}
             />
           </Box>
         </Stack>
