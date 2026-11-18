@@ -1,6 +1,6 @@
 import { Text } from "@mantine/core";
 
-import AddNote from "./AddNote";
+import AddNote from "./AddNote.tsx";
 
 export default function NoNote() {
   return (

@@ -4,7 +4,7 @@ import { ActionIcon, Affix } from "@mantine/core";
 import { use } from "react";
 import { Link } from "react-router";
 
-import AppContext from "./AppContext";
+import AppContext from "./AppContext.tsx";
 
 interface AppLinkActionProps {
   icon: IconDefinition;

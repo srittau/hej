@@ -3,11 +3,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Box, NavLink, ScrollArea, Stack, Text } from "@mantine/core";
 import { Link, useMatch } from "react-router";
 
-import AddNote from "./AddNote";
-import FavoriteIcon from "./FavoriteIcon";
-import LabelsLinks from "./LabelsLinks";
-import NotesLinks from "./NotesLinks";
-import { useFavoriteLabels, useFavoriteNotes, useLatestNotes } from "./gql";
+import AddNote from "./AddNote.tsx";
+import FavoriteIcon from "./FavoriteIcon.tsx";
+import LabelsLinks from "./LabelsLinks.tsx";
+import NotesLinks from "./NotesLinks.tsx";
+import { useFavoriteLabels, useFavoriteNotes, useLatestNotes } from "./gql.ts";
 
 interface NavBarProps {
   onClose?: () => void;

@@ -2,7 +2,7 @@ import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
 import { Anchor } from "@mantine/core";
 import { Link } from "react-router";
 
-import EmptyState from "./EmptyState";
+import EmptyState from "./EmptyState.tsx";
 
 /** Shown instead of a note that doesn't exist. */
 export default function UnknownNote() {

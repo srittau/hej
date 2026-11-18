@@ -45,7 +45,11 @@ export default defineConfig([
 
             // Enable import warnings.
             "sort-imports": ["warn", { ignoreDeclarationSort: true }],
-            "import-x/extensions": ["warn", "never"],
+            "import-x/extensions": [
+                "warn",
+                "always",
+                { ignorePackages: true },
+            ],
             "import-x/first": "warn",
             "import-x/no-mutable-exports": "error",
             "import-x/no-absolute-path": "error",

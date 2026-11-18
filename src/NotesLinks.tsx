@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink } from "@mantine/core";
 import { Link, useParams } from "react-router";
 
-import { NoteMeta, noteTitle } from "./Note";
+import { NoteMeta, noteTitle } from "./Note.ts";
 
 interface NotesListProps {
   notes: readonly NoteMeta[];

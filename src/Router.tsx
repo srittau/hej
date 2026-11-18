@@ -6,18 +6,18 @@ import {
   replace,
 } from "react-router";
 
-import AppPage from "./AppPage";
-import EditLabel from "./EditLabel";
-import ErrorPage from "./ErrorPage";
-import { Label } from "./Label";
-import LabelListView from "./LabelListView";
-import LabelView from "./LabelView";
-import LoginPage from "./LoginPage";
-import NoNote from "./NoNote";
-import NoteEditor from "./NoteEditor";
-import NoteListView from "./NoteListView";
-import NoteView from "./NoteView";
-import { isLoggedIn } from "./auth";
+import AppPage from "./AppPage.tsx";
+import EditLabel from "./EditLabel.tsx";
+import ErrorPage from "./ErrorPage.tsx";
+import { Label } from "./Label.ts";
+import LabelListView from "./LabelListView.tsx";
+import LabelView from "./LabelView.tsx";
+import LoginPage from "./LoginPage.tsx";
+import NoNote from "./NoNote.tsx";
+import NoteEditor from "./NoteEditor.tsx";
+import NoteListView from "./NoteListView.tsx";
+import NoteView from "./NoteView.tsx";
+import { isLoggedIn } from "./auth.ts";
 import {
   UpdateLabelError,
   allLabelsLoader,
@@ -34,7 +34,7 @@ import {
   noteLoader,
   queryClient,
   updateLabel,
-} from "./gql";
+} from "./gql.ts";
 
 function privateLoader(loader: LoaderFunction): LoaderFunction {
   return ({ request, ...args }) => {

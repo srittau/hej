@@ -120,7 +120,8 @@ touched: `typecheck`, `lint`, `format-check`, and `test` for Python;
 - One component per file, exported as `export default function Name()`.
   Component-specific styles go in a matching `Name.module.css`.
 - Import order: third-party packages first, a blank line, then local
-  imports, each group alphabetized.
+  imports, each group alphabetized. Local imports include the file
+  suffix (`./gql.ts`, `./NavBar.tsx`).
 - All GraphQL access goes through `src/gql.ts`. Define queries with the
   `gql` tag, reuse `NoteFragment`/`NoteMetaFragment`, add typed
   request/response interfaces, and invalidate or update the

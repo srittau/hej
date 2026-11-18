@@ -7,12 +7,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Anchor, Button, Group, Paper, Stack, Title } from "@mantine/core";
 import { Link, useParams } from "react-router";
 
-import EmptyState from "./EmptyState";
-import FavoriteIcon from "./FavoriteIcon";
-import { LabelChip } from "./LabelChip";
+import EmptyState from "./EmptyState.tsx";
+import FavoriteIcon from "./FavoriteIcon.tsx";
+import { LabelChip } from "./LabelChip.tsx";
 import classes from "./LabelView.module.css";
-import NoteList from "./NoteList";
-import { useLabel, useLabelNotes } from "./gql";
+import NoteList from "./NoteList.tsx";
+import { useLabel, useLabelNotes } from "./gql.ts";
 
 export default function LabelView() {
   const { slug } = useParams<string>();

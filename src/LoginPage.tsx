@@ -9,7 +9,7 @@ import {
 import { useForm } from "@mantine/form";
 import { Form, useActionData } from "react-router";
 
-import { LoginError } from "./Router";
+import { LoginError } from "./Router.tsx";
 
 export default function LoginPage() {
   const form = useForm({

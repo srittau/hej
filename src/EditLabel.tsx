@@ -2,9 +2,9 @@ import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
 import { Anchor, Stack, Title } from "@mantine/core";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router";
 
-import EmptyState from "./EmptyState";
-import LabelForm from "./LabelForm";
-import { useLabel } from "./gql";
+import EmptyState from "./EmptyState.tsx";
+import LabelForm from "./LabelForm.tsx";
+import { useLabel } from "./gql.ts";
 
 export default function EditLabel() {
   const { slug } = useParams<string>();

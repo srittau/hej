@@ -13,10 +13,10 @@ import { isNotEmpty, matches, useForm } from "@mantine/form";
 import { useEffect } from "react";
 import { useFetcher } from "react-router";
 
-import FavoriteIcon from "./FavoriteIcon";
-import { Label } from "./Label";
-import { LabelChip } from "./LabelChip";
-import { LabelActionResult, LabelReturnTo } from "./Router";
+import FavoriteIcon from "./FavoriteIcon.tsx";
+import { Label } from "./Label.ts";
+import { LabelChip } from "./LabelChip.tsx";
+import { LabelActionResult, LabelReturnTo } from "./Router.tsx";
 
 interface LabelFormProps {
   /** Label to edit. If not given, a new label is created. */

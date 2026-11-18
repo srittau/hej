@@ -3,8 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink } from "@mantine/core";
 import { Link, useParams } from "react-router";
 
-import { Label } from "./Label";
-import { LabelChip } from "./LabelChip";
+import { Label } from "./Label.ts";
+import { LabelChip } from "./LabelChip.tsx";
 
 interface LabelsLinksProps {
   labels: readonly Label[];

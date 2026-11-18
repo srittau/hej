@@ -4,13 +4,13 @@ import { useMemo } from "react";
 import Markdown from "react-markdown";
 import { useParams } from "react-router";
 
-import AppLinkAction from "./AppLinkAction";
-import FavoriteIcon from "./FavoriteIcon";
-import { sortLabels } from "./Label";
-import { LabelChip } from "./LabelChip";
+import AppLinkAction from "./AppLinkAction.tsx";
+import FavoriteIcon from "./FavoriteIcon.tsx";
+import { sortLabels } from "./Label.ts";
+import { LabelChip } from "./LabelChip.tsx";
 import classes from "./NoteView.module.css";
-import UnknownNote from "./UnknownNote";
-import { useNote } from "./gql";
+import UnknownNote from "./UnknownNote.tsx";
+import { useNote } from "./gql.ts";
 
 export default function NoteView() {
   const { uuid } = useParams<string>();

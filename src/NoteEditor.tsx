@@ -11,20 +11,20 @@ import {
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
-import AppLinkAction from "./AppLinkAction";
-import DeleteNote from "./DeleteNote";
-import FavoriteIcon from "./FavoriteIcon";
-import { Note } from "./Note";
+import AppLinkAction from "./AppLinkAction.tsx";
+import DeleteNote from "./DeleteNote.tsx";
+import FavoriteIcon from "./FavoriteIcon.tsx";
+import { Note } from "./Note.ts";
 import classes from "./NoteEditor.module.css";
-import NoteLabels from "./NoteLabels";
-import UnknownNote from "./UnknownNote";
+import NoteLabels from "./NoteLabels.tsx";
+import UnknownNote from "./UnknownNote.tsx";
 import {
   useMarkNoteAsFavorite,
   useNote,
   useUpdateNote,
   useUpdateNoteInCache,
-} from "./gql";
-import { useDebouncedValue } from "./hooks";
+} from "./gql.ts";
+import { useDebouncedValue } from "./hooks.ts";
 
 export default function NoteEditor() {
   const { uuid } = useParams<string>();

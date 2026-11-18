@@ -3,11 +3,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ActionIcon, Group, Popover, UnstyledButton } from "@mantine/core";
 import { useMemo, useState } from "react";
 
-import { Label, sortLabels } from "./Label";
-import { LabelChip } from "./LabelChip";
-import { Note } from "./Note";
+import { Label, sortLabels } from "./Label.ts";
+import { LabelChip } from "./LabelChip.tsx";
+import { Note } from "./Note.ts";
 import classes from "./NoteLabels.module.css";
-import { useAllLabels, useNoteLabels } from "./gql";
+import { useAllLabels, useNoteLabels } from "./gql.ts";
 
 interface NoteLabelsProps {
   note: Note;

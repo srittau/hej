@@ -14,12 +14,12 @@ import {
 import { useMemo, useState } from "react";
 import { Link, useSubmit } from "react-router";
 
-import EmptyState from "./EmptyState";
-import FavoriteIcon from "./FavoriteIcon";
-import { Label, sortLabels } from "./Label";
-import { LabelChip } from "./LabelChip";
-import LabelForm from "./LabelForm";
-import { useAllLabels } from "./gql";
+import EmptyState from "./EmptyState.tsx";
+import FavoriteIcon from "./FavoriteIcon.tsx";
+import { Label, sortLabels } from "./Label.ts";
+import { LabelChip } from "./LabelChip.tsx";
+import LabelForm from "./LabelForm.tsx";
+import { useAllLabels } from "./gql.ts";
 
 type View = "list" | "add-form";
 

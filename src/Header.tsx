@@ -1,7 +1,7 @@
 import { Burger, Group, Image } from "@mantine/core";
 
 import classes from "./Header.module.css";
-import Logout from "./Logout";
+import Logout from "./Logout.tsx";
 
 interface HeaderProps {
   opened: boolean;

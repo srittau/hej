@@ -2,9 +2,9 @@ import { AppShell } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Outlet } from "react-router";
 
-import AppContext from "./AppContext";
-import Header from "./Header";
-import NavBar from "./NavBar";
+import AppContext from "./AppContext.tsx";
+import Header from "./Header.tsx";
+import NavBar from "./NavBar.tsx";
 
 export default function AppPage() {
   const [opened, { toggle, close }] = useDisclosure();

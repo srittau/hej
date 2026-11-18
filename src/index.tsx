@@ -5,8 +5,8 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import React from "react";
 import { createRoot } from "react-dom/client";
 
-import Router from "./Router";
-import { queryClient } from "./gql";
+import Router from "./Router.tsx";
+import { queryClient } from "./gql.ts";
 
 import "./index.css";
 

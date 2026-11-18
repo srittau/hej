@@ -1,8 +1,8 @@
 import { faNoteSticky } from "@fortawesome/free-regular-svg-icons";
 
-import EmptyState from "./EmptyState";
-import NoteList from "./NoteList";
-import { useNotesMeta } from "./gql";
+import EmptyState from "./EmptyState.tsx";
+import NoteList from "./NoteList.tsx";
+import { useNotesMeta } from "./gql.ts";
 
 export default function NoteListView() {
   const notes = useNotesMeta();
