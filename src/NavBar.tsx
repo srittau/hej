@@ -14,7 +14,6 @@ interface NavBarProps {
 }
 
 export default function NavBar({ onClose }: NavBarProps) {
-  const notes = useLatestNotes(3);
   const isNotesPage = useMatch("/notes") !== null;
   const isLabelsPage = useMatch("/labels") !== null;
 
@@ -24,12 +23,7 @@ export default function NavBar({ onClose }: NavBarProps) {
       <ScrollArea type="auto">
         <Stack>
           <Favorites onClose={onClose} />
-          <Box>
-            <Text size="xs" c="dimmed">
-              Latest notes
-            </Text>
-            <NotesLinks notes={notes} onNoteClick={() => onClose?.()} />
-          </Box>
+          <LatestNotes onClose={onClose} />
           <Box>
             <Text size="xs" c="dimmed">
               Other
@@ -75,6 +69,23 @@ function Favorites({ onClose }: FavoritesProps) {
         <FavoriteIcon starred /> Favorites
       </Text>
       <LabelsLinks labels={labels} onLabelClick={() => onClose?.()} />
+      <NotesLinks notes={notes} onNoteClick={() => onClose?.()} />
+    </Box>
+  );
+}
+
+interface LatestNotesProps {
+  onClose?: () => void;
+}
+
+function LatestNotes({ onClose }: LatestNotesProps) {
+  const notes = useLatestNotes(3);
+  if (notes.length === 0) return null;
+  return (
+    <Box>
+      <Text size="xs" c="dimmed">
+        Latest notes
+      </Text>
       <NotesLinks notes={notes} onNoteClick={() => onClose?.()} />
     </Box>
   );
